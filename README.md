@@ -7,6 +7,7 @@ Goals
 - Utilises local storage/cookies to store user preferences
 - React, redux
 - Either styled components, reactstrap or material ui for the ui
+- Semantic html
 
 ## APIs
 
