@@ -1,0 +1,30 @@
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
+jobs:
+  build-and-test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: yarn install
+            - run: yarn test
+  deploy:
+    machine:
+      image: ubuntu-1604:202004-01
+    steps:
+      - run: curl -X POST -d {} ${netlify}
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build-and-test:
+          filters:
+            branches:
+              only: dev
+      - deploy:
+          filters:
+            branches:
+              only: master
