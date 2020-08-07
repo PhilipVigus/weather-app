@@ -1,5 +1,13 @@
 # Weather app
 
+Goals
+
+- Write an app that shows current, future and past weather conditions using 3rd party apis
+- Client-side only
+- Utilises local storage/cookies to store user preferences
+- React, redux
+- Either styled components, reactstrap or material ui for the ui
+
 ## APIs
 
 OpenWeather
