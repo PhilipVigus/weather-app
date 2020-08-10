@@ -10,7 +10,8 @@
     "airbnb",
     "prettier",
     "plugin:jest/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:react-redux/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -19,7 +20,7 @@
     "ecmaVersion": 11,
     "sourceType": "module"
   },
-  "plugins": ["react", "jest", "prettier"],
+  "plugins": ["react", "jest", "prettier", "react-redux"],
   "rules": {
     "prettier/prettier": ["error"],
     "no-else-return": "off",

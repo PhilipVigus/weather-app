@@ -1,8 +1,8 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import Main from "../components/Main";
+import App from "./App";
 
-test("renders Hello World", () => {
-  render(<Main />);
+test("renders the Main component", () => {
+  render(<App />);
   expect(screen.getByText(/Hello World/)).toBeInTheDocument();
 });
