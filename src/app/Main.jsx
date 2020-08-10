@@ -8,7 +8,7 @@ const Main = () => {
 
   useEffect(() => {
     dispatch(getWeather());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
