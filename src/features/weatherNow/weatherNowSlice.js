@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "axios";
 
-const initialState = { london: "" };
+const initialState = { locations: [] };
 
 export const getWeather = createAsyncThunk(
   "weatherNow/getWeather",
   async () => {
     const result = await Axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?q=London&appid=${process.env.REACT_APP_API_KEY}`
+      `http://api.openweathermap.org/data/2.5/weather?q=london&appid=${process.env.REACT_APP_API_KEY}`
     );
     return result.data;
   }
@@ -19,7 +19,7 @@ const weatherNowSlice = createSlice({
   reducers: {},
   extraReducers: {
     [getWeather.fulfilled]: (state, action) => {
-      state.london = action.payload;
+      state.locations = [action.payload];
     }
   }
 });
