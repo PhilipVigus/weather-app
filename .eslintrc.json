@@ -25,6 +25,13 @@
     "prettier/prettier": ["error"],
     "no-else-return": "off",
     "react/jsx-one-expression-per-line": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["state"]
+      }
+    ]
   }
 }
