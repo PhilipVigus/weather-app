@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import App from "../app/App";
+import App from "./App";
 
 describe("App", () => {
   let mock;

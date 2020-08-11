@@ -63,7 +63,7 @@ describe("Main", () => {
             },
             timezone: 3600,
             id: 2643743,
-            name: "location",
+            name: "London",
             cod: 200
           }
         ]
@@ -77,9 +77,7 @@ describe("Main", () => {
         <Main />
       </Provider>
     );
-    expect(
-      screen.getByText(/Weather in location right now/)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Weather in London right now/)).toBeInTheDocument();
   });
 
   it("renders the loading message", () => {
@@ -137,7 +135,7 @@ describe("Main", () => {
             },
             timezone: 3600,
             id: 2643743,
-            name: "location",
+            name: "London",
             cod: 200
           }
         ]
@@ -151,9 +149,17 @@ describe("Main", () => {
         <Main />
       </Provider>
     );
+
+    expect(screen.getByText(/Clouds/)).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: "Clouds icon" })
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Temp = 31 C/)).toBeInTheDocument();
     expect(screen.getByText(/Humidity = 43/)).toBeInTheDocument();
-    expect(store.dispatch).toHaveBeenCalledTimes(1);
-    expect(getWeather).toHaveBeenCalledTimes(1);
+    expect(
+      screen.getByText(/Wind = 2.6 m\/s \(80 degrees\)/)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/13% cloud coverage/)).toBeInTheDocument();
   });
 
   it("calls dispatch on the redux store with the correct action", async () => {
