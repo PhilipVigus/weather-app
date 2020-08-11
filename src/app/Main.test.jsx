@@ -82,6 +82,24 @@ describe("Main", () => {
     ).toBeInTheDocument();
   });
 
+  it("renders the loading message", () => {
+    const store = mockStore({
+      test: "",
+      weatherNow: {
+        locations: []
+      }
+    });
+
+    store.dispatch = jest.fn();
+
+    render(
+      <Provider store={store}>
+        <Main />
+      </Provider>
+    );
+    expect(screen.getByText(/Loading.../)).toBeInTheDocument();
+  });
+
   it("renders the state value in the redux store", async () => {
     const store = mockStore({
       test: "",
