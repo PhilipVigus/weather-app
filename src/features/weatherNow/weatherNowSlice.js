@@ -7,7 +7,7 @@ export const getWeather = createAsyncThunk(
   "weatherNow/getWeather",
   async () => {
     const result = await Axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?q=london&appid=${process.env.REACT_APP_API_KEY}`
+      `https://api.openweathermap.org/data/2.5/weather?q=london&appid=${process.env.REACT_APP_API_KEY}`
     );
     return result.data;
   }
