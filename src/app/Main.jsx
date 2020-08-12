@@ -20,7 +20,7 @@ const Main = () => {
         <div>
           <img
             alt={`${locations[0].weather[0].main} icon`}
-            src={`http://openweathermap.org/img/wn/${locations[0].weather[0].icon}@2x.png`}
+            src={`https://openweathermap.org/img/wn/${locations[0].weather[0].icon}@2x.png`}
           />
         </div>
         <div>{`Temp = ${Math.round(locations[0].main.temp - 273.15)} C`}</div>
