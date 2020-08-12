@@ -8,4 +8,12 @@ describe("CityList", () => {
 
     expect(screen.getByText(/City List/)).toBeInTheDocument();
   });
+
+  it("renders the textbox", () => {
+    render(<CityList />);
+
+    expect(
+      screen.getByRole("textbox", { name: "City Name" })
+    ).toBeInTheDocument();
+  });
 });
