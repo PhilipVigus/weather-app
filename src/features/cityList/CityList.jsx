@@ -9,8 +9,6 @@ const CityList = () => {
   const [currentInitialLetter, setCurrentInitialLetter] = useState("l");
   const citiesList = useSelector((state) => state.cityList.cities);
 
-  console.log(citiesList);
-
   useEffect(() => {
     dispatch(currentCitySet("London"));
     dispatch(fetchCitiesWithInitialLetter("l"));
@@ -44,19 +42,29 @@ const CityList = () => {
     setCityText("");
   };
 
+  const getFilteredCities = () => {
+    const pattern = new RegExp(`^${cityText}`, "i");
+    return citiesList.filter((city) => {
+      return pattern.test(city.name);
+    });
+  };
+
   return (
     <div>
       <div>City List</div>
       <div>
-        <input
-          type="text"
-          placeholder="Enter city name"
-          onKeyDown={handleKeyDown}
-          value={cityText}
-          onChange={handleChange}
-          onFocus={handleOnFocus}
-          style={{ width: "100%" }}
-        />
+        <div>
+          <input
+            type="text"
+            placeholder="Enter city name"
+            onKeyDown={handleKeyDown}
+            value={cityText}
+            onChange={handleChange}
+            onFocus={handleOnFocus}
+            style={{ width: "100%" }}
+          />
+        </div>
+        {citiesList.length > 0 && getFilteredCities().length}
       </div>
     </div>
   );
