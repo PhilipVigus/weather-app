@@ -4,13 +4,11 @@ import Axios from "axios";
 const initialState = { currentCity: "", cities: [] };
 
 export const getCities = createAsyncThunk(
-  "cityList/getCity",
+  "cityList/getCities",
   async (letter) => {
-    console.log("getting cities");
     const result = await Axios.get(
       `https://weather-app-server-phil.herokuapp.com/cities/${letter}`
     );
-    console.log(result.data);
     return result.data;
   }
 );

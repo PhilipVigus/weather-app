@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { currentCitySet } from "./cityListSlice";
+import { currentCitySet, getCities } from "./cityListSlice";
 import { getWeather } from "../weatherNow/weatherNowSlice";
 
 const CityList = () => {
@@ -9,13 +9,15 @@ const CityList = () => {
 
   useEffect(() => {
     dispatch(currentCitySet("London"));
+    dispatch(getCities("l"));
   }, [dispatch]);
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && city) {
       e.preventDefault();
       dispatch(currentCitySet(city));
       dispatch(getWeather(city));
+      setCity("");
     }
   };
 
