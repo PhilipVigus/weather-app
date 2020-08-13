@@ -6,7 +6,7 @@ import { getWeather } from "../weatherNow/weatherNowSlice";
 const CityList = () => {
   const dispatch = useDispatch();
   const [cityText, setCityText] = useState("London");
-  const [matchedCities] = useState(["Liverpool", "London", "Lancaster"]);
+  const [currentInitialLetter, setCurrentInitialLetter] = useState("l");
 
   useEffect(() => {
     dispatch(currentCitySet("London"));
@@ -23,6 +23,17 @@ const CityList = () => {
   };
 
   const handleChange = (e) => {
+    if (
+      e.target.value &&
+      e.target.value.charAt(0).toLocaleLowerCase() !== currentInitialLetter
+    ) {
+      dispatch(
+        fetchCitiesWithInitialLetter(
+          e.target.value.charAt(0).toLocaleLowerCase()
+        )
+      );
+      setCurrentInitialLetter(e.target.value.charAt(0).toLocaleLowerCase());
+    }
     setCityText(e.target.value);
   };
 
@@ -43,9 +54,6 @@ const CityList = () => {
           onFocus={handleOnFocus}
           style={{ width: "100%" }}
         />
-        {matchedCities.map((city) => (
-          <div key={city}>{city}</div>
-        ))}
       </div>
     </div>
   );
