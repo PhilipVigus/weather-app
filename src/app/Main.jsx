@@ -1,8 +1,14 @@
 import React from "react";
 import WeatherNow from "../features/weatherNow/WeatherNow";
+import CityList from "../features/cityList/CityList";
 
 const Main = () => {
-  return <WeatherNow />;
+  return (
+    <>
+      <CityList />
+      <WeatherNow />
+    </>
+  );
 };
 
 export default Main;
