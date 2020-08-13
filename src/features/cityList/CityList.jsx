@@ -1,36 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { currentCitySet, getCities } from "./cityListSlice";
+import { currentCitySet, fetchCitiesWithInitialLetter } from "./cityListSlice";
 import { getWeather } from "../weatherNow/weatherNowSlice";
 
 const CityList = () => {
   const dispatch = useDispatch();
-  const [city, setCity] = useState("London");
+  const [cityText, setCityText] = useState("London");
+  const [matchedCities] = useState(["Liverpool", "London", "Lancaster"]);
 
   useEffect(() => {
     dispatch(currentCitySet("London"));
-    dispatch(getCities("l"));
+    dispatch(fetchCitiesWithInitialLetter("l"));
   }, [dispatch]);
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter" && city) {
+    if (e.key === "Enter" && cityText) {
       e.preventDefault();
-      dispatch(currentCitySet(city));
-      dispatch(getWeather(city));
-      setCity("");
+      dispatch(currentCitySet(cityText));
+      dispatch(getWeather(cityText));
+      setCityText("");
     }
+  };
+
+  const handleChange = (e) => {
+    setCityText(e.target.value);
+  };
+
+  const handleOnFocus = () => {
+    setCityText("");
   };
 
   return (
     <div>
       <div>City List</div>
-      <input
-        type="text"
-        placeholder="Enter city name"
-        onKeyDown={handleKeyDown}
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-      />
+      <div>
+        <input
+          type="text"
+          placeholder="Enter city name"
+          onKeyDown={handleKeyDown}
+          value={cityText}
+          onChange={handleChange}
+          onFocus={handleOnFocus}
+          style={{ width: "100%" }}
+        />
+        {matchedCities.map((city) => (
+          <div key={city}>{city}</div>
+        ))}
+      </div>
     </div>
   );
 };

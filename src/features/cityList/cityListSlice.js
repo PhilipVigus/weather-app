@@ -3,8 +3,8 @@ import Axios from "axios";
 
 const initialState = { currentCity: "", cities: [] };
 
-export const getCities = createAsyncThunk(
-  "cityList/getCities",
+export const fetchCitiesWithInitialLetter = createAsyncThunk(
+  "cityList/fetchCitiesWithInitialLetter",
   async (letter) => {
     const result = await Axios.get(
       `https://weather-app-server-phil.herokuapp.com/cities/${letter}`
@@ -31,7 +31,7 @@ const cityListSlice = createSlice({
     }
   },
   extraReducers: {
-    [getCities.fulfilled]: (state, action) => {
+    [fetchCitiesWithInitialLetter.fulfilled]: (state, action) => {
       state.cities = [action.payload];
     }
   }
