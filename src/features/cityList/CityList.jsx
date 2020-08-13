@@ -1,23 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import ContentEditable from "./ContentEditable";
 import { currentCitySet } from "./cityListSlice";
+import { getWeather } from "../weatherNow/weatherNowSlice";
 
 const CityList = () => {
-  const [textContent, setTextContent] = useState(
-    "<span style='color:grey'>Enter city name</span>"
-  );
-
   const dispatch = useDispatch();
+  const [city, setCity] = useState("London");
 
   useEffect(() => {
     dispatch(currentCitySet("London"));
   }, [dispatch]);
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      dispatch(currentCitySet(city));
+      dispatch(getWeather(city));
+    }
+  };
+
   return (
     <div>
       <div>City List</div>
-      <ContentEditable html={textContent} />
+      <input
+        type="text"
+        placeholder="Enter city name"
+        onKeyDown={handleKeyDown}
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+      />
     </div>
   );
 };
