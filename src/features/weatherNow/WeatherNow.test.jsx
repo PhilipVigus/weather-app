@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { getWeather } from "./weatherNowSlice";
+import * as weatherNowSlice from "./weatherNowSlice";
 import WeatherNow from "./WeatherNow";
 
 jest.mock("./weatherNowSlice");
@@ -28,7 +28,6 @@ describe("WeatherNow", () => {
 
   it("renders the heading", () => {
     const store = mockStore({
-      test: "",
       cityList: {
         currentCity: "London"
       },
@@ -85,7 +84,6 @@ describe("WeatherNow", () => {
 
   it("renders the loading message", () => {
     const store = mockStore({
-      test: "",
       cityList: {
         currentCity: "London"
       },
@@ -106,7 +104,6 @@ describe("WeatherNow", () => {
 
   it("renders the state value in the redux store", async () => {
     const store = mockStore({
-      test: "",
       cityList: {
         currentCity: "London"
       },
@@ -173,7 +170,6 @@ describe("WeatherNow", () => {
 
   it("calls dispatch on the redux store with the correct action", async () => {
     const store = mockStore({
-      test: "",
       cityList: {
         currentCity: "London"
       },
@@ -227,6 +223,7 @@ describe("WeatherNow", () => {
     );
 
     expect(store.dispatch).toHaveBeenCalledTimes(1);
-    expect(getWeather).toHaveBeenCalledTimes(1);
+    expect(weatherNowSlice.getWeather).toHaveBeenCalledTimes(1);
+    expect(weatherNowSlice.getWeather).toHaveBeenCalledWith("London");
   });
 });
