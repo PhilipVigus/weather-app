@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { currentCitySet, fetchCitiesWithInitialLetter } from "./cityListSlice";
 import { getWeather } from "../weatherNow/weatherNowSlice";
 
@@ -7,6 +7,9 @@ const CityList = () => {
   const dispatch = useDispatch();
   const [cityText, setCityText] = useState("London");
   const [currentInitialLetter, setCurrentInitialLetter] = useState("l");
+  const citiesList = useSelector((state) => state.cityList.cities);
+
+  console.log(citiesList);
 
   useEffect(() => {
     dispatch(currentCitySet("London"));
