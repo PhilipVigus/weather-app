@@ -12,8 +12,6 @@ describe("CityList", () => {
   it("renders the textbox", () => {
     render(<CityList />);
 
-    expect(
-      screen.getByRole("textbox", { name: "City Name" })
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Enter city name/)).toBeInTheDocument();
   });
 });

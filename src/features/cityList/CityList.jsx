@@ -1,19 +1,11 @@
 import React, { useState } from "react";
+import ContentEditable from "./ContentEditable";
 
 const CityList = () => {
-  const [cityName, setCityName] = useState("");
   return (
     <div>
       <div>City List</div>
-      <label htmlFor="cityName">
-        City Name
-        <input
-          type="text"
-          id="cityName"
-          value={cityName}
-          onChange={(e) => setCityName(e.target.value)}
-        />
-      </label>
+      <ContentEditable html="Enter city name" />
     </div>
   );
 };
