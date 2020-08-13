@@ -74,10 +74,10 @@ const CityList = () => {
               width: "100%"
             }}
           >
-            {filteredCities.slice(0, 5).map((city) => (
+            {filteredCities.slice(0, 20).map((city) => (
               <div key={city.id}>{city.name}</div>
             ))}
-            <div>{`+${filteredCities.length - 5} matches`}</div>
+            <div>{`+${filteredCities.length - 20} matches`}</div>
           </div>
         </div>
       );
