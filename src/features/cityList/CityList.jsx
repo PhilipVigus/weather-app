@@ -44,9 +44,44 @@ const CityList = () => {
 
   const getFilteredCities = () => {
     const pattern = new RegExp(`^${cityText}`, "i");
-    return citiesList.filter((city) => {
+    const filteredCities = citiesList.filter((city) => {
       return pattern.test(city.name);
     });
+
+    if (filteredCities.length === 0) {
+      return <div>No matches</div>;
+    } else if (filteredCities.length < 10) {
+      return (
+        <div
+          style={{
+            position: "absolute",
+            backgroundColor: "beige",
+            width: "100%"
+          }}
+        >
+          {filteredCities.map((city) => (
+            <div key={city.id}>{city.name}</div>
+          ))}
+        </div>
+      );
+    } else {
+      return (
+        <div style={{ position: "relative" }}>
+          <div
+            style={{
+              position: "absolute",
+              backgroundColor: "beige",
+              width: "100%"
+            }}
+          >
+            {filteredCities.slice(0, 5).map((city) => (
+              <div key={city.id}>{city.name}</div>
+            ))}
+            <div>{`+${filteredCities.length - 5} matches`}</div>
+          </div>
+        </div>
+      );
+    }
   };
 
   return (
@@ -64,7 +99,7 @@ const CityList = () => {
             style={{ width: "100%" }}
           />
         </div>
-        {citiesList.length > 0 && getFilteredCities().length}
+        {citiesList.length > 0 && cityText && getFilteredCities()}
       </div>
     </div>
   );
