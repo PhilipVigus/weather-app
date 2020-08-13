@@ -4,11 +4,14 @@ import { getWeather } from "./weatherNowSlice";
 
 const WeatherNow = () => {
   const locations = useSelector((state) => state.weatherNow.locations);
+  const currentCity = useSelector((state) => state.cityList.currentCity);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getWeather());
-  }, [dispatch]);
+    if (currentCity) {
+      dispatch(getWeather(currentCity));
+    }
+  }, [dispatch, currentCity]);
 
   if (locations.length === 0) {
     return <div>Loading...</div>;

@@ -14,6 +14,9 @@ describe("Main", () => {
   it("renders the WeatherNow component", () => {
     const store = mockStore({
       test: "",
+      cityList: {
+        currentCity: "London"
+      },
       weatherNow: {
         locations: [
           {
@@ -68,6 +71,9 @@ describe("Main", () => {
   it("renders the CityList component", () => {
     const store = mockStore({
       test: "",
+      cityList: {
+        currentCity: "London"
+      },
       weatherNow: {
         locations: [
           {

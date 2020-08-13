@@ -5,9 +5,9 @@ const initialState = { locations: [] };
 
 export const getWeather = createAsyncThunk(
   "weatherNow/getWeather",
-  async () => {
+  async (city) => {
     const result = await Axios.get(
-      `https://api.openweathermap.org/data/2.5/weather?q=london&appid=${process.env.REACT_APP_API_KEY}`
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_API_KEY}`
     );
     return result.data;
   }

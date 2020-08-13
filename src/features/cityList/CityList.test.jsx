@@ -8,7 +8,11 @@ const mockStore = configureStore([]);
 
 describe("CityList", () => {
   it("renders the title", () => {
-    const store = mockStore({});
+    const store = mockStore({
+      cityList: {
+        currentCity: "London"
+      }
+    });
     render(
       <Provider store={store}>
         <CityList />
@@ -19,7 +23,11 @@ describe("CityList", () => {
   });
 
   it("renders the textbox", () => {
-    const store = mockStore({});
+    const store = mockStore({
+      cityList: {
+        currentCity: "London"
+      }
+    });
     render(
       <Provider store={store}>
         <CityList />
