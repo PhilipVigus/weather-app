@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { fetchCitiesWithInitialLetter } from "./cityListSlice";
+import FilteredCity from "./FilteredCity";
 
 const CityList = () => {
   const dispatch = useDispatch();
@@ -61,6 +62,11 @@ const CityList = () => {
     setCityText("");
   };
 
+  const handleCityClick = (id) => {
+    setShowFilteredCities(false);
+    history.push(`/${id}`);
+  };
+
   const getFilteredCities = () => {
     const pattern = new RegExp(`^${cityText}`, "i");
     const filteredCities = citiesList.filter((city) => {
@@ -79,7 +85,12 @@ const CityList = () => {
           }}
         >
           {filteredCities.map((city) => (
-            <div key={city.id}>{city.name}</div>
+            <FilteredCity
+              key={city.id}
+              id={city.id}
+              name={city.name}
+              callback={handleCityClick}
+            />
           ))}
         </div>
       );
@@ -94,7 +105,12 @@ const CityList = () => {
             }}
           >
             {filteredCities.slice(0, 20).map((city) => (
-              <div key={city.id}>{city.name}</div>
+              <FilteredCity
+                key={city.id}
+                id={city.id}
+                name={city.name}
+                callback={handleCityClick}
+              />
             ))}
             <div>{`+${filteredCities.length - 20} matches`}</div>
           </div>
