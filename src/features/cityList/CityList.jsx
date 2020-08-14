@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { currentCitySet, fetchCitiesWithInitialLetter } from "./cityListSlice";
-import { getWeather } from "../weatherNow/weatherNowSlice";
+import { getWeatherById } from "../weatherNow/weatherNowSlice";
 
 const CityList = () => {
   const dispatch = useDispatch();
@@ -17,8 +17,14 @@ const CityList = () => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && cityText) {
       e.preventDefault();
-      dispatch(currentCitySet(cityText));
-      dispatch(getWeather(cityText));
+      const newLocation = citiesList.find((location) => {
+        console.log(cityText);
+        const pattern = new RegExp(`^${cityText}`, "i");
+        return pattern.test(location.name);
+      });
+      console.log(newLocation);
+      dispatch(currentCitySet(newLocation.name));
+      dispatch(getWeatherById(newLocation.id));
       setCityText("");
     }
   };
