@@ -29,7 +29,7 @@ describe("LocationList", () => {
 
   it("renders the title", () => {
     const store = mockStore({
-      cityList: {
+      locationList: {
         locations: []
       },
       weatherNow: {
@@ -51,7 +51,7 @@ describe("LocationList", () => {
 
   it("dispatchs fetchLocationsWithInitialLetter action when you press return", () => {
     const store = mockStore({
-      cityList: {
+      locationList: {
         locations: []
       },
       weatherNow: {
@@ -84,7 +84,7 @@ describe("LocationList", () => {
 
   it("clears the box when it gains focus", () => {
     const store = mockStore({
-      cityList: {
+      locationList: {
         locations: []
       },
       weatherNow: {
@@ -110,7 +110,7 @@ describe("LocationList", () => {
 
   it("shows the filtered list", () => {
     const store = mockStore({
-      cityList: {
+      locationList: {
         locations: [
           { id: 1, name: "London" },
           { id: 2, name: "Liverpool" },
@@ -143,7 +143,7 @@ describe("LocationList", () => {
 
   it("shows the shortened filtered list", () => {
     const store = mockStore({
-      cityList: {
+      locationList: {
         locations: [
           { id: 1, name: "London" },
           { id: 2, name: "Liverpool" },
@@ -193,7 +193,7 @@ describe("LocationList", () => {
 
   it("hides the filtered list when you click it", () => {
     const store = mockStore({
-      cityList: {
+      locationList: {
         locations: [
           { id: 1, name: "London" },
           { id: 2, name: "Liverpool" },
@@ -228,7 +228,7 @@ describe("LocationList", () => {
 
   it("hides the filtered list when you press enter", () => {
     const store = mockStore({
-      cityList: {
+      locationList: {
         locations: [
           { id: 1, name: "London" },
           { id: 2, name: "Liverpool" },
@@ -262,7 +262,7 @@ describe("LocationList", () => {
 
   it("shows no matches if there are no filtered locations", () => {
     const store = mockStore({
-      cityList: {
+      locationList: {
         locations: [
           { id: 1, name: "London" },
           { id: 2, name: "Liverpool" },

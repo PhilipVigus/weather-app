@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import { MemoryRouter as Router, Route } from "react-router-dom";
+import { MemoryRouter as Router } from "react-router-dom";
 import Main from "./Main";
 
 const mockStore = configureStore([]);
@@ -14,9 +14,8 @@ describe("Main", () => {
 
   it("renders the WeatherNow component", () => {
     const store = mockStore({
-      cityList: {
-        currentCity: "London",
-        cities: []
+      locationList: {
+        locations: []
       },
       weatherNow: {
         locations: [
@@ -71,11 +70,10 @@ describe("Main", () => {
     expect(screen.getByText(/Weather in London right now/)).toBeInTheDocument();
   });
 
-  it("renders the CityList component", () => {
+  it("renders the LocationList component", () => {
     const store = mockStore({
-      cityList: {
-        currentCity: "London",
-        cities: []
+      locationList: {
+        locations: []
       },
       weatherNow: {
         locations: [
