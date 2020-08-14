@@ -13,6 +13,16 @@ export const getWeather = createAsyncThunk(
   }
 );
 
+export const getWeatherById = createAsyncThunk(
+  "weatherNow/getWeatherById",
+  async (id) => {
+    const result = await Axios.get(
+      `https://api.openweathermap.org/data/2.5/weather?id=${id}&appid=${process.env.REACT_APP_API_KEY}`
+    );
+    return result.data;
+  }
+);
+
 const weatherNowSlice = createSlice({
   name: "weatherNow",
   initialState,
@@ -20,8 +30,13 @@ const weatherNowSlice = createSlice({
   extraReducers: {
     [getWeather.fulfilled]: (state, action) => {
       state.locations = [action.payload];
+    },
+    [getWeatherById.fulfilled]: (state, action) => {
+      state.locations = [action.payload];
     }
   }
 });
+
+export const getLocationName = (state) => state.locations[0].name;
 
 export default weatherNowSlice.reducer;
