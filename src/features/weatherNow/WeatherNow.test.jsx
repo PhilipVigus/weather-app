@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { MemoryRouter as Router, Route } from "react-router-dom";
 import * as weatherNowSlice from "./weatherNowSlice";
 import WeatherNow from "./WeatherNow";
 
@@ -76,7 +77,9 @@ describe("WeatherNow", () => {
 
     render(
       <Provider store={store}>
-        <WeatherNow />
+        <Router>
+          <WeatherNow />
+        </Router>
       </Provider>
     );
     expect(screen.getByText(/Weather in London right now/)).toBeInTheDocument();
@@ -96,7 +99,9 @@ describe("WeatherNow", () => {
 
     render(
       <Provider store={store}>
-        <WeatherNow />
+        <Router>
+          <WeatherNow />
+        </Router>
       </Provider>
     );
     expect(screen.getByText(/Loading.../)).toBeInTheDocument();
@@ -152,7 +157,9 @@ describe("WeatherNow", () => {
 
     render(
       <Provider store={store}>
-        <WeatherNow />
+        <Router>
+          <WeatherNow />
+        </Router>
       </Provider>
     );
 
@@ -218,12 +225,16 @@ describe("WeatherNow", () => {
 
     render(
       <Provider store={store}>
-        <WeatherNow />
+        <Router initialEntries={["/15"]}>
+          <Route path="/:id">
+            <WeatherNow />
+          </Route>
+        </Router>
       </Provider>
     );
 
     expect(store.dispatch).toHaveBeenCalledTimes(1);
-    expect(weatherNowSlice.getWeather).toHaveBeenCalledTimes(1);
-    expect(weatherNowSlice.getWeather).toHaveBeenCalledWith("London");
+    expect(weatherNowSlice.getWeatherById).toHaveBeenCalledTimes(1);
+    expect(weatherNowSlice.getWeatherById).toHaveBeenCalledWith("15");
   });
 });

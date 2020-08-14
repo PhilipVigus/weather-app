@@ -1,17 +1,16 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getWeather } from "./weatherNowSlice";
+import { useParams } from "react-router-dom";
+import { getWeatherById, getLocations } from "./weatherNowSlice";
 
 const WeatherNow = () => {
   const locations = useSelector((state) => state.weatherNow.locations);
-  const currentCity = useSelector((state) => state.cityList.currentCity);
   const dispatch = useDispatch();
+  const { id } = useParams();
 
   useEffect(() => {
-    if (currentCity) {
-      dispatch(getWeather(currentCity));
-    }
-  }, [dispatch, currentCity]);
+    dispatch(getWeatherById(id));
+  }, [dispatch, id]);
 
   if (locations.length === 0) {
     return <div>Loading...</div>;
