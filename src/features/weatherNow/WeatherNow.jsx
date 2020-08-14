@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getWeatherById } from "./weatherNowSlice";
+import { getWeatherById, getLocations } from "./weatherNowSlice";
 import { currentCitySet } from "../cityList/cityListSlice";
 
 const WeatherNow = () => {
-  const locations = useSelector((state) => state.weatherNow.locations);
+  const locations = useSelector(getLocations);
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -14,7 +14,7 @@ const WeatherNow = () => {
     if (locations.length > 0) {
       dispatch(currentCitySet(locations[0].name));
     }
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   if (locations.length === 0) {
     return <div>Loading...</div>;

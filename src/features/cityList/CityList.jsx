@@ -1,31 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { currentCitySet, fetchCitiesWithInitialLetter } from "./cityListSlice";
-import { getWeatherById } from "../weatherNow/weatherNowSlice";
 
 const CityList = () => {
   const dispatch = useDispatch();
-  const [cityText, setCityText] = useState("London");
+  const [cityText, setCityText] = useState("");
   const [currentInitialLetter, setCurrentInitialLetter] = useState("l");
   const citiesList = useSelector((state) => state.cityList.cities);
+  const locations = useSelector((state) => state.weatherNow.locations);
+  const history = useHistory();
 
   useEffect(() => {
-    dispatch(currentCitySet("London"));
-    dispatch(fetchCitiesWithInitialLetter("l"));
-  }, [dispatch]);
+    if (locations.length > 0) {
+      dispatch(currentCitySet(locations[0].name));
+      dispatch(
+        fetchCitiesWithInitialLetter(
+          locations[0].name.charAt(0).toLocaleLowerCase()
+        )
+      );
+      setCityText(locations[0].name);
+    }
+  }, [dispatch, locations]);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && cityText) {
       e.preventDefault();
       const newLocation = citiesList.find((location) => {
-        console.log(cityText);
         const pattern = new RegExp(`^${cityText}`, "i");
         return pattern.test(location.name);
       });
-      console.log(newLocation);
       dispatch(currentCitySet(newLocation.name));
-      dispatch(getWeatherById(newLocation.id));
-      setCityText("");
+      history.push(`/${newLocation.id}`);
     }
   };
 

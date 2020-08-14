@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect, Link } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import WeatherNow from "../features/weatherNow/WeatherNow";
 import CityList from "../features/cityList/CityList";
 
@@ -10,12 +10,7 @@ const Main = () => {
         exact
         path="/"
         render={() => {
-          return (
-            <>
-              <CityList />
-              <WeatherNow />
-            </>
-          );
+          return <Redirect to="/2643743" />;
         }}
       />
       <Route

@@ -37,6 +37,5 @@ const weatherNowSlice = createSlice({
   }
 });
 
-export const getLocationName = (state) => state.locations[0].name;
-
+export const getLocations = (state) => state.weatherNow.locations;
 export default weatherNowSlice.reducer;
