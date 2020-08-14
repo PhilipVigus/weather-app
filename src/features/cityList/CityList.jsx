@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { fetchCitiesWithInitialLetter } from "./cityListSlice";
@@ -11,8 +11,10 @@ const CityList = () => {
   const citiesList = useSelector((state) => state.cityList.cities);
   const locations = useSelector((state) => state.weatherNow.locations);
   const history = useHistory();
+  const textBoxRef = useRef(null);
 
   useEffect(() => {
+    textBoxRef.current.blur();
     if (locations.length > 0) {
       dispatch(
         fetchCitiesWithInitialLetter(
@@ -107,6 +109,7 @@ const CityList = () => {
       <div>
         <div>
           <input
+            ref={textBoxRef}
             type="text"
             placeholder="Enter city name"
             onKeyDown={handleKeyDown}
