@@ -5,14 +5,14 @@ import configureStore from "redux-mock-store";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { MemoryRouter as Router } from "react-router-dom";
-import CityList from "./CityList";
-import * as cityListSlice from "./locationListSlice";
+import LocationList from "./LocationList";
+import * as locationListSlice from "./locationListSlice";
 
 jest.mock("./locationListSlice");
 
 const mockStore = configureStore([]);
 
-describe("CityList", () => {
+describe("LocationList", () => {
   let mock;
 
   beforeAll(() => {
@@ -30,7 +30,6 @@ describe("CityList", () => {
   it("renders the title", () => {
     const store = mockStore({
       cityList: {
-        currentCity: "London",
         locations: []
       },
       weatherNow: {
@@ -42,18 +41,17 @@ describe("CityList", () => {
     render(
       <Provider store={store}>
         <Router>
-          <CityList />
+          <LocationList />
         </Router>
       </Provider>
     );
 
-    expect(screen.getByText(/City List/)).toBeInTheDocument();
+    expect(screen.getByText(/Location List/)).toBeInTheDocument();
   });
 
-  it("dispatchs currentCitySet and getWeather actions when you press return", () => {
+  it("dispatchs fetchLocationsWithInitialLetter action when you press return", () => {
     const store = mockStore({
       cityList: {
-        currentCity: "London",
         locations: []
       },
       weatherNow: {
@@ -65,23 +63,23 @@ describe("CityList", () => {
     render(
       <Provider store={store}>
         <Router>
-          <CityList />
+          <LocationList />
         </Router>
       </Provider>
     );
 
-    const textBox = screen.getByPlaceholderText(/Enter city name/);
+    const textBox = screen.getByPlaceholderText(/Enter location name/);
     fireEvent.change(textBox, { target: { value: "Paris" } });
     fireEvent.focus(textBox);
     fireEvent.keyDown(textBox, { key: "Enter", code: "Enter" });
 
     expect(store.dispatch).toHaveBeenCalledTimes(1);
-    expect(cityListSlice.fetchLocationsWithInitialLetter).toHaveBeenCalledTimes(
-      1
-    );
-    expect(cityListSlice.fetchLocationsWithInitialLetter).toHaveBeenCalledWith(
-      "p"
-    );
+    expect(
+      locationListSlice.fetchLocationsWithInitialLetter
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      locationListSlice.fetchLocationsWithInitialLetter
+    ).toHaveBeenCalledWith("p");
   });
 
   it("clears the box when it gains focus", () => {
@@ -99,12 +97,12 @@ describe("CityList", () => {
     render(
       <Provider store={store}>
         <Router>
-          <CityList />
+          <LocationList />
         </Router>
       </Provider>
     );
 
-    const textbox = screen.getByPlaceholderText(/Enter city name/);
+    const textbox = screen.getByPlaceholderText(/Enter location name/);
     expect(textbox.value).toBe("London");
     fireEvent.focus(textbox);
     expect(textbox.value).toBe("");
@@ -129,12 +127,12 @@ describe("CityList", () => {
     render(
       <Provider store={store}>
         <Router>
-          <CityList />
+          <LocationList />
         </Router>
       </Provider>
     );
 
-    const textbox = screen.getByPlaceholderText(/Enter city name/);
+    const textbox = screen.getByPlaceholderText(/Enter location name/);
     fireEvent.focus(textbox);
     fireEvent.change(textbox, { target: { value: "l" } });
 
@@ -181,12 +179,12 @@ describe("CityList", () => {
     render(
       <Provider store={store}>
         <Router>
-          <CityList />
+          <LocationList />
         </Router>
       </Provider>
     );
 
-    const textbox = screen.getByPlaceholderText(/Enter city name/);
+    const textbox = screen.getByPlaceholderText(/Enter location name/);
     fireEvent.focus(textbox);
     fireEvent.change(textbox, { target: { value: "l" } });
 
@@ -212,12 +210,12 @@ describe("CityList", () => {
     render(
       <Provider store={store}>
         <Router>
-          <CityList />
+          <LocationList />
         </Router>
       </Provider>
     );
 
-    const textbox = screen.getByPlaceholderText(/Enter city name/);
+    const textbox = screen.getByPlaceholderText(/Enter location name/);
     fireEvent.focus(textbox);
     fireEvent.change(textbox, { target: { value: "l" } });
     const london = screen.getByText(/London/);
@@ -247,12 +245,12 @@ describe("CityList", () => {
     render(
       <Provider store={store}>
         <Router>
-          <CityList />
+          <LocationList />
         </Router>
       </Provider>
     );
 
-    const textbox = screen.getByPlaceholderText(/Enter city name/);
+    const textbox = screen.getByPlaceholderText(/Enter location name/);
     fireEvent.focus(textbox);
     fireEvent.change(textbox, { target: { value: "l" } });
     fireEvent.keyDown(textbox, { key: "Enter", code: "Enter" });
@@ -262,7 +260,7 @@ describe("CityList", () => {
     expect(screen.queryByText(/Lincoln/)).toBeNull();
   });
 
-  it("shows no matches if there are no filtered cities", () => {
+  it("shows no matches if there are no filtered locations", () => {
     const store = mockStore({
       cityList: {
         locations: [
@@ -281,12 +279,12 @@ describe("CityList", () => {
     render(
       <Provider store={store}>
         <Router>
-          <CityList />
+          <LocationList />
         </Router>
       </Provider>
     );
 
-    const textbox = screen.getByPlaceholderText(/Enter city name/);
+    const textbox = screen.getByPlaceholderText(/Enter location name/);
     fireEvent.focus(textbox);
     fireEvent.change(textbox, { target: { value: "p" } });
 

@@ -128,6 +128,6 @@ describe("Main", () => {
       </Provider>
     );
 
-    expect(screen.getByText(/City List/)).toBeInTheDocument();
+    expect(screen.getByText(/Location List/)).toBeInTheDocument();
   });
 });

@@ -68,6 +68,8 @@ describe("App", () => {
     expect(
       await screen.findByText(/Weather in London right now/)
     ).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Enter city name/)).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/Enter location name/)
+    ).toBeInTheDocument();
   });
 });
