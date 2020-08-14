@@ -4,10 +4,11 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { MemoryRouter as Router, Route } from "react-router-dom";
 import CityList from "./CityList";
-import * as weatherNowSlice from "../weatherNow/weatherNowSlice";
+import * as cityListSlice from "./cityListSlice";
 
-jest.mock("../weatherNow/weatherNowSlice");
+jest.mock("./cityListSlice");
 
 const mockStore = configureStore([]);
 
@@ -29,52 +30,43 @@ describe("CityList", () => {
   it("renders the title", () => {
     const store = mockStore({
       cityList: {
-        currentCity: "London"
+        currentCity: "London",
+        cities: []
+      },
+      weatherNow: {
+        locations: []
       }
     });
 
     store.dispatch = jest.fn();
     render(
       <Provider store={store}>
-        <CityList />
+        <Router>
+          <CityList />
+        </Router>
       </Provider>
     );
 
     expect(screen.getByText(/City List/)).toBeInTheDocument();
   });
 
-  it("renders the textbox with it's initial value", () => {
-    const store = mockStore({
-      cityList: {
-        currentCity: "London"
-      }
-    });
-
-    store.dispatch = jest.fn();
-
-    render(
-      <Provider store={store}>
-        <CityList />
-      </Provider>
-    );
-
-    const textBox = screen.getByPlaceholderText(/Enter city name/);
-    expect(textBox.value).toBe("London");
-  });
-
   it("dispatchs currentCitySet and getWeather actions when you press return", () => {
     const store = mockStore({
       cityList: {
-        currentCity: "London"
+        currentCity: "London",
+        cities: []
+      },
+      weatherNow: {
+        locations: []
       }
     });
 
     store.dispatch = jest.fn();
-    weatherNowSlice.getWeather = jest.fn();
-
     render(
       <Provider store={store}>
-        <CityList />
+        <Router>
+          <CityList />
+        </Router>
       </Provider>
     );
 
@@ -83,12 +75,10 @@ describe("CityList", () => {
     fireEvent.focus(textBox);
     fireEvent.keyDown(textBox, { key: "Enter", code: "Enter" });
 
-    expect(store.dispatch).toHaveBeenCalledTimes(4);
-    expect(store.dispatch.mock.calls[2][0]).toEqual({
-      payload: { city: "Paris" },
-      type: "cityList/currentCitySet"
-    });
-    expect(weatherNowSlice.getWeather).toHaveBeenCalledTimes(1);
-    expect(weatherNowSlice.getWeather).toHaveBeenCalledWith("Paris");
+    expect(store.dispatch).toHaveBeenCalledTimes(1);
+    expect(cityListSlice.fetchCitiesWithInitialLetter).toHaveBeenCalledTimes(1);
+    expect(cityListSlice.fetchCitiesWithInitialLetter).toHaveBeenCalledWith(
+      "p"
+    );
   });
 });

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { getWeatherById, getLocations } from "./weatherNowSlice";
 
 const WeatherNow = () => {
-  const locations = useSelector(getLocations);
+  const locations = useSelector((state) => state.weatherNow.locations);
   const dispatch = useDispatch();
   const { id } = useParams();
 
