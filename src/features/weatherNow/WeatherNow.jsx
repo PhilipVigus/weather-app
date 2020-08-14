@@ -29,7 +29,6 @@ const WeatherNow = () => {
         <div>{`Humidity = ${locations[0].main.humidity}`}</div>
         <div>{`Wind = ${locations[0].wind.speed} m/s (${locations[0].wind.deg} degrees)`}</div>
         <div>{`${locations[0].clouds.all}% cloud coverage`}</div>
-        <div>{locations[0].name}</div>
       </div>
     );
   }
