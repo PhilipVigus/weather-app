@@ -19,7 +19,7 @@ describe("App", () => {
     mock.restore();
   });
 
-  it("renders the weather now and city list", async () => {
+  it("renders the weather now and location list", async () => {
     mock
       .onGet()
       .replyOnce(200, {
@@ -68,6 +68,8 @@ describe("App", () => {
     expect(
       await screen.findByText(/Weather in London right now/)
     ).toBeInTheDocument();
-    expect(screen.getByPlaceholderText(/Enter city name/)).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/Enter location name/)
+    ).toBeInTheDocument();
   });
 });

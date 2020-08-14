@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { fetchCitiesWithInitialLetter } from "./cityListSlice";
-import FilteredCity from "./FilteredCity";
+import { fetchLocationsWithInitialLetter } from "./locationListSlice";
+import FilteredLocation from "./FilteredLocation";
 
-const CityList = () => {
+const LocationList = () => {
   const dispatch = useDispatch();
-  const [cityText, setCityText] = useState("");
+  const [locationText, setLocationText] = useState("");
   const [currentInitialLetter, setCurrentInitialLetter] = useState("l");
-  const [showFilteredCities, setShowFilteredCities] = useState(false);
-  const citiesList = useSelector((state) => state.cityList.cities);
+  const [showFilteredLocations, setShowFilteredLocations] = useState(false);
+  const locationsList = useSelector((state) => state.locationList.locations);
   const locations = useSelector((state) => state.weatherNow.locations);
   const history = useHistory();
   const textBoxRef = useRef(null);
@@ -18,22 +18,22 @@ const CityList = () => {
     textBoxRef.current.blur();
     if (locations.length > 0) {
       dispatch(
-        fetchCitiesWithInitialLetter(
+        fetchLocationsWithInitialLetter(
           locations[0].name.charAt(0).toLocaleLowerCase()
         )
       );
-      setCityText(locations[0].name);
+      setLocationText(locations[0].name);
     }
   }, [dispatch, locations]);
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter" && cityText) {
+    if (e.key === "Enter" && locationText) {
       e.preventDefault();
-      const newLocation = citiesList.find((location) => {
-        const pattern = new RegExp(`^${cityText}`, "i");
+      const newLocation = locationsList.find((location) => {
+        const pattern = new RegExp(`^${locationText}`, "i");
         return pattern.test(location.name);
       });
-      setShowFilteredCities(false);
+      setShowFilteredLocations(false);
       history.push(`/${newLocation.id}`);
     }
   };
@@ -44,7 +44,7 @@ const CityList = () => {
       e.target.value.charAt(0).toLocaleLowerCase() !== currentInitialLetter
     ) {
       dispatch(
-        fetchCitiesWithInitialLetter(
+        fetchLocationsWithInitialLetter(
           e.target.value.charAt(0).toLocaleLowerCase()
         )
       );
@@ -52,30 +52,30 @@ const CityList = () => {
     }
 
     if (e.target.value) {
-      setShowFilteredCities(true);
+      setShowFilteredLocations(true);
     }
 
-    setCityText(e.target.value);
+    setLocationText(e.target.value);
   };
 
   const handleOnFocus = () => {
-    setCityText("");
+    setLocationText("");
   };
 
-  const handleCityClick = (id) => {
-    setShowFilteredCities(false);
+  const handleLocationClick = (id) => {
+    setShowFilteredLocations(false);
     history.push(`/${id}`);
   };
 
-  const getFilteredCities = () => {
-    const pattern = new RegExp(`^${cityText}`, "i");
-    const filteredCities = citiesList.filter((city) => {
-      return pattern.test(city.name);
+  const getFilteredLocations = () => {
+    const pattern = new RegExp(`^${locationText}`, "i");
+    const filteredLocations = locationsList.filter((location) => {
+      return pattern.test(location.name);
     });
 
-    if (filteredCities.length === 0) {
+    if (filteredLocations.length === 0) {
       return <div>No matches</div>;
-    } else if (filteredCities.length < 10) {
+    } else if (filteredLocations.length < 10) {
       return (
         <div
           style={{
@@ -84,12 +84,12 @@ const CityList = () => {
             width: "100%"
           }}
         >
-          {filteredCities.map((city) => (
-            <FilteredCity
-              key={city.id}
-              id={city.id}
-              name={city.name}
-              callback={handleCityClick}
+          {filteredLocations.map((location) => (
+            <FilteredLocation
+              key={location.id}
+              id={location.id}
+              name={location.name}
+              callback={handleLocationClick}
             />
           ))}
         </div>
@@ -104,15 +104,15 @@ const CityList = () => {
               width: "100%"
             }}
           >
-            {filteredCities.slice(0, 20).map((city) => (
-              <FilteredCity
-                key={city.id}
-                id={city.id}
-                name={city.name}
-                callback={handleCityClick}
+            {filteredLocations.slice(0, 20).map((location) => (
+              <FilteredLocation
+                key={location.id}
+                id={location.id}
+                name={location.name}
+                callback={handleLocationClick}
               />
             ))}
-            <div>{`+${filteredCities.length - 20} matches`}</div>
+            <div>{`+${filteredLocations.length - 20} matches`}</div>
           </div>
         </div>
       );
@@ -121,27 +121,27 @@ const CityList = () => {
 
   return (
     <div>
-      <div>City List</div>
+      <div>Location List</div>
       <div>
         <div>
           <input
             ref={textBoxRef}
             type="text"
-            placeholder="Enter city name"
+            placeholder="Enter location name"
             onKeyDown={handleKeyDown}
-            value={cityText}
+            value={locationText}
             onChange={handleChange}
             onFocus={handleOnFocus}
             style={{ width: "100%" }}
           />
         </div>
-        {showFilteredCities &&
-          citiesList.length > 0 &&
-          cityText &&
-          getFilteredCities()}
+        {showFilteredLocations &&
+          locationsList.length > 0 &&
+          locationText &&
+          getFilteredLocations()}
       </div>
     </div>
   );
 };
 
-export default CityList;
+export default LocationList;

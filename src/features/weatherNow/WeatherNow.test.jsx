@@ -29,8 +29,8 @@ describe("WeatherNow", () => {
 
   it("renders the heading", () => {
     const store = mockStore({
-      cityList: {
-        currentCity: "London"
+      locationList: {
+        locations: []
       },
       weatherNow: {
         locations: [
@@ -87,8 +87,8 @@ describe("WeatherNow", () => {
 
   it("renders the loading message", () => {
     const store = mockStore({
-      cityList: {
-        currentCity: "London"
+      locationList: {
+        locations: []
       },
       weatherNow: {
         locations: []
@@ -109,8 +109,8 @@ describe("WeatherNow", () => {
 
   it("renders the state value in the redux store", async () => {
     const store = mockStore({
-      cityList: {
-        currentCity: "London"
+      locationList: {
+        locations: []
       },
       weatherNow: {
         locations: [
@@ -177,8 +177,8 @@ describe("WeatherNow", () => {
 
   it("calls dispatch on the redux store with the correct action", async () => {
     const store = mockStore({
-      cityList: {
-        currentCity: "London"
+      locationList: {
+        locations: []
       },
       weatherNow: {
         locations: [
