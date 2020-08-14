@@ -7,6 +7,7 @@ const CityList = () => {
   const dispatch = useDispatch();
   const [cityText, setCityText] = useState("");
   const [currentInitialLetter, setCurrentInitialLetter] = useState("l");
+  const [showFilteredCities, setShowFilteredCities] = useState(false);
   const citiesList = useSelector((state) => state.cityList.cities);
   const locations = useSelector((state) => state.weatherNow.locations);
   const history = useHistory();
@@ -29,6 +30,7 @@ const CityList = () => {
         const pattern = new RegExp(`^${cityText}`, "i");
         return pattern.test(location.name);
       });
+      setShowFilteredCities(false);
       history.push(`/${newLocation.id}`);
     }
   };
@@ -45,6 +47,11 @@ const CityList = () => {
       );
       setCurrentInitialLetter(e.target.value.charAt(0).toLocaleLowerCase());
     }
+
+    if (e.target.value) {
+      setShowFilteredCities(true);
+    }
+
     setCityText(e.target.value);
   };
 
@@ -109,7 +116,10 @@ const CityList = () => {
             style={{ width: "100%" }}
           />
         </div>
-        {citiesList.length > 0 && cityText && getFilteredCities()}
+        {showFilteredCities &&
+          citiesList.length > 0 &&
+          cityText &&
+          getFilteredCities()}
       </div>
     </div>
   );
