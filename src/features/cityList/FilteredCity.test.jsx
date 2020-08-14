@@ -18,4 +18,14 @@ describe("FilteredCity", () => {
 
     expect(callback).toHaveBeenCalledTimes(1);
   });
+
+  it("calls the callback when you press return", () => {
+    const callback = jest.fn();
+    render(<FilteredCity name="London" id={133} callback={callback} />);
+    const city = screen.getByText(/London/);
+
+    fireEvent.focus(city);
+    fireEvent.keyDown(city, { key: "Enter", code: "Enter" });
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
 });

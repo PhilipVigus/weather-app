@@ -2,10 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const FilteredCity = ({ name, id, callback }) => {
-  const handleKeyPress = (e) => {
-    e.preventDefault();
-    console.log("pressed");
-
+  const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       callback(id);
     }
@@ -16,7 +13,7 @@ const FilteredCity = ({ name, id, callback }) => {
       key={id}
       role="link"
       onClick={() => callback(id)}
-      onKeyPress={handleKeyPress}
+      onKeyDown={handleKeyDown}
       tabIndex={0}
     >
       {name}
