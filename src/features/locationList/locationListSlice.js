@@ -7,7 +7,7 @@ export const fetchLocationsWithInitialLetter = createAsyncThunk(
   "locationList/locationsWithInitialLetterFetched",
   async (letter) => {
     const result = await Axios.get(
-      `https://weather-app-server-phil.herokuapp.com/cities/${letter}`
+      `https://weather-app-server-phil.herokuapp.com/locations/${letter}`
     );
     return result.data;
   }
