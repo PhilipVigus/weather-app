@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getWeatherById, getLocations } from "./weatherNowSlice";
-import { currentCitySet } from "../cityList/cityListSlice";
 
 const WeatherNow = () => {
   const locations = useSelector(getLocations);
@@ -11,9 +10,6 @@ const WeatherNow = () => {
 
   useEffect(() => {
     dispatch(getWeatherById(id));
-    if (locations.length > 0) {
-      dispatch(currentCitySet(locations[0].name));
-    }
   }, [dispatch, id]);
 
   if (locations.length === 0) {

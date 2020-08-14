@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { currentCitySet, fetchCitiesWithInitialLetter } from "./cityListSlice";
+import { fetchCitiesWithInitialLetter } from "./cityListSlice";
 
 const CityList = () => {
   const dispatch = useDispatch();
@@ -13,7 +13,6 @@ const CityList = () => {
 
   useEffect(() => {
     if (locations.length > 0) {
-      dispatch(currentCitySet(locations[0].name));
       dispatch(
         fetchCitiesWithInitialLetter(
           locations[0].name.charAt(0).toLocaleLowerCase()
@@ -30,7 +29,6 @@ const CityList = () => {
         const pattern = new RegExp(`^${cityText}`, "i");
         return pattern.test(location.name);
       });
-      dispatch(currentCitySet(newLocation.name));
       history.push(`/${newLocation.id}`);
     }
   };
