@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import WeatherNow from "../features/weatherNow/WeatherNow";
-import CityList from "../features/cityList/CityList";
+import LocationList from "../features/locationList/LocationList";
 
 const Main = () => {
   return (
@@ -19,7 +19,7 @@ const Main = () => {
         render={() => {
           return (
             <>
-              <CityList />
+              <LocationList />
               <WeatherNow />
             </>
           );
