@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { fetchCitiesWithInitialLetter } from "./cityListSlice";
+import { fetchLocationsWithInitialLetter } from "./locationListSlice";
 import FilteredCity from "./FilteredCity";
 
 const CityList = () => {
@@ -9,7 +9,7 @@ const CityList = () => {
   const [cityText, setCityText] = useState("");
   const [currentInitialLetter, setCurrentInitialLetter] = useState("l");
   const [showFilteredCities, setShowFilteredCities] = useState(false);
-  const citiesList = useSelector((state) => state.cityList.cities);
+  const citiesList = useSelector((state) => state.cityList.locations);
   const locations = useSelector((state) => state.weatherNow.locations);
   const history = useHistory();
   const textBoxRef = useRef(null);
@@ -18,7 +18,7 @@ const CityList = () => {
     textBoxRef.current.blur();
     if (locations.length > 0) {
       dispatch(
-        fetchCitiesWithInitialLetter(
+        fetchLocationsWithInitialLetter(
           locations[0].name.charAt(0).toLocaleLowerCase()
         )
       );
@@ -44,7 +44,7 @@ const CityList = () => {
       e.target.value.charAt(0).toLocaleLowerCase() !== currentInitialLetter
     ) {
       dispatch(
-        fetchCitiesWithInitialLetter(
+        fetchLocationsWithInitialLetter(
           e.target.value.charAt(0).toLocaleLowerCase()
         )
       );

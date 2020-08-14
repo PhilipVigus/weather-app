@@ -4,11 +4,11 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { MemoryRouter as Router, Route } from "react-router-dom";
+import { MemoryRouter as Router } from "react-router-dom";
 import CityList from "./CityList";
-import * as cityListSlice from "./cityListSlice";
+import * as cityListSlice from "./locationListSlice";
 
-jest.mock("./cityListSlice");
+jest.mock("./locationListSlice");
 
 const mockStore = configureStore([]);
 
@@ -31,7 +31,7 @@ describe("CityList", () => {
     const store = mockStore({
       cityList: {
         currentCity: "London",
-        cities: []
+        locations: []
       },
       weatherNow: {
         locations: []
@@ -54,7 +54,7 @@ describe("CityList", () => {
     const store = mockStore({
       cityList: {
         currentCity: "London",
-        cities: []
+        locations: []
       },
       weatherNow: {
         locations: []
@@ -76,8 +76,10 @@ describe("CityList", () => {
     fireEvent.keyDown(textBox, { key: "Enter", code: "Enter" });
 
     expect(store.dispatch).toHaveBeenCalledTimes(1);
-    expect(cityListSlice.fetchCitiesWithInitialLetter).toHaveBeenCalledTimes(1);
-    expect(cityListSlice.fetchCitiesWithInitialLetter).toHaveBeenCalledWith(
+    expect(cityListSlice.fetchLocationsWithInitialLetter).toHaveBeenCalledTimes(
+      1
+    );
+    expect(cityListSlice.fetchLocationsWithInitialLetter).toHaveBeenCalledWith(
       "p"
     );
   });
@@ -85,7 +87,7 @@ describe("CityList", () => {
   it("clears the box when it gains focus", () => {
     const store = mockStore({
       cityList: {
-        cities: []
+        locations: []
       },
       weatherNow: {
         locations: [{ name: "London" }]
@@ -111,7 +113,7 @@ describe("CityList", () => {
   it("shows the filtered list", () => {
     const store = mockStore({
       cityList: {
-        cities: [
+        locations: [
           { id: 1, name: "London" },
           { id: 2, name: "Liverpool" },
           { id: 3, name: "Lincoln" }
@@ -144,7 +146,7 @@ describe("CityList", () => {
   it("shows the shortened filtered list", () => {
     const store = mockStore({
       cityList: {
-        cities: [
+        locations: [
           { id: 1, name: "London" },
           { id: 2, name: "Liverpool" },
           { id: 3, name: "Lincoln" },
@@ -194,7 +196,7 @@ describe("CityList", () => {
   it("hides the filtered list when you click it", () => {
     const store = mockStore({
       cityList: {
-        cities: [
+        locations: [
           { id: 1, name: "London" },
           { id: 2, name: "Liverpool" },
           { id: 3, name: "Lincoln" }
@@ -229,7 +231,7 @@ describe("CityList", () => {
   it("hides the filtered list when you press enter", () => {
     const store = mockStore({
       cityList: {
-        cities: [
+        locations: [
           { id: 1, name: "London" },
           { id: 2, name: "Liverpool" },
           { id: 3, name: "Lincoln" }
@@ -263,7 +265,7 @@ describe("CityList", () => {
   it("shows no matches if there are no filtered cities", () => {
     const store = mockStore({
       cityList: {
-        cities: [
+        locations: [
           { id: 1, name: "London" },
           { id: 2, name: "Liverpool" },
           { id: 3, name: "Lincoln" }

@@ -19,7 +19,7 @@ describe("App", () => {
     mock.restore();
   });
 
-  it("renders the weather now and city list", async () => {
+  it("renders the weather now and location list", async () => {
     mock
       .onGet()
       .replyOnce(200, {
