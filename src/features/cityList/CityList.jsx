@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { fetchLocationsWithInitialLetter } from "./locationListSlice";
-import FilteredCity from "./FilteredCity";
+import FilteredCity from "./FilteredLocation";
 
 const CityList = () => {
   const dispatch = useDispatch();

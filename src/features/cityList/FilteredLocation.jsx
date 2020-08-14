@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const FilteredCity = ({ name, id, callback }) => {
+const FilteredLocation = ({ name, id, callback }) => {
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       callback(id);
@@ -21,10 +21,10 @@ const FilteredCity = ({ name, id, callback }) => {
   );
 };
 
-FilteredCity.propTypes = {
+FilteredLocation.propTypes = {
   name: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   callback: PropTypes.func.isRequired
 };
 
-export default FilteredCity;
+export default FilteredLocation;
