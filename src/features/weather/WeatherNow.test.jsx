@@ -2,17 +2,29 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
+import Axios from "axios";
+import MockAdapter from "axios-mock-adapter";
 import { MemoryRouter as Router } from "react-router-dom";
-import Main from "./Main";
+import WeatherNow from "./WeatherNow";
 
 const mockStore = configureStore([]);
 
-describe("Main", () => {
+describe("WeatherNow", () => {
+  let axiosMock;
+
+  beforeAll(() => {
+    axiosMock = new MockAdapter(Axios);
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it("renders the WeatherNow component", () => {
+  afterAll(() => {
+    axiosMock.restore();
+  });
+
+  it("renders the heading", () => {
     const store = mockStore({
       locationList: {
         locations: []
@@ -61,14 +73,34 @@ describe("Main", () => {
     render(
       <Provider store={store}>
         <Router>
-          <Main />
+          <WeatherNow />
         </Router>
       </Provider>
     );
     expect(screen.getByText(/Weather in London right now/)).toBeInTheDocument();
   });
 
-  it("renders the LocationList component", () => {
+  it("renders the loading message", () => {
+    const store = mockStore({
+      locationList: {
+        locations: []
+      },
+      weather: {}
+    });
+
+    store.dispatch = jest.fn();
+
+    render(
+      <Provider store={store}>
+        <Router>
+          <WeatherNow />
+        </Router>
+      </Provider>
+    );
+    expect(screen.getByText(/Loading.../)).toBeInTheDocument();
+  });
+
+  it("renders the state value in the redux store", async () => {
     const store = mockStore({
       locationList: {
         locations: []
@@ -117,11 +149,20 @@ describe("Main", () => {
     render(
       <Provider store={store}>
         <Router>
-          <Main />
+          <WeatherNow />
         </Router>
       </Provider>
     );
 
-    expect(screen.getByText(/Location List/)).toBeInTheDocument();
+    expect(screen.getByText(/Clouds/)).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", { name: "Clouds icon" })
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Temp = 31 C/)).toBeInTheDocument();
+    expect(screen.getByText(/Humidity = 43/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Wind = 2.6 m\/s \(80 degrees\)/)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/13% cloud coverage/)).toBeInTheDocument();
   });
 });

@@ -6,6 +6,7 @@ const initialState = { locations: [], cachedLetters: {} };
 export const fetchLocationsWithInitialLetter = createAsyncThunk(
   "locationList/locationsWithInitialLetterFetched",
   async (letter, thunkAPI) => {
+    console.log("called");
     if (thunkAPI.getState().locationList.cachedLetters[letter]) {
       return {
         toCache: false,
@@ -30,6 +31,7 @@ const locationListSlice = createSlice({
   reducers: {},
   extraReducers: {
     [fetchLocationsWithInitialLetter.fulfilled]: (state, action) => {
+      console.log("here");
       if (action.payload.toCache) {
         state.cachedLetters[action.payload.letterToCache] = action.payload.data;
       }
