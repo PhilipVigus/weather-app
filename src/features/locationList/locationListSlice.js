@@ -1,15 +1,26 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "axios";
 
-const initialState = { locations: [] };
+const initialState = { locations: [], cachedLetters: {} };
 
 export const fetchLocationsWithInitialLetter = createAsyncThunk(
   "locationList/locationsWithInitialLetterFetched",
-  async (letter) => {
-    const result = await Axios.get(
-      `${process.env.REACT_APP_SERVER_URL}/locations/${letter}`
-    );
-    return result.data;
+  async (letter, thunkAPI) => {
+    if (thunkAPI.getState().locationList.cachedLetters[letter]) {
+      return {
+        toCache: false,
+        data: thunkAPI.getState().locationList.cachedLetters[letter]
+      };
+    } else {
+      const result = await Axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/locations/${letter}`
+      );
+      return {
+        toCache: true,
+        letterToCache: letter,
+        data: result.data
+      };
+    }
   }
 );
 
@@ -19,7 +30,10 @@ const locationListSlice = createSlice({
   reducers: {},
   extraReducers: {
     [fetchLocationsWithInitialLetter.fulfilled]: (state, action) => {
-      state.locations = action.payload;
+      if (action.payload.toCache) {
+        state.cachedLetters[action.payload.letterToCache] = action.payload.data;
+      }
+      state.locations = action.payload.data;
     }
   }
 });
