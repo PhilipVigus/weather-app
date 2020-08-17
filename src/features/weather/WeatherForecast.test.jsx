@@ -13,7 +13,30 @@ describe("WeatherForecast", () => {
         locations: []
       },
       weather: {
-        forecast: {}
+        forecast: {
+          list: [
+            {
+              dt: 1597676400,
+              dt_txt: "2020-08-17 15:00:00",
+              main: {
+                humidity: 75,
+                temp: 294.45
+              },
+              weather: [
+                {
+                  main: "Clear"
+                }
+              ],
+              wind: {
+                speed: 4.3,
+                deg: 27
+              },
+              clouds: {
+                all: 1
+              }
+            }
+          ]
+        }
       }
     });
 
@@ -41,5 +64,53 @@ describe("WeatherForecast", () => {
     );
 
     expect(screen.getByText(/Loading.../)).toBeInTheDocument();
+  });
+
+  it("Renders the forecast", () => {
+    const store = mockStore({
+      locationList: {
+        locations: []
+      },
+      weather: {
+        forecast: {
+          list: [
+            {
+              dt: 1597676400,
+              dt_txt: "2020-08-17 15:00:00",
+              main: {
+                humidity: 75,
+                temp: 294.45
+              },
+              weather: [
+                {
+                  main: "Clear"
+                }
+              ],
+              wind: {
+                speed: 4.3,
+                deg: 27
+              },
+              clouds: {
+                all: 1
+              }
+            }
+          ]
+        }
+      }
+    });
+
+    render(
+      <Provider store={store}>
+        <WeatherForecast />
+      </Provider>
+    );
+
+    expect(screen.getByText(/Clear/)).toBeInTheDocument();
+    expect(screen.getByText(/Temp = 21 C/)).toBeInTheDocument();
+    expect(screen.getByText(/Humidity = 75/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Wind = 4.3 m\/s \(27 degrees\)/)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/1% cloud coverage/)).toBeInTheDocument();
   });
 });

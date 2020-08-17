@@ -60,10 +60,7 @@ describe("App", () => {
         cod: 200
       })
       .onGet()
-      .replyOnce(200, [
-        { id: 7287676, name: "L'Abbaye, Switzerland (6.30°, 46.64°)" },
-        { id: 2660080, name: "L'Abbaye, Switzerland (6.32°, 46.65°)" }
-      ]);
+      .replyOnce(200, { list: [] });
 
     render(<App />);
 
