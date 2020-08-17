@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import weatherNowReducer from "../features/weatherNow/weatherNowSlice";
+import weatherReducer from "../features/weather/weatherSlice";
 import locationListReducer from "../features/locationList/locationListSlice";
 
 export default configureStore({
   reducer: {
-    weatherNow: weatherNowReducer,
+    weather: weatherReducer,
     locationList: locationListReducer
   }
 });

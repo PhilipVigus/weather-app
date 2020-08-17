@@ -17,7 +17,7 @@ describe("Main", () => {
       locationList: {
         locations: []
       },
-      weatherNow: {
+      weather: {
         now: {
           coord: { lon: -0.13, lat: 51.51 },
           weather: [
@@ -73,7 +73,7 @@ describe("Main", () => {
       locationList: {
         locations: []
       },
-      weatherNow: {
+      weather: {
         now: {
           coord: { lon: -0.13, lat: 51.51 },
           weather: [

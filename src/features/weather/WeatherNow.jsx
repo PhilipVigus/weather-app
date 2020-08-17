@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getWeatherById } from "./weatherNowSlice";
+import { getWeatherById } from "./weatherSlice";
 
 const WeatherNow = () => {
-  const weatherNow = useSelector((state) => state.weatherNow.now);
+  const weatherNow = useSelector((state) => state.weather.now);
   const dispatch = useDispatch();
   const { id } = useParams();
 

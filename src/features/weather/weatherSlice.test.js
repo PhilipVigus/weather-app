@@ -2,7 +2,7 @@ import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { getWeatherById } from "./weatherNowSlice";
+import { getWeatherById } from "./weatherSlice";
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -65,7 +65,7 @@ describe("store", () => {
       const store = mockStore({ locations: [] });
       const result = await store.dispatch(getWeatherById(2643743));
 
-      expect(result.type).toEqual("weatherNow/getWeatherById/fulfilled");
+      expect(result.type).toEqual("weather/getWeatherById/fulfilled");
       expect(result.payload).toEqual({
         now: {
           coord: { lon: -0.13, lat: 51.51 },

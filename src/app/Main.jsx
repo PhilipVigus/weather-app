@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import WeatherNow from "../features/weatherNow/WeatherNow";
+import WeatherNow from "../features/weather/WeatherNow";
 import LocationList from "../features/locationList/LocationList";
 
 const Main = () => {

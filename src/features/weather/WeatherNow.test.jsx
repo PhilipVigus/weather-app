@@ -5,10 +5,10 @@ import configureStore from "redux-mock-store";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { MemoryRouter as Router, Route } from "react-router-dom";
-import * as weatherNowSlice from "./weatherNowSlice";
+import * as weatherNowSlice from "./weatherSlice";
 import WeatherNow from "./WeatherNow";
 
-jest.mock("./weatherNowSlice");
+jest.mock("./weatherSlice");
 
 const mockStore = configureStore([]);
 
@@ -32,7 +32,7 @@ describe("WeatherNow", () => {
       locationList: {
         locations: []
       },
-      weatherNow: {
+      weather: {
         now: {
           coord: { lon: -0.13, lat: 51.51 },
           weather: [
@@ -88,7 +88,7 @@ describe("WeatherNow", () => {
       locationList: {
         locations: []
       },
-      weatherNow: {}
+      weather: {}
     });
 
     store.dispatch = jest.fn();
@@ -108,7 +108,7 @@ describe("WeatherNow", () => {
       locationList: {
         locations: []
       },
-      weatherNow: {
+      weather: {
         now: {
           coord: { lon: -0.13, lat: 51.51 },
           weather: [
@@ -174,7 +174,7 @@ describe("WeatherNow", () => {
       locationList: {
         locations: []
       },
-      weatherNow: {
+      weather: {
         now: {
           coord: { lon: -0.13, lat: 51.51 },
           weather: [

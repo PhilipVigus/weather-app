@@ -10,7 +10,7 @@ const LocationList = () => {
   const [currentInitialLetter, setCurrentInitialLetter] = useState("l");
   const [showFilteredLocations, setShowFilteredLocations] = useState(false);
   const locationsList = useSelector((state) => state.locationList.locations);
-  const weatherNow = useSelector((state) => state.weatherNow.now);
+  const weatherNow = useSelector((state) => state.weather.now);
   const history = useHistory();
   const textBoxRef = useRef(null);
 

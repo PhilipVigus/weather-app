@@ -4,7 +4,7 @@ import Axios from "axios";
 const initialState = {};
 
 export const getWeatherById = createAsyncThunk(
-  "weatherNow/getWeatherById",
+  "weather/getWeatherById",
   async (id) => {
     const nameResponse = await Axios.get(
       `${process.env.REACT_APP_SERVER_URL}/locations/names/${id}`
@@ -23,8 +23,8 @@ export const getWeatherById = createAsyncThunk(
   }
 );
 
-const weatherNowSlice = createSlice({
-  name: "weatherNow",
+const weatherSlice = createSlice({
+  name: "weather",
   initialState,
   reducers: {},
   extraReducers: {
@@ -35,4 +35,4 @@ const weatherNowSlice = createSlice({
   }
 });
 
-export default weatherNowSlice.reducer;
+export default weatherSlice.reducer;
