@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "axios";
 
-const initialState = { locations: [], forecast: {} };
+const initialState = {};
 
 export const getWeatherById = createAsyncThunk(
   "weatherNow/getWeatherById",
@@ -29,7 +29,7 @@ const weatherNowSlice = createSlice({
   reducers: {},
   extraReducers: {
     [getWeatherById.fulfilled]: (state, action) => {
-      state.locations = [action.payload.now];
+      state.now = action.payload.now;
       state.forecast = action.payload.forecast;
     }
   }

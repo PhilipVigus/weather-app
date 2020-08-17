@@ -10,21 +10,21 @@ const LocationList = () => {
   const [currentInitialLetter, setCurrentInitialLetter] = useState("l");
   const [showFilteredLocations, setShowFilteredLocations] = useState(false);
   const locationsList = useSelector((state) => state.locationList.locations);
-  const locations = useSelector((state) => state.weatherNow.locations);
+  const weatherNow = useSelector((state) => state.weatherNow.now);
   const history = useHistory();
   const textBoxRef = useRef(null);
 
   useEffect(() => {
     textBoxRef.current.blur();
-    if (locations.length > 0) {
+    if (weatherNow) {
       dispatch(
         fetchLocationsWithInitialLetter(
-          locations[0].name.charAt(0).toLocaleLowerCase()
+          weatherNow.name.charAt(0).toLocaleLowerCase()
         )
       );
-      setLocationText(locations[0].name);
+      setLocationText(weatherNow.name);
     }
-  }, [dispatch, locations]);
+  }, [dispatch, weatherNow]);
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && locationText) {

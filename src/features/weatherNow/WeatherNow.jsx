@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { getWeatherById } from "./weatherNowSlice";
 
 const WeatherNow = () => {
-  const locations = useSelector((state) => state.weatherNow.locations);
+  const weatherNow = useSelector((state) => state.weatherNow.now);
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -12,23 +12,23 @@ const WeatherNow = () => {
     dispatch(getWeatherById(id));
   }, [dispatch, id]);
 
-  if (locations.length === 0) {
+  if (!weatherNow) {
     return <div>Loading...</div>;
   } else {
     return (
       <div>
-        <div>{`Weather in ${locations[0].name} right now`}</div>
-        <div>{locations[0].weather[0].main}</div>
+        <div>{`Weather in ${weatherNow.name} right now`}</div>
+        <div>{weatherNow.weather[0].main}</div>
         <div>
           <img
-            alt={`${locations[0].weather[0].main} icon`}
-            src={`https://openweathermap.org/img/wn/${locations[0].weather[0].icon}@2x.png`}
+            alt={`${weatherNow.weather[0].main} icon`}
+            src={`https://openweathermap.org/img/wn/${weatherNow.weather[0].icon}@2x.png`}
           />
         </div>
-        <div>{`Temp = ${Math.round(locations[0].main.temp - 273.15)} C`}</div>
-        <div>{`Humidity = ${locations[0].main.humidity}`}</div>
-        <div>{`Wind = ${locations[0].wind.speed} m/s (${locations[0].wind.deg} degrees)`}</div>
-        <div>{`${locations[0].clouds.all}% cloud coverage`}</div>
+        <div>{`Temp = ${Math.round(weatherNow.main.temp - 273.15)} C`}</div>
+        <div>{`Humidity = ${weatherNow.main.humidity}`}</div>
+        <div>{`Wind = ${weatherNow.wind.speed} m/s (${weatherNow.wind.deg} degrees)`}</div>
+        <div>{`${weatherNow.clouds.all}% cloud coverage`}</div>
       </div>
     );
   }
