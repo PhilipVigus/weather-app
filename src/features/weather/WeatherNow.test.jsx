@@ -4,19 +4,16 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { MemoryRouter as Router, Route } from "react-router-dom";
-import * as weatherNowSlice from "./weatherSlice";
+import { MemoryRouter as Router } from "react-router-dom";
 import WeatherNow from "./WeatherNow";
-
-jest.mock("./weatherSlice");
 
 const mockStore = configureStore([]);
 
 describe("WeatherNow", () => {
-  let mock;
+  let axiosMock;
 
   beforeAll(() => {
-    mock = new MockAdapter(Axios);
+    axiosMock = new MockAdapter(Axios);
   });
 
   afterEach(() => {
@@ -24,7 +21,7 @@ describe("WeatherNow", () => {
   });
 
   afterAll(() => {
-    mock.restore();
+    axiosMock.restore();
   });
 
   it("renders the heading", () => {
@@ -167,66 +164,5 @@ describe("WeatherNow", () => {
       screen.getByText(/Wind = 2.6 m\/s \(80 degrees\)/)
     ).toBeInTheDocument();
     expect(screen.getByText(/13% cloud coverage/)).toBeInTheDocument();
-  });
-
-  it("calls dispatch on the redux store with the correct action", async () => {
-    const store = mockStore({
-      locationList: {
-        locations: []
-      },
-      weather: {
-        now: {
-          coord: { lon: -0.13, lat: 51.51 },
-          weather: [
-            {
-              id: 801,
-              main: "Clouds",
-              description: "few clouds",
-              icon: "02d"
-            }
-          ],
-          base: "stations",
-          main: {
-            temp: 304.61,
-            feels_like: 305.31,
-            temp_min: 304.15,
-            temp_max: 305.93,
-            pressure: 1013,
-            humidity: 43
-          },
-          visibility: 10000,
-          wind: { speed: 2.6, deg: 80 },
-          clouds: { all: 13 },
-          dt: 1597063048,
-          sys: {
-            type: 1,
-            id: 1414,
-            country: "GB",
-            sunrise: 1597034324,
-            sunset: 1597087983
-          },
-          timezone: 3600,
-          id: 2643743,
-          name: "location",
-          cod: 200
-        }
-      }
-    });
-
-    store.dispatch = jest.fn();
-
-    render(
-      <Provider store={store}>
-        <Router initialEntries={["/15"]}>
-          <Route path="/:id">
-            <WeatherNow />
-          </Route>
-        </Router>
-      </Provider>
-    );
-
-    expect(store.dispatch).toHaveBeenCalledTimes(1);
-    expect(weatherNowSlice.getWeatherById).toHaveBeenCalledTimes(1);
-    expect(weatherNowSlice.getWeatherById).toHaveBeenCalledWith("15");
   });
 });
