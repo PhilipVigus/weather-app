@@ -22,6 +22,8 @@ describe("App", () => {
   it("renders the weather now and location list", async () => {
     mock
       .onGet()
+      .replyOnce(200, { name: "London" })
+      .onGet()
       .replyOnce(200, {
         coord: { lon: -0.13, lat: 51.51 },
         weather: [
