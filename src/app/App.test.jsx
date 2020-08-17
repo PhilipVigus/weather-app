@@ -22,7 +22,7 @@ describe("App", () => {
   it("renders the weather now and location list", async () => {
     mock
       .onGet()
-      .replyOnce(200, { name: "London" })
+      .replyOnce(200, { name: "London, UK" })
       .onGet()
       .replyOnce(200, {
         coord: { lon: -0.13, lat: 51.51 },
@@ -68,7 +68,7 @@ describe("App", () => {
     render(<App />);
 
     expect(
-      await screen.findByText(/Weather in London right now/)
+      await screen.findByText(/Weather in London, UK right now/)
     ).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/Enter location name/)
