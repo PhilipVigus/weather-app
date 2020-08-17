@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import App from "./App";
