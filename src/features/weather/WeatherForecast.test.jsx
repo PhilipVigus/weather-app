@@ -105,6 +105,7 @@ describe("WeatherForecast", () => {
       </Provider>
     );
 
+    expect(screen.getByText(/Mon 3:00 PM/)).toBeInTheDocument();
     expect(screen.getByText(/Clear/)).toBeInTheDocument();
     expect(screen.getByText(/Temp = 21 C/)).toBeInTheDocument();
     expect(screen.getByText(/Humidity = 75/)).toBeInTheDocument();
