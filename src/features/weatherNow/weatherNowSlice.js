@@ -6,10 +6,15 @@ const initialState = { locations: [] };
 export const getWeatherById = createAsyncThunk(
   "weatherNow/getWeatherById",
   async (id) => {
-    const result = await Axios.get(
+    const nameResponse = await Axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/locations/names/${id}`
+    );
+
+    const weatherResponse = await Axios.get(
       `https://api.openweathermap.org/data/2.5/weather?id=${id}&appid=${process.env.REACT_APP_API_KEY}`
     );
-    return result.data;
+    weatherResponse.data.name = nameResponse.data.name;
+    return weatherResponse.data;
   }
 );
 
