@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "axios";
 
-const initialState = { locations: [] };
+const initialState = { locations: [], forecast: {} };
 
 export const getWeatherById = createAsyncThunk(
   "weatherNow/getWeatherById",
@@ -14,7 +14,12 @@ export const getWeatherById = createAsyncThunk(
       `https://api.openweathermap.org/data/2.5/weather?id=${id}&appid=${process.env.REACT_APP_API_KEY}`
     );
     weatherResponse.data.name = nameResponse.data.name;
-    return weatherResponse.data;
+
+    const forecastResponse = await Axios.get(
+      `https://api.openweathermap.org/data/2.5/forecast?id=${id}&appid=${process.env.REACT_APP_API_KEY}`
+    );
+
+    return { now: weatherResponse.data, forecast: forecastResponse.data };
   }
 );
 
@@ -24,7 +29,8 @@ const weatherNowSlice = createSlice({
   reducers: {},
   extraReducers: {
     [getWeatherById.fulfilled]: (state, action) => {
-      state.locations = [action.payload];
+      state.locations = [action.payload.now];
+      state.forecast = action.payload.forecast;
     }
   }
 });
