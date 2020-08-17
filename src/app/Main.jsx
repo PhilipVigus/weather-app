@@ -1,6 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import WeatherNow from "../features/weatherNow/WeatherNow";
+import WeatherContainer from "../features/weather/WeatherContainer";
 import LocationList from "../features/locationList/LocationList";
 
 const Main = () => {
@@ -20,7 +20,7 @@ const Main = () => {
           return (
             <>
               <LocationList />
-              <WeatherNow />
+              <WeatherContainer />
             </>
           );
         }}

@@ -32,8 +32,8 @@ describe("LocationList", () => {
       locationList: {
         locations: []
       },
-      weatherNow: {
-        locations: []
+      weather: {
+        weather: {}
       }
     });
 
@@ -54,8 +54,8 @@ describe("LocationList", () => {
       locationList: {
         locations: []
       },
-      weatherNow: {
-        locations: []
+      weather: {
+        weather: {}
       }
     });
 
@@ -87,8 +87,8 @@ describe("LocationList", () => {
       locationList: {
         locations: []
       },
-      weatherNow: {
-        locations: [{ name: "London" }]
+      weather: {
+        now: { name: "London" }
       }
     });
 
@@ -117,8 +117,8 @@ describe("LocationList", () => {
           { id: 3, name: "Lincoln" }
         ]
       },
-      weatherNow: {
-        locations: [{ name: "London" }]
+      weather: {
+        weather: { now: { name: "London" } }
       }
     });
 
@@ -169,8 +169,8 @@ describe("LocationList", () => {
           { id: 22, name: "Liverpool" }
         ]
       },
-      weatherNow: {
-        locations: [{ name: "London" }]
+      weather: {
+        weather: { now: { name: "London" } }
       }
     });
 
@@ -200,8 +200,8 @@ describe("LocationList", () => {
           { id: 3, name: "Lincoln" }
         ]
       },
-      weatherNow: {
-        locations: [{ name: "London" }]
+      weather: {
+        weather: { now: { name: "London" } }
       }
     });
 
@@ -235,8 +235,8 @@ describe("LocationList", () => {
           { id: 3, name: "Lincoln" }
         ]
       },
-      weatherNow: {
-        locations: [{ name: "London" }]
+      weather: {
+        weather: { now: { name: "London" } }
       }
     });
 
@@ -269,8 +269,8 @@ describe("LocationList", () => {
           { id: 3, name: "Lincoln" }
         ]
       },
-      weatherNow: {
-        locations: [{ name: "London" }]
+      weather: {
+        now: { name: "London" }
       }
     });
 
