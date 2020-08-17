@@ -2,7 +2,7 @@ import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { fetchLocationsWithInitialLetter } from "../features/locationList/locationListSlice";
+import { fetchLocationsWithInitialLetter } from "./locationListSlice";
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -22,7 +22,7 @@ describe("store", () => {
     mock.restore();
   });
 
-  describe("fetchLocationsWithInitialLetter", () => {
+  describe("locationListSlice", () => {
     it("creates an action when the data has been fetched", async () => {
       mock.onGet().replyOnce(200, [
         { id: 1, name: "London" },
@@ -32,7 +32,6 @@ describe("store", () => {
 
       const store = mockStore({ locations: [] });
       const result = await store.dispatch(fetchLocationsWithInitialLetter("l"));
-      console.log(result);
 
       expect(result.type).toEqual(
         "locationList/locationsWithInitialLetterFetched/fulfilled"
