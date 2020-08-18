@@ -1,3 +1,4 @@
+/* eslint-disable no-extend-native */
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
@@ -67,6 +68,11 @@ describe("WeatherForecast", () => {
   });
 
   it("Renders the forecast", () => {
+    const { getTimezoneOffset } = Date.prototype;
+    Date.prototype.getTimezoneOffset = () => {
+      return -60;
+    };
+
     const store = mockStore({
       locationList: {
         locations: []
@@ -105,7 +111,6 @@ describe("WeatherForecast", () => {
       </Provider>
     );
 
-    expect(screen.getByText(/Mon 3:00 PM/)).toBeInTheDocument();
     expect(screen.getByText(/Clear/)).toBeInTheDocument();
     expect(screen.getByText(/Temp = 21 C/)).toBeInTheDocument();
     expect(screen.getByText(/Humidity = 75/)).toBeInTheDocument();
@@ -113,5 +118,7 @@ describe("WeatherForecast", () => {
       screen.getByText(/Wind = 4.3 m\/s \(27 degrees\)/)
     ).toBeInTheDocument();
     expect(screen.getByText(/1% cloud coverage/)).toBeInTheDocument();
+
+    Date.prototype.getTimezoneOffset = getTimezoneOffset;
   });
 });
