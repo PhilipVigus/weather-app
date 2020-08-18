@@ -2,7 +2,7 @@ import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { getWeatherById } from "./weatherSlice";
+import reducer, { getWeatherById, getWeatherByGPS } from "./weatherSlice";
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -19,7 +19,7 @@ describe("store", () => {
   });
 
   describe("weatherNowSlice", () => {
-    it("creates an action when the data has been fetched", async () => {
+    it("creates an action when getWeatherById is called", async () => {
       mock
         .onGet()
         .replyOnce(200, { name: "London" })
@@ -103,6 +103,141 @@ describe("store", () => {
           cod: 200
         },
         forecast: { weather: "some weather" }
+      });
+    });
+
+    it("creates an action when getWeatherByGPS is called and is available", async () => {
+      const mockGeolocation = {
+        getCurrentPosition: jest.fn().mockImplementationOnce((success) =>
+          Promise.resolve(
+            success({
+              coords: {
+                latitude: 51.1,
+                longitude: 45.3
+              }
+            })
+          )
+        )
+      };
+
+      global.navigator.geolocation = mockGeolocation;
+
+      mock
+        .onGet()
+        .replyOnce(200, {
+          coord: { lon: -0.13, lat: 51.51 },
+          weather: [
+            {
+              id: 801,
+              main: "Clouds",
+              description: "few clouds",
+              icon: "02d"
+            }
+          ]
+        })
+        .onGet()
+        .replyOnce(200, { weather: "a weather forecast" })
+        .onGet()
+        .replyOnce(200, { name: "London" });
+
+      const store = mockStore({ locations: [] });
+      const result = await store.dispatch(getWeatherByGPS());
+
+      expect(result.type).toEqual("weather/getWeatherByGPS/fulfilled");
+      expect(result.payload).toEqual({
+        forecast: { weather: "a weather forecast" },
+        now: {
+          coord: { lat: 51.51, lon: -0.13 },
+          name: "London",
+          weather: [
+            { description: "few clouds", icon: "02d", id: 801, main: "Clouds" }
+          ]
+        }
+      });
+    });
+
+    it("creates throws an error when getWeatherByGPS is called and is unavailable", async () => {
+      global.navigator.geolocation = undefined;
+
+      mock
+        .onGet()
+        .replyOnce(200, {
+          coord: { lon: -0.13, lat: 51.51 },
+          weather: [
+            {
+              id: 801,
+              main: "Clouds",
+              description: "few clouds",
+              icon: "02d"
+            }
+          ]
+        })
+        .onGet()
+        .replyOnce(200, { weather: "a weather forecast" })
+        .onGet()
+        .replyOnce(200, { name: "London" });
+
+      const store = mockStore({ locations: [] });
+      const result = await store.dispatch(getWeatherByGPS());
+
+      expect(result.type).toEqual("weather/getWeatherByGPS/rejected");
+    });
+
+    describe("reducer", () => {
+      it("returns the initial state", () => {
+        expect(reducer(undefined, {})).toEqual({
+          GPSAvailable: true
+        });
+      });
+
+      it("handles getWeatherByGPS actions when GPS is available", () => {
+        const mockGeolocation = {
+          getCurrentPosition: jest.fn().mockImplementationOnce((success) =>
+            Promise.resolve(
+              success({
+                coords: {
+                  latitude: 51.1,
+                  longitude: 45.3
+                }
+              })
+            )
+          )
+        };
+
+        global.navigator.geolocation = mockGeolocation;
+
+        expect(
+          reducer(
+            { GPSAvailable: true },
+            {
+              type: getWeatherByGPS.fulfilled.type,
+              payload: {
+                now: { weather: "good" },
+                forecast: { weather: "bad" }
+              }
+            }
+          )
+        ).toEqual({
+          GPSAvailable: true,
+          now: { weather: "good" },
+          forecast: { weather: "bad" }
+        });
+      });
+
+      it("handles getWeatherByGPS actions when GPS is unavailable", () => {
+        global.navigator.geolocation = undefined;
+
+        expect(
+          reducer(
+            { GPSAvailable: true },
+            {
+              type: getWeatherByGPS.rejected.type,
+              payload: {}
+            }
+          )
+        ).toEqual({
+          GPSAvailable: false
+        });
       });
     });
   });
