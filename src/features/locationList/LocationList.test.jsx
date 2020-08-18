@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import Axios from "axios";
@@ -7,8 +7,10 @@ import MockAdapter from "axios-mock-adapter";
 import { MemoryRouter as Router } from "react-router-dom";
 import LocationList from "./LocationList";
 import * as locationListSlice from "./locationListSlice";
+import * as weatherSlice from "../weather/weatherSlice";
 
 jest.mock("./locationListSlice");
+jest.mock("../weather/weatherSlice");
 
 const mockStore = configureStore([]);
 
@@ -318,5 +320,81 @@ describe("LocationList", () => {
     expect(
       screen.getByRole("button", { name: "Where I am" })
     ).toBeInTheDocument();
+  });
+
+  it("the GPS button calls dispatch", async () => {
+    const mockGeolocation = {
+      getCurrentPosition: jest.fn().mockImplementationOnce((success) =>
+        Promise.resolve(
+          success({
+            coords: {
+              latitude: 51.1,
+              longitude: 45.3
+            }
+          })
+        )
+      )
+    };
+
+    global.navigator.geolocation = mockGeolocation;
+    const store = mockStore({
+      locationList: {
+        locations: [
+          { id: 1, name: "London" },
+          { id: 2, name: "Liverpool" },
+          { id: 3, name: "Lincoln" }
+        ]
+      },
+      weather: {
+        now: { name: "London" },
+        GPSAvailable: true
+      }
+    });
+
+    store.dispatch = jest.fn();
+
+    render(
+      <Provider store={store}>
+        <Router>
+          <LocationList />
+        </Router>
+      </Provider>
+    );
+
+    const button = screen.getByRole("button", { name: "Where I am" });
+    fireEvent.click(button);
+    expect(store.dispatch).toHaveBeenCalledTimes(2);
+    expect(weatherSlice.getWeatherByGPS).toHaveBeenCalledTimes(1);
+  });
+
+  it("the GPS button is disabled when GPS is unavailable", async () => {
+    const store = mockStore({
+      locationList: {
+        locations: [
+          { id: 1, name: "London" },
+          { id: 2, name: "Liverpool" },
+          { id: 3, name: "Lincoln" }
+        ]
+      },
+      weather: {
+        now: { name: "London" },
+        GPSAvailable: false
+      }
+    });
+
+    store.dispatch = jest.fn();
+
+    render(
+      <Provider store={store}>
+        <Router>
+          <LocationList />
+        </Router>
+      </Provider>
+    );
+
+    const button = screen.getByRole("button", { name: "Where I am" });
+    fireEvent.click(button);
+    expect(store.dispatch).toHaveBeenCalledTimes(1);
+    expect(weatherSlice.getWeatherByGPS).toHaveBeenCalledTimes(0);
   });
 });

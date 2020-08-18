@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { fetchLocationsWithInitialLetter } from "./locationListSlice";
 import FilteredLocation from "./FilteredLocation";
+import { getWeatherByGPS } from "../weather/weatherSlice";
 
 const LocationList = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const LocationList = () => {
   const [showFilteredLocations, setShowFilteredLocations] = useState(false);
   const locationsList = useSelector((state) => state.locationList.locations);
   const weatherNow = useSelector((state) => state.weather.now);
+  const GPSAvailable = useSelector((state) => state.weather.GPSAvailable);
   const history = useHistory();
   const textBoxRef = useRef(null);
 
@@ -65,6 +67,10 @@ const LocationList = () => {
   const handleLocationClick = (id) => {
     setShowFilteredLocations(false);
     history.push(`/${id}`);
+  };
+
+  const handleWhereIAmClick = () => {
+    dispatch(getWeatherByGPS());
   };
 
   const getFilteredLocations = () => {
@@ -136,7 +142,13 @@ const LocationList = () => {
           />
         </div>
         <div>
-          <button type="button">Where I am</button>
+          <button
+            type="button"
+            onClick={handleWhereIAmClick}
+            disabled={!GPSAvailable}
+          >
+            Where I am
+          </button>
         </div>
         {showFilteredLocations &&
           locationsList.length > 0 &&
