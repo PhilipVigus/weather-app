@@ -1,13 +1,16 @@
 import React from "react";
 import { format } from "date-fns";
+import addMilliseconds from "date-fns/addMilliseconds";
 import { useSelector } from "react-redux";
 
 const WeatherForecast = () => {
   const weatherForecast = useSelector((state) => state.weather.forecast);
   const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
 
-  const getTimeDateString = (milliseconds) => {
-    return format(new Date(milliseconds), "eee p");
+  const getTimeDateString = (date) => {
+    const UTCDate = new Date(date);
+    const localDate = addMilliseconds(UTCDate, -timeOffset);
+    return format(localDate, "eee p");
   };
 
   if (!weatherForecast) {
@@ -19,9 +22,7 @@ const WeatherForecast = () => {
         {weatherForecast.list.map((forecastAtTime) => (
           <div key={forecastAtTime.dt}>
             <hr />
-            <div>
-              {getTimeDateString(forecastAtTime.dt * 1000 + timeOffset)}
-            </div>
+            <div>{`${getTimeDateString(forecastAtTime.dt_txt)}`}</div>
             <div>{forecastAtTime.weather[0].main}</div>
             <div>
               <img
