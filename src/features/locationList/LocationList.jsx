@@ -135,6 +135,9 @@ const LocationList = () => {
             style={{ width: "100%" }}
           />
         </div>
+        <div>
+          <button type="button">Where I am</button>
+        </div>
         {showFilteredLocations &&
           locationsList.length > 0 &&
           locationText &&

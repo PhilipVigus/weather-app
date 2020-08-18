@@ -290,4 +290,33 @@ describe("LocationList", () => {
 
     expect(screen.getByText(/No matches/)).toBeInTheDocument();
   });
+
+  it("shows the button for setting the location to GPS", () => {
+    const store = mockStore({
+      locationList: {
+        locations: [
+          { id: 1, name: "London" },
+          { id: 2, name: "Liverpool" },
+          { id: 3, name: "Lincoln" }
+        ]
+      },
+      weather: {
+        now: { name: "London" }
+      }
+    });
+
+    store.dispatch = jest.fn();
+
+    render(
+      <Provider store={store}>
+        <Router>
+          <LocationList />
+        </Router>
+      </Provider>
+    );
+
+    expect(
+      screen.getByRole("button", { name: "Where I am" })
+    ).toBeInTheDocument();
+  });
 });
