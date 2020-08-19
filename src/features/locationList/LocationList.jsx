@@ -126,7 +126,7 @@ const LocationList = () => {
   };
 
   return (
-    <div>
+    <nav>
       <div>Location List</div>
       <div>
         <div>
@@ -155,7 +155,7 @@ const LocationList = () => {
           locationText &&
           getFilteredLocations()}
       </div>
-    </div>
+    </nav>
   );
 };
 
