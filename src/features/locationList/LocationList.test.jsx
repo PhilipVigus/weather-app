@@ -20,30 +20,7 @@ describe("LocationList", () => {
     jest.clearAllMocks();
   });
 
-  it("renders the title", () => {
-    const store = mockStore({
-      locationList: {
-        cachedLetters: {},
-        locations: []
-      },
-      weather: {
-        GPSAvailable: true
-      }
-    });
-
-    store.dispatch = jest.fn();
-    render(
-      <Provider store={store}>
-        <Router>
-          <LocationList />
-        </Router>
-      </Provider>
-    );
-
-    expect(screen.getByText(/Location List/)).toBeInTheDocument();
-  });
-
-  it("dispatchs a fetchLocationsWithInitialLetter action when you press return", () => {
+  it("dispatchs a fetchLocationsWithInitialLetter action when change the first letter of the textbox", () => {
     const store = mockStore({
       locationList: {
         cachedLetters: {},
@@ -68,8 +45,6 @@ describe("LocationList", () => {
 
     const textBox = screen.getByPlaceholderText(/Enter location name/);
     fireEvent.change(textBox, { target: { value: "Paris" } });
-    fireEvent.focus(textBox);
-    fireEvent.keyDown(textBox, { key: "Enter", code: "Enter" });
 
     expect(store.dispatch).toHaveBeenCalledTimes(1);
     expect(
@@ -253,6 +228,40 @@ describe("LocationList", () => {
       ).toBeNull();
     });
 
+    it("hides the filtered list when you press the search button", () => {
+      const store = mockStore({
+        locationList: {
+          cachedLetters: {},
+          locations: locatioinsWithInitialLetterL
+        },
+        weather: {
+          now: londonWeatherNow,
+          forecast: londonWeatherForecast,
+          GPSAvailable: true
+        }
+      });
+
+      store.dispatch = jest.fn();
+
+      render(
+        <Provider store={store}>
+          <Router>
+            <LocationList />
+          </Router>
+        </Provider>
+      );
+
+      const textbox = screen.getByPlaceholderText(/Enter location name/);
+      fireEvent.focus(textbox);
+      fireEvent.change(textbox, { target: { value: "l" } });
+      const searchButton = screen.getByRole("button", { name: "search" });
+      fireEvent.click(searchButton);
+
+      expect(
+        screen.queryByText(/L'Ametlla del Vallès, Spain \(2\.27°, 41\.67°\)/)
+      ).toBeNull();
+    });
+
     it("shows no matches if there are no filtered locations", () => {
       const store = mockStore({
         locationList: {
@@ -309,7 +318,7 @@ describe("LocationList", () => {
       );
 
       expect(
-        screen.getByRole("button", { name: "Where I am" })
+        screen.getByRole("button", { name: "weather at my location" })
       ).toBeInTheDocument();
     });
 
@@ -351,7 +360,9 @@ describe("LocationList", () => {
         </Provider>
       );
 
-      const button = screen.getByRole("button", { name: "Where I am" });
+      const button = screen.getByRole("button", {
+        name: "weather at my location"
+      });
       fireEvent.click(button);
 
       expect(weatherSlice.getWeatherByGPS).toHaveBeenCalledTimes(1);
@@ -380,7 +391,9 @@ describe("LocationList", () => {
         </Provider>
       );
 
-      const button = screen.getByRole("button", { name: "Where I am" });
+      const button = screen.getByRole("button", {
+        name: "weather at my location"
+      });
       fireEvent.click(button);
 
       expect(weatherSlice.getWeatherByGPS).toHaveBeenCalledTimes(0);

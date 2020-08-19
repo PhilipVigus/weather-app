@@ -1,9 +1,47 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMapMarkerAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
+
 import { fetchLocationsWithInitialLetter } from "./locationListSlice";
 import FilteredLocation from "./FilteredLocation";
 import { getWeatherByGPS } from "../weather/weatherSlice";
+
+const StyledNav = styled.nav`
+  background: rgb(56, 56, 56);
+  color: white;
+  padding: 20px 150px;
+`;
+
+const UserInputs = styled.div`
+  color: black;
+  display: flex;
+  background: white;
+`;
+
+const StyledInput = styled.input`
+  border: none;
+  font-size: 1.6rem;
+  padding: 0 15px;
+`;
+
+const SearchButton = styled.button`
+  background: white;
+  border: none;
+  color: rgb(56, 56, 56);
+  font-size: 2rem;
+  padding: 10px;
+`;
+
+const MyLocationButton = styled.button`
+  border: none;
+  background: rgb(56, 56, 56);
+  color: white;
+  font-size: 2.5rem;
+  padding: 11px 20px;
+`;
 
 const LocationList = () => {
   const dispatch = useDispatch();
@@ -15,9 +53,12 @@ const LocationList = () => {
   const GPSAvailable = useSelector((state) => state.weather.GPSAvailable);
   const history = useHistory();
   const textBoxRef = useRef(null);
+  const myLocationButtonRef = useRef(null);
 
   useEffect(() => {
     textBoxRef.current.blur();
+    myLocationButtonRef.current.blur();
+
     if (weatherNow) {
       dispatch(
         fetchLocationsWithInitialLetter(
@@ -73,6 +114,17 @@ const LocationList = () => {
     dispatch(getWeatherByGPS());
   };
 
+  const handleSearchClick = () => {
+    if (locationText && showFilteredLocations) {
+      const newLocation = locationsList.find((location) => {
+        const pattern = new RegExp(`^${locationText}`, "i");
+        return pattern.test(location.name);
+      });
+      setShowFilteredLocations(false);
+      history.push(`/${newLocation.id}`);
+    }
+  };
+
   const getFilteredLocations = () => {
     const pattern = new RegExp(`^${locationText}`, "i");
     const filteredLocations = locationsList.filter((location) => {
@@ -126,36 +178,42 @@ const LocationList = () => {
   };
 
   return (
-    <nav>
-      <div>Location List</div>
-      <div>
+    <StyledNav>
+      <UserInputs>
+        <StyledInput
+          ref={textBoxRef}
+          type="text"
+          placeholder="Enter location name"
+          onKeyDown={handleKeyDown}
+          value={locationText}
+          onChange={handleChange}
+          onFocus={handleOnFocus}
+          style={{ width: "100%" }}
+        />
+        <SearchButton
+          aria-label="search"
+          type="button"
+          onClick={handleSearchClick}
+        >
+          <FontAwesomeIcon icon={faSearch} />
+        </SearchButton>
         <div>
-          <input
-            ref={textBoxRef}
-            type="text"
-            placeholder="Enter location name"
-            onKeyDown={handleKeyDown}
-            value={locationText}
-            onChange={handleChange}
-            onFocus={handleOnFocus}
-            style={{ width: "100%" }}
-          />
-        </div>
-        <div>
-          <button
+          <MyLocationButton
+            aria-label="weather at my location"
+            ref={myLocationButtonRef}
             type="button"
             onClick={handleWhereIAmClick}
             disabled={!GPSAvailable}
           >
-            Where I am
-          </button>
+            <FontAwesomeIcon icon={faMapMarkerAlt} />
+          </MyLocationButton>
         </div>
-        {showFilteredLocations &&
-          locationsList.length > 0 &&
-          locationText &&
-          getFilteredLocations()}
-      </div>
-    </nav>
+      </UserInputs>
+      {showFilteredLocations &&
+        locationsList.length > 0 &&
+        locationText &&
+        getFilteredLocations()}
+    </StyledNav>
   );
 };
 

@@ -66,6 +66,8 @@ describe("Main", () => {
       </Provider>
     );
 
-    expect(screen.getByText(/Location List/)).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/Enter location name/)
+    ).toBeInTheDocument();
   });
 });
