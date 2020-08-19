@@ -32,6 +32,20 @@ describe("Main", () => {
     jest.clearAllMocks();
   });
 
+  it("renders the Header component", () => {
+    render(
+      <Provider store={store}>
+        <Router>
+          <Main />
+        </Router>
+      </Provider>
+    );
+
+    expect(
+      screen.getByRole("heading", { name: "Weather" })
+    ).toBeInTheDocument();
+  });
+
   it("renders the WeatherNow component", () => {
     render(
       <Provider store={store}>

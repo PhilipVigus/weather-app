@@ -1,7 +1,8 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import WeatherContainer from "../features/weather/WeatherContainer";
+import Header from "./Header";
 import LocationList from "../features/locationList/LocationList";
+import WeatherContainer from "../features/weather/WeatherContainer";
 
 const Main = () => {
   return (
@@ -19,6 +20,7 @@ const Main = () => {
         render={() => {
           return (
             <>
+              <Header />
               <LocationList />
               <WeatherContainer />
             </>
