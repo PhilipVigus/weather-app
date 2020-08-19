@@ -81,7 +81,7 @@ const LocationList = () => {
 
     if (filteredLocations.length === 0) {
       return <div>No matches</div>;
-    } else if (filteredLocations.length < 10) {
+    } else if (filteredLocations.length < 21) {
       return (
         <div
           style={{
