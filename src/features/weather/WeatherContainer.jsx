@@ -13,10 +13,10 @@ const WeatherContainer = () => {
     dispatch(getWeatherById(id));
   }, [dispatch, id]);
   return (
-    <div>
+    <main>
       <WeatherNow />
       <WeatherForecast />
-    </div>
+    </main>
   );
 };
 
