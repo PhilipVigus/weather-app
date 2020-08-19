@@ -16,6 +16,7 @@ describe("Main", () => {
   beforeAll(() => {
     store = mockStore({
       locationList: {
+        cachedLetters: {},
         locations: locationsWithInitialL
       },
       weather: {
