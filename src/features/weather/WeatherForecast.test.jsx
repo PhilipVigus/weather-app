@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import WeatherForecast from "./WeatherForecast";
+import londonWeatherForecast from "../../fixtures/londonWeatherForecast";
 
 const mockStore = configureStore([]);
 
@@ -11,33 +12,12 @@ describe("WeatherForecast", () => {
   it("Renders the title", () => {
     const store = mockStore({
       locationList: {
+        cachedLetters: {},
         locations: []
       },
       weather: {
-        forecast: {
-          list: [
-            {
-              dt: 1597676400,
-              dt_txt: "2020-08-17 15:00:00",
-              main: {
-                humidity: 75,
-                temp: 294.45
-              },
-              weather: [
-                {
-                  main: "Clear"
-                }
-              ],
-              wind: {
-                speed: 4.3,
-                deg: 27
-              },
-              clouds: {
-                all: 1
-              }
-            }
-          ]
-        }
+        forecast: londonWeatherForecast,
+        GPSAvailable: true
       }
     });
 
@@ -55,7 +35,7 @@ describe("WeatherForecast", () => {
       locationList: {
         locations: []
       },
-      weather: {}
+      weather: { GPSAvailable: true }
     });
 
     render(
@@ -78,30 +58,8 @@ describe("WeatherForecast", () => {
         locations: []
       },
       weather: {
-        forecast: {
-          list: [
-            {
-              dt: 1597676400,
-              dt_txt: "2020-08-17 15:00:00",
-              main: {
-                humidity: 75,
-                temp: 294.45
-              },
-              weather: [
-                {
-                  main: "Clear"
-                }
-              ],
-              wind: {
-                speed: 4.3,
-                deg: 27
-              },
-              clouds: {
-                all: 1
-              }
-            }
-          ]
-        }
+        forecast: londonWeatherForecast,
+        GPSAvailable: true
       }
     });
 
@@ -111,13 +69,13 @@ describe("WeatherForecast", () => {
       </Provider>
     );
 
-    expect(screen.getByText(/Clear/)).toBeInTheDocument();
-    expect(screen.getByText(/Temp = 21 C/)).toBeInTheDocument();
-    expect(screen.getByText(/Humidity = 75/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Clear/).length).toBe(9);
+    expect(screen.getAllByText(/Temp = 21 C/).length).toBe(7);
+    expect(screen.getByText(/Humidity = 82/)).toBeInTheDocument();
     expect(
-      screen.getByText(/Wind = 4.3 m\/s \(27 degrees\)/)
+      screen.getByText(/Wind = 4.73 m\/s \(235 degrees\)/)
     ).toBeInTheDocument();
-    expect(screen.getByText(/1% cloud coverage/)).toBeInTheDocument();
+    expect(screen.getByText(/99% cloud coverage/)).toBeInTheDocument();
 
     Date.prototype.getTimezoneOffset = getTimezoneOffset;
   });
