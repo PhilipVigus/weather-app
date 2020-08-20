@@ -53,10 +53,14 @@ const FilterLocationsContainer = styled.div`
 `;
 
 const FilteredLocations = styled.div`
-  background: white;
-  color: rgb(56, 56, 56);
+  background: rgb(220, 220, 220);
+  color: black;
   position: absolute;
   width: 100%;
+`;
+
+const AdditionalMatches = styled.div`
+  padding: 2px 10px;
 `;
 
 const LocationList = () => {
@@ -155,9 +159,9 @@ const LocationList = () => {
             callback={handleLocationClick}
           />
         ))}
-        <div>
+        <AdditionalMatches>
           {locations.length > 20 && `+${locations.length - 20} matches`}
-        </div>
+        </AdditionalMatches>
       </>
     );
   };

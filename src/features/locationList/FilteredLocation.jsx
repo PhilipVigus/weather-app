@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const Location = styled.div`
-  background: rgb(220, 220, 220);
   padding: 2px 10px;
 
   @media (hover: hover) {
