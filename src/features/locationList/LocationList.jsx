@@ -42,7 +42,6 @@ const FilterLocationsContainer = styled.div`
 
 const FilteredLocations = styled.div`
   background: white;
-  border-top: none;
   color: rgb(56, 56, 56);
   position: absolute;
   width: 100%;
