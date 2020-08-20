@@ -2,6 +2,7 @@ import React from "react";
 import { format } from "date-fns";
 import addMilliseconds from "date-fns/addMilliseconds";
 import { useSelector } from "react-redux";
+import WeatherDays from "./WeatherDays";
 
 const WeatherForecast = () => {
   const weatherForecast = useSelector((state) => state.weather.forecast);
@@ -19,6 +20,7 @@ const WeatherForecast = () => {
     return (
       <div>
         <div>Forecast</div>
+        <WeatherDays forecast={weatherForecast} />
         {weatherForecast.list.map((forecastAtTime) => (
           <div key={forecastAtTime.dt}>
             <hr />
