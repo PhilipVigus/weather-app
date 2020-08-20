@@ -2,12 +2,19 @@ import React, { useEffect, useState } from "react";
 import PropTypes, { string, number, arrayOf } from "prop-types";
 import { format } from "date-fns";
 import addMilliseconds from "date-fns/addMilliseconds";
+import styled from "styled-components";
+import WeatherDay from "./WeatherDay";
+
+const Days = styled.div`
+  display: flex;
+`;
 
 const WeatherDays = ({ forecast }) => {
   const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
   const [foreCastDays, setForecastDays] = useState([]);
 
   useEffect(() => {
+    // eslint-disable-next-line no-shadow
     const splitForecastIntoDays = (forecast) => {
       const days = [];
       let dayForecasts = [];
@@ -41,11 +48,11 @@ const WeatherDays = ({ forecast }) => {
   }, [forecast, timeOffset]);
 
   return (
-    <div>
+    <Days>
       {foreCastDays.map((day) => (
-        <span key={day.day}>{day.day}</span>
+        <WeatherDay key={day.day} forecast={day} />
       ))}
-    </div>
+    </Days>
   );
 };
 
