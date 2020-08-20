@@ -9,27 +9,6 @@ import londonWeatherForecast from "../../fixtures/londonWeatherForecast";
 const mockStore = configureStore([]);
 
 describe("WeatherForecast", () => {
-  it("Renders the title", () => {
-    const store = mockStore({
-      locationList: {
-        cachedLetters: {},
-        locations: []
-      },
-      weather: {
-        forecast: londonWeatherForecast,
-        GPSAvailable: true
-      }
-    });
-
-    render(
-      <Provider store={store}>
-        <WeatherForecast />
-      </Provider>
-    );
-
-    expect(screen.getByText(/Forecast/)).toBeInTheDocument();
-  });
-
   it("Renders the loading message", () => {
     const store = mockStore({
       locationList: {
