@@ -61,64 +61,67 @@ const FilteredLocations = styled.div`
 
 const LocationList = () => {
   const dispatch = useDispatch();
-  const [locationText, setLocationText] = useState("");
+  const history = useHistory();
+
+  const [textboxText, setTextboxText] = useState("");
   const [currentInitialLetter, setCurrentInitialLetter] = useState("l");
   const [showFilteredLocations, setShowFilteredLocations] = useState(false);
+
   const locationsList = useSelector((state) => state.locationList.locations);
   const weatherNow = useSelector((state) => state.weather.now);
   const GPSAvailable = useSelector((state) => state.weather.GPSAvailable);
-  const history = useHistory();
+
   const textBoxRef = useRef(null);
   const myLocationButtonRef = useRef(null);
 
   useEffect(() => {
+    // prevent elements having focus when page reloads to new location
     textBoxRef.current.blur();
     myLocationButtonRef.current.blur();
 
+    // get the location list for locations starting with the same
+    // letter as the current location
     if (weatherNow) {
       dispatch(
         fetchLocationsWithInitialLetter(
           weatherNow.name.charAt(0).toLocaleLowerCase()
         )
       );
-      setLocationText(weatherNow.name);
+      setTextboxText(weatherNow.name);
     }
   }, [dispatch, weatherNow]);
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && locationText) {
+  const handleKeyDownInTextbox = (e) => {
+    if (e.key === "Enter" && textboxText) {
       e.preventDefault();
+
       const newLocation = locationsList.find((location) => {
-        const pattern = new RegExp(`^${locationText}`, "i");
-        return pattern.test(location.name);
+        const filterPattern = new RegExp(`^${textboxText}`, "i");
+        return filterPattern.test(location.name);
       });
+
       setShowFilteredLocations(false);
       history.push(`/${newLocation.id}`);
     }
   };
 
-  const handleChange = (e) => {
-    if (
-      e.target.value &&
-      e.target.value.charAt(0).toLocaleLowerCase() !== currentInitialLetter
-    ) {
-      dispatch(
-        fetchLocationsWithInitialLetter(
-          e.target.value.charAt(0).toLocaleLowerCase()
-        )
-      );
-      setCurrentInitialLetter(e.target.value.charAt(0).toLocaleLowerCase());
+  const handleTextboxContentChange = (e) => {
+    const textBoxInitialLetter = e.target.value.charAt(0).toLocaleLowerCase();
+
+    if (e.target.value && textBoxInitialLetter !== currentInitialLetter) {
+      dispatch(fetchLocationsWithInitialLetter(textBoxInitialLetter));
+      setCurrentInitialLetter(textBoxInitialLetter);
     }
 
     if (e.target.value) {
       setShowFilteredLocations(true);
     }
 
-    setLocationText(e.target.value);
+    setTextboxText(e.target.value);
   };
 
-  const handleOnFocus = () => {
-    setLocationText("");
+  const handleTextboxGainingFocus = () => {
+    setTextboxText("");
   };
 
   const handleLocationClick = (id) => {
@@ -131,9 +134,9 @@ const LocationList = () => {
   };
 
   const handleSearchClick = () => {
-    if (locationText && showFilteredLocations) {
+    if (textboxText && showFilteredLocations) {
       const newLocation = locationsList.find((location) => {
-        const pattern = new RegExp(`^${locationText}`, "i");
+        const pattern = new RegExp(`^${textboxText}`, "i");
         return pattern.test(location.name);
       });
       setShowFilteredLocations(false);
@@ -141,42 +144,37 @@ const LocationList = () => {
     }
   };
 
-  const getFilteredLocations = () => {
-    const pattern = new RegExp(`^${locationText}`, "i");
+  const getFilteredLocationComponents = (locations) => {
+    return (
+      <>
+        {locations.slice(0, 20).map((location) => (
+          <FilteredLocation
+            key={location.id}
+            id={location.id}
+            name={location.name}
+            callback={handleLocationClick}
+          />
+        ))}
+        <div>
+          {locations.length > 20 && `+${locations.length - 20} matches`}
+        </div>
+      </>
+    );
+  };
+
+  const getFilteredLocationsList = () => {
+    const filterPattern = new RegExp(`^${textboxText}`, "i");
     const filteredLocations = locationsList.filter((location) => {
-      return pattern.test(location.name);
+      return filterPattern.test(location.name);
     });
 
     if (filteredLocations.length === 0) {
       return <div>No matches</div>;
-    } else if (filteredLocations.length < 21) {
-      return (
-        <FilterLocationsContainer>
-          <FilteredLocations>
-            {filteredLocations.map((location) => (
-              <FilteredLocation
-                key={location.id}
-                id={location.id}
-                name={location.name}
-                callback={handleLocationClick}
-              />
-            ))}
-          </FilteredLocations>
-        </FilterLocationsContainer>
-      );
     } else {
       return (
         <FilterLocationsContainer>
           <FilteredLocations>
-            {filteredLocations.slice(0, 20).map((location) => (
-              <FilteredLocation
-                key={location.id}
-                id={location.id}
-                name={location.name}
-                callback={handleLocationClick}
-              />
-            ))}
-            <div>{`+${filteredLocations.length - 20} matches`}</div>
+            {getFilteredLocationComponents(filteredLocations)}
           </FilteredLocations>
         </FilterLocationsContainer>
       );
@@ -190,10 +188,10 @@ const LocationList = () => {
           ref={textBoxRef}
           type="text"
           placeholder="Enter location name"
-          onKeyDown={handleKeyDown}
-          value={locationText}
-          onChange={handleChange}
-          onFocus={handleOnFocus}
+          onKeyDown={handleKeyDownInTextbox}
+          value={textboxText}
+          onChange={handleTextboxContentChange}
+          onFocus={handleTextboxGainingFocus}
           style={{ width: "100%" }}
         />
         <IconButton
@@ -217,8 +215,8 @@ const LocationList = () => {
       </UserInputs>
       {showFilteredLocations &&
         locationsList.length > 0 &&
-        locationText &&
-        getFilteredLocations()}
+        textboxText &&
+        getFilteredLocationsList()}
     </StyledNav>
   );
 };
