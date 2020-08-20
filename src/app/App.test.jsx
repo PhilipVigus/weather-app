@@ -33,7 +33,7 @@ describe("App", () => {
 
     render(<App />);
 
-    expect(await screen.findByText(/Wednesday/)).toBeInTheDocument();
+    expect(await screen.findByText(/10:00/)).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/Enter location name/)
     ).toBeInTheDocument();

@@ -4,7 +4,9 @@ import DayNavigator from "./DayNavigator";
 
 describe("DayNavigator", () => {
   it("renders the days", () => {
-    render(<DayNavigator days={["Monday", "Tuesday"]} />);
+    render(
+      <DayNavigator days={["Monday", "Tuesday"]} clickCallback={() => {}} />
+    );
 
     expect(screen.getByText("Monday")).toBeInTheDocument();
     expect(screen.getByText("Tuesday")).toBeInTheDocument();

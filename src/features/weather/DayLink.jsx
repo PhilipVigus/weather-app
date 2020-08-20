@@ -2,7 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const DayLink = ({ day, index, clickCallback }) => {
-  return <input type="button" value={day} onClick={clickCallback(index)} />;
+  return (
+    <input type="button" value={day} onClick={() => clickCallback(index)} />
+  );
 };
 
 DayLink.propTypes = {

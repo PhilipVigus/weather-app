@@ -54,7 +54,7 @@ describe("Main", () => {
         </Router>
       </Provider>
     );
-    expect(screen.getByText(/Wednesday/)).toBeInTheDocument();
+    expect(screen.getByText(/10:00/)).toBeInTheDocument();
   });
 
   it("renders the LocationList component", () => {

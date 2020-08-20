@@ -7,21 +7,24 @@ const StyledNavigator = styled.div`
   display: flex;
 `;
 
-const handleDayLinkClick = (index) => {};
-
-const DayNavigator = ({ days }) => {
-  console.log(days);
+const DayNavigator = ({ days, clickCallback }) => {
   return (
     <StyledNavigator>
       {days.map((day, index) => (
-        <DayLink key={day} day={day} index={index} clickCallback={() => {}} />
+        <DayLink
+          key={day}
+          day={day}
+          index={index}
+          clickCallback={clickCallback}
+        />
       ))}
     </StyledNavigator>
   );
 };
 
 DayNavigator.propTypes = {
-  days: PropTypes.arrayOf(PropTypes.string).isRequired
+  days: PropTypes.arrayOf(PropTypes.string).isRequired,
+  clickCallback: PropTypes.func.isRequired
 };
 
 export default DayNavigator;

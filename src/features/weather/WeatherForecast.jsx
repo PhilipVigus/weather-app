@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import addMilliseconds from "date-fns/addMilliseconds";
-import WeatherDays from "./WeatherDays";
 import DayNavigator from "./DayNavigator";
+import WeatherForecastDay from "./WeatherForecastDay";
 
 const WeatherForecast = () => {
   const weatherForecast = useSelector((state) => state.weather.forecast);
   const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
   const [forecastAsDays, setForecastAsDays] = useState([]);
+  const [dayIndexDisplayed, setDayIndexDisplayed] = useState(0);
 
   useEffect(() => {
     // eslint-disable-next-line no-shadow
@@ -49,7 +50,11 @@ const WeatherForecast = () => {
     splitForecastIntoDays(weatherForecast);
   }, [weatherForecast, timeOffset]);
 
-  if (!weatherForecast) {
+  const handleDayLinkClick = (index) => {
+    setDayIndexDisplayed(index);
+  };
+
+  if (!weatherForecast || forecastAsDays.length === 0) {
     return <div>Loading...</div>;
   } else {
     return (
@@ -58,8 +63,11 @@ const WeatherForecast = () => {
           days={forecastAsDays.map((forecastDay) => {
             return forecastDay.day;
           })}
+          clickCallback={handleDayLinkClick}
         />
-        <WeatherDays forecast={weatherForecast} />
+        <WeatherForecastDay
+          forecastForDay={forecastAsDays[dayIndexDisplayed]}
+        />
       </>
     );
   }
