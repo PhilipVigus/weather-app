@@ -16,6 +16,7 @@ const StyledNav = styled.nav`
 `;
 
 const UserInputs = styled.div`
+  align-items: center;
   color: black;
   display: flex;
   background: white;
@@ -23,24 +24,28 @@ const UserInputs = styled.div`
 
 const StyledInput = styled.input`
   border: none;
-  font-size: 1.6rem;
-  padding: 0 15px;
+  font-size: 3rem;
+  padding: 10px 15px;
 `;
 
-const SearchButton = styled.button`
+const IconButton = styled.button`
   background: white;
   border: none;
   color: rgb(56, 56, 56);
-  font-size: 2rem;
+  font-size: 2.5rem;
   padding: 10px;
 `;
 
-const MyLocationButton = styled.button`
-  border: none;
-  background: rgb(56, 56, 56);
-  color: white;
-  font-size: 2.5rem;
-  padding: 11px 20px;
+const FilterLocationsContainer = styled.div`
+  position: relative;
+`;
+
+const FilteredLocations = styled.div`
+  background: white;
+  border-top: none;
+  color: rgb(56, 56, 56);
+  position: absolute;
+  width: 100%;
 `;
 
 const LocationList = () => {
@@ -135,33 +140,23 @@ const LocationList = () => {
       return <div>No matches</div>;
     } else if (filteredLocations.length < 21) {
       return (
-        <div
-          style={{
-            position: "absolute",
-            backgroundColor: "beige",
-            width: "100%"
-          }}
-        >
-          {filteredLocations.map((location) => (
-            <FilteredLocation
-              key={location.id}
-              id={location.id}
-              name={location.name}
-              callback={handleLocationClick}
-            />
-          ))}
-        </div>
+        <FilterLocationsContainer>
+          <FilteredLocations>
+            {filteredLocations.map((location) => (
+              <FilteredLocation
+                key={location.id}
+                id={location.id}
+                name={location.name}
+                callback={handleLocationClick}
+              />
+            ))}
+          </FilteredLocations>
+        </FilterLocationsContainer>
       );
     } else {
       return (
-        <div style={{ position: "relative" }}>
-          <div
-            style={{
-              position: "absolute",
-              backgroundColor: "beige",
-              width: "100%"
-            }}
-          >
+        <FilterLocationsContainer>
+          <FilteredLocations>
             {filteredLocations.slice(0, 20).map((location) => (
               <FilteredLocation
                 key={location.id}
@@ -171,8 +166,8 @@ const LocationList = () => {
               />
             ))}
             <div>{`+${filteredLocations.length - 20} matches`}</div>
-          </div>
-        </div>
+          </FilteredLocations>
+        </FilterLocationsContainer>
       );
     }
   };
@@ -190,15 +185,15 @@ const LocationList = () => {
           onFocus={handleOnFocus}
           style={{ width: "100%" }}
         />
-        <SearchButton
+        <IconButton
           aria-label="search"
           type="button"
           onClick={handleSearchClick}
         >
           <FontAwesomeIcon icon={faSearch} />
-        </SearchButton>
+        </IconButton>
         <div>
-          <MyLocationButton
+          <IconButton
             aria-label="weather at my location"
             ref={myLocationButtonRef}
             type="button"
@@ -206,7 +201,7 @@ const LocationList = () => {
             disabled={!GPSAvailable}
           >
             <FontAwesomeIcon icon={faMapMarkerAlt} />
-          </MyLocationButton>
+          </IconButton>
         </div>
       </UserInputs>
       {showFilteredLocations &&
