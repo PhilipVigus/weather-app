@@ -3,6 +3,7 @@ import PropTypes, { string, number, arrayOf } from "prop-types";
 import { format } from "date-fns";
 import addMilliseconds from "date-fns/addMilliseconds";
 import styled from "styled-components";
+import WeatherTime from "./WeatherTime";
 
 const Day = styled.div`
   display: flex;
@@ -21,9 +22,13 @@ const WeatherDay = ({ forecast }) => {
       <div>{forecast.day}</div>
       <Day>
         {forecast.forecast.map((timeForecast) => (
-          <div key={timeForecast.dt_txt}>
-            {getTimeDateString(timeForecast.dt_txt)}
-          </div>
+          <WeatherTime
+            key={timeForecast.dt}
+            forecast={{
+              time: getTimeDateString(timeForecast.dt_txt),
+              forecast: timeForecast
+            }}
+          />
         ))}
       </Day>
     </div>

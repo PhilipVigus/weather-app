@@ -70,8 +70,8 @@ describe("WeatherForecast", () => {
     );
 
     expect(screen.getAllByText(/Clear/).length).toBe(9);
-    expect(screen.getAllByText(/Temp = 21 C/).length).toBe(7);
-    expect(screen.getByText(/Humidity = 82/)).toBeInTheDocument();
+    expect(screen.getAllByText(/17 C/).length).toBe(2);
+    expect(screen.getByText(/82% humidity/)).toBeInTheDocument();
     expect(
       screen.getByText(/Wind = 4.73 m\/s \(235 degrees\)/)
     ).toBeInTheDocument();
