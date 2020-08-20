@@ -1,5 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
+import styled from "styled-components";
+
+const Location = styled.div`
+  padding: 2px 10px;
+
+  @media (hover: hover) {
+    &:hover {
+      background: rgb(200, 200, 200);
+    }
+  }
+`;
 
 const FilteredLocation = ({ name, id, callback }) => {
   const handleKeyDown = (e) => {
@@ -9,7 +20,7 @@ const FilteredLocation = ({ name, id, callback }) => {
   };
 
   return (
-    <div
+    <Location
       key={id}
       role="link"
       onClick={() => callback(id)}
@@ -17,7 +28,7 @@ const FilteredLocation = ({ name, id, callback }) => {
       tabIndex={0}
     >
       {name}
-    </div>
+    </Location>
   );
 };
 

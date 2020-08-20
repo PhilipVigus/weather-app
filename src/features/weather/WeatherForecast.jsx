@@ -1,44 +1,74 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import addMilliseconds from "date-fns/addMilliseconds";
-import { useSelector } from "react-redux";
+import DayNavigator from "./DayNavigator";
+import WeatherForecastDay from "./WeatherForecastDay";
 
 const WeatherForecast = () => {
   const weatherForecast = useSelector((state) => state.weather.forecast);
   const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
+  const [forecastAsDays, setForecastAsDays] = useState([]);
+  const [dayIndexDisplayed, setDayIndexDisplayed] = useState(0);
 
-  const getTimeDateString = (date) => {
-    const UTCDate = new Date(date);
-    const localDate = addMilliseconds(UTCDate, -timeOffset);
-    return format(localDate, "eee p");
+  useEffect(() => {
+    // eslint-disable-next-line no-shadow
+    const splitForecastIntoDays = (forecast) => {
+      if (!weatherForecast) {
+        return;
+      }
+
+      const days = [];
+      let dayForecasts = [];
+
+      for (let i = 0; i < forecast.list.length; i += 1) {
+        const UTCDate = new Date(forecast.list[i].dt_txt);
+        const localDate = addMilliseconds(UTCDate, -timeOffset);
+        const day = format(localDate, "EEEE");
+
+        dayForecasts.push(forecast.list[i]);
+
+        if (i === forecast.list.length - 1) {
+          days.push({ day, forecast: dayForecasts });
+          dayForecasts = [];
+        } else {
+          const nextUTCDate = new Date(forecast.list[i + 1].dt_txt);
+          const nextlocalDate = addMilliseconds(nextUTCDate, -timeOffset);
+          const nextDay = format(nextlocalDate, "EEEE");
+
+          if (day !== nextDay) {
+            days.push({ day, forecast: dayForecasts });
+            dayForecasts = [];
+          }
+        }
+      }
+
+      days[0].day = "Today";
+      setForecastAsDays(days);
+    };
+
+    splitForecastIntoDays(weatherForecast);
+  }, [weatherForecast, timeOffset]);
+
+  const handleDayLinkClick = (index) => {
+    setDayIndexDisplayed(index);
   };
 
-  if (!weatherForecast) {
+  if (!weatherForecast || forecastAsDays.length === 0) {
     return <div>Loading...</div>;
   } else {
     return (
-      <div>
-        <div>Forecast</div>
-        {weatherForecast.list.map((forecastAtTime) => (
-          <div key={forecastAtTime.dt}>
-            <hr />
-            <div>{`${getTimeDateString(forecastAtTime.dt_txt)}`}</div>
-            <div>{forecastAtTime.weather[0].main}</div>
-            <div>
-              <img
-                alt={`${forecastAtTime.weather[0].main} icon`}
-                src={`https://openweathermap.org/img/wn/${forecastAtTime.weather[0].icon}@2x.png`}
-              />
-            </div>
-            <div>
-              {`Temp = ${Math.round(forecastAtTime.main.temp - 273.15)} C`}
-              <div>{`Humidity = ${forecastAtTime.main.humidity}`}</div>
-              <div>{`Wind = ${forecastAtTime.wind.speed} m/s (${forecastAtTime.wind.deg} degrees)`}</div>
-              <div>{`${forecastAtTime.clouds.all}% cloud coverage`}</div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <>
+        <DayNavigator
+          days={forecastAsDays.map((forecastDay) => {
+            return forecastDay.day;
+          })}
+          clickCallback={handleDayLinkClick}
+        />
+        <WeatherForecastDay
+          forecastForDay={forecastAsDays[dayIndexDisplayed]}
+        />
+      </>
     );
   }
 };

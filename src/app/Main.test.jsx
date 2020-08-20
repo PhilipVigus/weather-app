@@ -32,6 +32,20 @@ describe("Main", () => {
     jest.clearAllMocks();
   });
 
+  it("renders the Header component", () => {
+    render(
+      <Provider store={store}>
+        <Router>
+          <Main />
+        </Router>
+      </Provider>
+    );
+
+    expect(
+      screen.getByRole("heading", { name: "Weather" })
+    ).toBeInTheDocument();
+  });
+
   it("renders the WeatherNow component", () => {
     render(
       <Provider store={store}>
@@ -40,7 +54,7 @@ describe("Main", () => {
         </Router>
       </Provider>
     );
-    expect(screen.getByText(/Weather in London right now/)).toBeInTheDocument();
+    expect(screen.getByText(/10:00/)).toBeInTheDocument();
   });
 
   it("renders the LocationList component", () => {
@@ -52,6 +66,8 @@ describe("Main", () => {
       </Provider>
     );
 
-    expect(screen.getByText(/Location List/)).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/Enter location name/)
+    ).toBeInTheDocument();
   });
 });

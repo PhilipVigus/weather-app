@@ -33,9 +33,7 @@ describe("App", () => {
 
     render(<App />);
 
-    expect(
-      await screen.findByText(`Weather in ${londonFullName.name} right now`)
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/10:00/)).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/Enter location name/)
     ).toBeInTheDocument();
