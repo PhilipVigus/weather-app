@@ -1,17 +1,20 @@
 import React from "react";
-import PropTypes, { string, number, arrayOf } from "prop-types";
+import PropTypes from "prop-types";
 import styled from "styled-components";
+import DayLink from "./DayLink";
 
 const StyledNavigator = styled.div`
   display: flex;
 `;
 
+const handleDayLinkClick = (index) => {};
+
 const DayNavigator = ({ days }) => {
   console.log(days);
   return (
     <StyledNavigator>
-      {days.map((day) => (
-        <div key={day}>{day}</div>
+      {days.map((day, index) => (
+        <DayLink key={day} day={day} index={index} clickCallback={() => {}} />
       ))}
     </StyledNavigator>
   );
