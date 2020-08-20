@@ -12,7 +12,7 @@ import { getWeatherByGPS } from "../weather/weatherSlice";
 const StyledNav = styled.nav`
   background: rgb(56, 56, 56);
   color: white;
-  padding: 20px 150px;
+  padding: 20px 10%;
 `;
 
 const UserInputs = styled.div`
@@ -26,6 +26,18 @@ const StyledInput = styled.input`
   border: none;
   font-size: 3rem;
   padding: 10px 15px;
+
+  @media (max-width: 48em) {
+    & {
+      font-size: 2rem;
+    }
+  }
+
+  @media (max-width: 37.5em) {
+    html {
+      font-size: 1.5rem;
+    }
+  }
 `;
 
 const IconButton = styled.button`

@@ -60,6 +60,20 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     font-size: 62.5%;
   }
+
+  /* 768px / 16px = 48em */
+  @media (max-width: 48em) {
+    html {
+      font-size: 50%;
+    }
+  }
+
+  /* 600px / 16px = 37.5em */
+  @media (max-width: 37.5em) {
+    html {
+      font-size: 40%;
+    }
+  }
 `;
 
 export default GlobalStyle;

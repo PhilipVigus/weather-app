@@ -5,7 +5,7 @@ const StyledHeader = styled.header`
   background: black;
   color: white;
   font-size: 5rem;
-  padding-left: 150px;
+  padding-left: 10%;
 `;
 
 const Header = () => {
