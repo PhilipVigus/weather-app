@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import PropTypes, { string, number, arrayOf } from "prop-types";
 import { format } from "date-fns";
 import addMilliseconds from "date-fns/addMilliseconds";
@@ -49,8 +50,8 @@ const WeatherDays = ({ forecast }) => {
 
   return (
     <Days>
-      {foreCastDays.map((day) => (
-        <WeatherDay key={day.day} forecast={day} />
+      {foreCastDays.map((day, index) => (
+        <WeatherDay key={day.day} forecast={day} today={index === 0} />
       ))}
     </Days>
   );

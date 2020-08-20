@@ -8,12 +8,7 @@ const WeatherForecast = () => {
   if (!weatherForecast) {
     return <div>Loading...</div>;
   } else {
-    return (
-      <div>
-        <div>Forecast</div>
-        <WeatherDays forecast={weatherForecast} />
-      </div>
-    );
+    return <WeatherDays forecast={weatherForecast} />;
   }
 };
 

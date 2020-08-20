@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes, { string, number, arrayOf } from "prop-types";
+import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import addMilliseconds from "date-fns/addMilliseconds";
 import styled from "styled-components";
@@ -9,8 +10,10 @@ const Day = styled.div`
   display: flex;
 `;
 
-const WeatherDay = ({ forecast }) => {
-  const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
+const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
+
+const WeatherDay = ({ forecast, today }) => {
+  const weatherNow = useSelector((state) => state.weather.now);
 
   const getTimeDateString = (date) => {
     const UTCDate = new Date(date);
@@ -21,6 +24,15 @@ const WeatherDay = ({ forecast }) => {
     <div>
       <div>{forecast.day}</div>
       <Day>
+        {weatherNow && today && (
+          <WeatherTime
+            key="Now"
+            forecast={{
+              time: "Now",
+              forecast: weatherNow
+            }}
+          />
+        )}
         {forecast.forecast.map((timeForecast) => (
           <WeatherTime
             key={timeForecast.dt}
@@ -77,7 +89,8 @@ WeatherDay.propTypes = {
         })
       })
     )
-  }).isRequired
+  }).isRequired,
+  today: PropTypes.bool.isRequired
 };
 
 export default WeatherDay;
