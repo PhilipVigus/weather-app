@@ -32,8 +32,7 @@ describe("App", () => {
       .replyOnce(200, londonWeatherForecast);
 
     render(<App />);
-
-    expect(await screen.findByText(/10:00/)).toBeInTheDocument();
+    expect(await screen.findByText(/87% humidity/)).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/Enter location name/)
     ).toBeInTheDocument();
