@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,8 +8,12 @@ import {
   faSearch,
   faStar
 } from "@fortawesome/free-solid-svg-icons";
+import { faStar as faStarOUtline } from "@fortawesome/free-regular-svg-icons";
 
-import { fetchLocationsWithInitialLetter } from "./locationListSlice";
+import {
+  fetchLocationsWithInitialLetter,
+  defaultLocationIdSet
+} from "./locationListSlice";
 import FilteredLocation from "./FilteredLocation";
 import { getWeatherByGPS } from "../weather/weatherSlice";
 
@@ -70,6 +74,7 @@ const AdditionalMatches = styled.div`
 const LocationList = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { id } = useParams();
 
   const [textboxText, setTextboxText] = useState("");
   const [currentInitialLetter, setCurrentInitialLetter] = useState("l");
@@ -78,6 +83,9 @@ const LocationList = () => {
   const locationsList = useSelector((state) => state.locationList.locations);
   const weatherNow = useSelector((state) => state.weather.now);
   const GPSAvailable = useSelector((state) => state.weather.GPSAvailable);
+  const defaultLocationId = useSelector(
+    (state) => state.locationList.defaultLocationId
+  );
 
   const textBoxRef = useRef(null);
   const myLocationButtonRef = useRef(null);
@@ -152,6 +160,10 @@ const LocationList = () => {
     }
   };
 
+  const handleHomeClick = () => {
+    dispatch(defaultLocationIdSet(id));
+  };
+
   const getFilteredLocationComponents = (locations) => {
     return (
       <>
@@ -192,8 +204,12 @@ const LocationList = () => {
   return (
     <StyledNav>
       <UserInputs>
-        <IconButton aria-label="home" type="button" onClick={handleSearchClick}>
-          <FontAwesomeIcon icon={faStar} />
+        <IconButton aria-label="home" type="button" onClick={handleHomeClick}>
+          {defaultLocationId && defaultLocationId === id ? (
+            <FontAwesomeIcon icon={faStar} />
+          ) : (
+            <FontAwesomeIcon icon={faStarOUtline} />
+          )}
         </IconButton>
         <StyledInput
           ref={textBoxRef}
