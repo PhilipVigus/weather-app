@@ -80,6 +80,7 @@ describe("store", () => {
       it("returns the initial state", () => {
         expect(reducer(undefined, {})).toEqual({
           cachedLetters: {},
+          defaultLocationId: null,
           locations: []
         });
       });
@@ -107,10 +108,7 @@ describe("store", () => {
         expect(
           reducer(
             { locations: [], cachedLetters: {} },
-            {
-              type: defaultLocationIdSet.type,
-              payload: "1"
-            }
+            defaultLocationIdSet("1")
           )
         ).toEqual({
           cachedLetters: {},

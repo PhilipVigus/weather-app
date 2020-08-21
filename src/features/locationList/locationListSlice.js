@@ -3,7 +3,8 @@ import Axios from "axios";
 
 const initialState = {
   locations: [],
-  cachedLetters: {}
+  cachedLetters: {},
+  defaultLocationId: localStorage.getItem("weatherApp-defaultLocationId")
 };
 
 export const fetchLocationsWithInitialLetter = createAsyncThunk(
@@ -34,6 +35,7 @@ const locationListSlice = createSlice({
     defaultLocationIdSet: {
       reducer(state, action) {
         state.defaultLocationId = action.payload;
+        localStorage.setItem("weatherApp-defaultLocationId", action.payload);
       },
       prepare(id) {
         return {
