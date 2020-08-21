@@ -1,14 +1,15 @@
 /* eslint-disable no-extend-native */
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { MemoryRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import WeatherForecast from "./WeatherForecast";
+import Forecast from "./Forecast";
 import londonWeatherForecast from "../../fixtures/londonWeatherForecast";
 
 const mockStore = configureStore([]);
 
-describe("WeatherForecast", () => {
+describe("Forecast", () => {
   it("Renders the loading message", () => {
     const store = mockStore({
       locationList: {
@@ -17,9 +18,13 @@ describe("WeatherForecast", () => {
       weather: { GPSAvailable: true }
     });
 
+    store.dispatch = jest.fn();
+
     render(
       <Provider store={store}>
-        <WeatherForecast />
+        <Router>
+          <Forecast />
+        </Router>
       </Provider>
     );
 
@@ -44,9 +49,13 @@ describe("WeatherForecast", () => {
       }
     });
 
+    store.dispatch = jest.fn();
+
     render(
       <Provider store={store}>
-        <WeatherForecast />
+        <Router>
+          <Forecast />
+        </Router>
       </Provider>
     );
 
@@ -72,9 +81,13 @@ describe("WeatherForecast", () => {
       }
     });
 
+    store.dispatch = jest.fn();
+
     render(
       <Provider store={store}>
-        <WeatherForecast />
+        <Router>
+          <Forecast />
+        </Router>
       </Provider>
     );
 

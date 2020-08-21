@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Header from "./Header";
 import LocationList from "../features/locationList/LocationList";
-import WeatherContainer from "../features/weather/WeatherContainer";
+import Forecast from "../features/weather/Forecast";
 
 const Main = () => {
   return (
@@ -22,7 +22,7 @@ const Main = () => {
             <>
               <Header />
               <LocationList />
-              <WeatherContainer />
+              <Forecast />
             </>
           );
         }}

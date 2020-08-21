@@ -19,7 +19,7 @@ const Day = styled.div`
 
 const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
 
-const ScrollableWeather = ({ forecast, scrollTo }) => {
+const ScrollableWeatherView = ({ forecast, scrollTo }) => {
   const [forecastAsTimes, setForecastAsTimes] = useState([]);
   const [bookmarkPositions, setBookmarkPositions] = useState([]);
   const bookmarkRefs = useRef([]);
@@ -70,7 +70,7 @@ const ScrollableWeather = ({ forecast, scrollTo }) => {
   );
 };
 
-ScrollableWeather.propTypes = {
+ScrollableWeatherView.propTypes = {
   scrollTo: PropTypes.number.isRequired,
   forecast: PropTypes.arrayOf(
     PropTypes.shape({
@@ -111,4 +111,4 @@ ScrollableWeather.propTypes = {
   ).isRequired
 };
 
-export default ScrollableWeather;
+export default ScrollableWeatherView;
