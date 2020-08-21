@@ -56,6 +56,7 @@ const Forecast = () => {
 
   useEffect(() => {
     dispatch(getWeatherById(id));
+    setDayIndexDisplayed(0);
   }, [dispatch, id]);
 
   const handleDayLinkClick = (index) => {
