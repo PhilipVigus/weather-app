@@ -77,7 +77,6 @@ describe("store", () => {
       it("returns the initial state", () => {
         expect(reducer(undefined, {})).toEqual({
           cachedLetters: {},
-          defaultLocationId: 2643743,
           locations: []
         });
       });
