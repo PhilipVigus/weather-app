@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import addMilliseconds from "date-fns/addMilliseconds";
 import styled from "styled-components";
 import PropTypes, { string, number, arrayOf } from "prop-types";
-import WeatherTime from "./WeatherTime";
+import WeatherAtTime from "./WeatherAtTime";
 
 const Day = styled.div`
   display: flex;
@@ -61,7 +61,7 @@ const ScrollableWeather = ({ forecast, scrollTo }) => {
       {forecastAsTimes.map((time, index) => (
         // eslint-disable-next-line no-return-assign
         <div key={time.dt} ref={(el) => (bookmarkRefs.current[index] = el)}>
-          <WeatherTime
+          <WeatherAtTime
             forecast={{ time: getTimeDateString(time.dt_txt), forecast: time }}
           />
         </div>
