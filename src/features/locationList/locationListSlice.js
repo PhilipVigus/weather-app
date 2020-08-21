@@ -1,7 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "axios";
 
-const initialState = { locations: [], cachedLetters: {} };
+const londonId = 2643743;
+
+const initialState = {
+  locations: [],
+  cachedLetters: {},
+  defaultLocationId: londonId
+};
 
 export const fetchLocationsWithInitialLetter = createAsyncThunk(
   "locationList/locationsWithInitialLetterFetched",

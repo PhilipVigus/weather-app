@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt, faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMapMarkerAlt,
+  faSearch,
+  faStar
+} from "@fortawesome/free-solid-svg-icons";
 
 import { fetchLocationsWithInitialLetter } from "./locationListSlice";
 import FilteredLocation from "./FilteredLocation";
@@ -188,6 +192,9 @@ const LocationList = () => {
   return (
     <StyledNav>
       <UserInputs>
+        <IconButton aria-label="home" type="button" onClick={handleSearchClick}>
+          <FontAwesomeIcon icon={faStar} />
+        </IconButton>
         <StyledInput
           ref={textBoxRef}
           type="text"
