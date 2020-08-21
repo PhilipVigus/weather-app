@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import addMilliseconds from "date-fns/addMilliseconds";
+import { useParams } from "react-router-dom";
 import DayNavigator from "./DayNavigator";
-import WeatherForecastDay from "./WeatherForecastDay";
+import ScrollableWeatherView from "./ScrollableWeatherView";
+import { getWeatherById } from "./weatherSlice";
 
-const WeatherForecast = () => {
+const Forecast = () => {
   const weatherForecast = useSelector((state) => state.weather.forecast);
   const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
   const [forecastAsDays, setForecastAsDays] = useState([]);
   const [dayIndexDisplayed, setDayIndexDisplayed] = useState(0);
 
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
   useEffect(() => {
-    // eslint-disable-next-line no-shadow
     const splitForecastIntoDays = (forecast) => {
       if (!weatherForecast) {
         return;
@@ -50,6 +54,10 @@ const WeatherForecast = () => {
     splitForecastIntoDays(weatherForecast);
   }, [weatherForecast, timeOffset]);
 
+  useEffect(() => {
+    dispatch(getWeatherById(id));
+  }, [dispatch, id]);
+
   const handleDayLinkClick = (index) => {
     setDayIndexDisplayed(index);
   };
@@ -65,12 +73,13 @@ const WeatherForecast = () => {
           })}
           clickCallback={handleDayLinkClick}
         />
-        <WeatherForecastDay
-          forecastForDay={forecastAsDays[dayIndexDisplayed]}
+        <ScrollableWeatherView
+          forecast={forecastAsDays}
+          scrollTo={dayIndexDisplayed}
         />
       </>
     );
   }
 };
 
-export default WeatherForecast;
+export default Forecast;

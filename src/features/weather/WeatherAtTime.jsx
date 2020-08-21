@@ -3,13 +3,13 @@ import React from "react";
 import PropTypes, { string, number, arrayOf } from "prop-types";
 import styled from "styled-components";
 
-const StyledWeatherTime = styled.div`
+const StyledWeatherAtTime = styled.div`
   border: 1px solid black;
 `;
 
-const WeatherTime = ({ forecast }) => {
+const WeatherAtTime = ({ forecast }) => {
   return (
-    <StyledWeatherTime>
+    <StyledWeatherAtTime>
       <div>{forecast.time}</div>
       <div>{forecast.forecast.weather[0].main}</div>
       <div>
@@ -22,11 +22,11 @@ const WeatherTime = ({ forecast }) => {
       <div>{forecast.forecast.main.humidity}% humidity</div>
       <div>{`Wind = ${forecast.forecast.wind.speed} m/s (${forecast.forecast.wind.deg} degrees)`}</div>
       <div>{`${forecast.forecast.clouds.all}% cloud coverage`}</div>
-    </StyledWeatherTime>
+    </StyledWeatherAtTime>
   );
 };
 
-WeatherTime.propTypes = {
+WeatherAtTime.propTypes = {
   forecast: PropTypes.shape({
     time: PropTypes.string.isRequired,
     forecast: PropTypes.shape({
@@ -69,4 +69,4 @@ WeatherTime.propTypes = {
   }).isRequired
 };
 
-export default WeatherTime;
+export default WeatherAtTime;

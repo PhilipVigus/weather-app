@@ -1,14 +1,15 @@
 /* eslint-disable no-extend-native */
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { MemoryRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import WeatherForecast from "./WeatherForecast";
+import Forecast from "./Forecast";
 import londonWeatherForecast from "../../fixtures/londonWeatherForecast";
 
 const mockStore = configureStore([]);
 
-describe("WeatherForecast", () => {
+describe("Forecast", () => {
   it("Renders the loading message", () => {
     const store = mockStore({
       locationList: {
@@ -17,9 +18,13 @@ describe("WeatherForecast", () => {
       weather: { GPSAvailable: true }
     });
 
+    store.dispatch = jest.fn();
+
     render(
       <Provider store={store}>
-        <WeatherForecast />
+        <Router>
+          <Forecast />
+        </Router>
       </Provider>
     );
 
@@ -27,6 +32,8 @@ describe("WeatherForecast", () => {
   });
 
   it("Renders the forecast", () => {
+    const scrollIntoViewMock = jest.fn();
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
     const { getTimezoneOffset } = Date.prototype;
     Date.prototype.getTimezoneOffset = () => {
       return -60;
@@ -42,13 +49,16 @@ describe("WeatherForecast", () => {
       }
     });
 
+    store.dispatch = jest.fn();
+
     render(
       <Provider store={store}>
-        <WeatherForecast />
+        <Router>
+          <Forecast />
+        </Router>
       </Provider>
     );
 
-    expect(screen.getByText(/Clouds/)).toBeInTheDocument();
     expect(screen.getByText(/82% humidity/)).toBeInTheDocument();
     expect(
       screen.getByText(/Wind = 4.64 m\/s \(169 degrees\)/)
@@ -57,11 +67,9 @@ describe("WeatherForecast", () => {
     Date.prototype.getTimezoneOffset = getTimezoneOffset;
   });
 
-  it("Change the day displayed when you click the button", () => {
-    const { getTimezoneOffset } = Date.prototype;
-    Date.prototype.getTimezoneOffset = () => {
-      return -60;
-    };
+  it("Calls scrollIntoView when you click a day button", () => {
+    const scrollIntoViewMock = jest.fn();
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
 
     const store = mockStore({
       locationList: {
@@ -73,17 +81,19 @@ describe("WeatherForecast", () => {
       }
     });
 
+    store.dispatch = jest.fn();
+
     render(
       <Provider store={store}>
-        <WeatherForecast />
+        <Router>
+          <Forecast />
+        </Router>
       </Provider>
     );
 
-    const thursdayButton = screen.getByRole("button", { name: "Thursday" });
-    fireEvent.click(thursdayButton);
+    const button = screen.getByRole("button", { name: "Monday" });
+    fireEvent.click(button);
 
-    expect(screen.getByText(/01:00/)).toBeInTheDocument();
-
-    Date.prototype.getTimezoneOffset = getTimezoneOffset;
+    expect(scrollIntoViewMock).toBeCalled();
   });
 });

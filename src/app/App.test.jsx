@@ -23,6 +23,9 @@ describe("App", () => {
   });
 
   it("renders the weather now and location list", async () => {
+    const scrollIntoViewMock = jest.fn();
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
+
     mock
       .onGet(/\/locations\/names\//)
       .replyOnce(200, londonFullName)
