@@ -48,7 +48,6 @@ describe("WeatherForecast", () => {
       </Provider>
     );
 
-    expect(screen.getByText(/Clouds/)).toBeInTheDocument();
     expect(screen.getByText(/82% humidity/)).toBeInTheDocument();
     expect(
       screen.getByText(/Wind = 4.64 m\/s \(169 degrees\)/)
@@ -57,11 +56,9 @@ describe("WeatherForecast", () => {
     Date.prototype.getTimezoneOffset = getTimezoneOffset;
   });
 
-  it("Change the day displayed when you click the button", () => {
-    const { getTimezoneOffset } = Date.prototype;
-    Date.prototype.getTimezoneOffset = () => {
-      return -60;
-    };
+  it("Calls scrollIntoView when you click a day button", () => {
+    const scrollIntoViewMock = jest.fn();
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
 
     const store = mockStore({
       locationList: {
@@ -79,11 +76,9 @@ describe("WeatherForecast", () => {
       </Provider>
     );
 
-    const thursdayButton = screen.getByRole("button", { name: "Thursday" });
-    fireEvent.click(thursdayButton);
+    const button = screen.getByRole("button", { name: "Monday" });
+    fireEvent.click(button);
 
-    expect(screen.getByText(/01:00/)).toBeInTheDocument();
-
-    Date.prototype.getTimezoneOffset = getTimezoneOffset;
+    expect(scrollIntoViewMock).toBeCalled();
   });
 });

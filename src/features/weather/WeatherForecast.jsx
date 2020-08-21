@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { format } from "date-fns";
 import addMilliseconds from "date-fns/addMilliseconds";
 import DayNavigator from "./DayNavigator";
-import WeatherForecastDay from "./WeatherForecastDay";
+import ScrollableWeather from "./ScrollableWeather";
 
 const WeatherForecast = () => {
   const weatherForecast = useSelector((state) => state.weather.forecast);
@@ -12,7 +12,6 @@ const WeatherForecast = () => {
   const [dayIndexDisplayed, setDayIndexDisplayed] = useState(0);
 
   useEffect(() => {
-    // eslint-disable-next-line no-shadow
     const splitForecastIntoDays = (forecast) => {
       if (!weatherForecast) {
         return;
@@ -65,8 +64,9 @@ const WeatherForecast = () => {
           })}
           clickCallback={handleDayLinkClick}
         />
-        <WeatherForecastDay
-          forecastForDay={forecastAsDays[dayIndexDisplayed]}
+        <ScrollableWeather
+          forecast={forecastAsDays}
+          scrollTo={dayIndexDisplayed}
         />
       </>
     );
