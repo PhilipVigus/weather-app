@@ -1,7 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "axios";
 
-const initialState = { locations: [], cachedLetters: {} };
+const initialState = {
+  locations: [],
+  cachedLetters: {},
+  defaultLocationId: localStorage.getItem("weatherApp-defaultLocationId")
+};
 
 export const fetchLocationsWithInitialLetter = createAsyncThunk(
   "locationList/locationsWithInitialLetterFetched",
@@ -27,7 +31,19 @@ export const fetchLocationsWithInitialLetter = createAsyncThunk(
 const locationListSlice = createSlice({
   name: "locationList",
   initialState,
-  reducers: {},
+  reducers: {
+    defaultLocationIdSet: {
+      reducer(state, action) {
+        state.defaultLocationId = action.payload;
+        localStorage.setItem("weatherApp-defaultLocationId", action.payload);
+      },
+      prepare(id) {
+        return {
+          payload: id
+        };
+      }
+    }
+  },
   extraReducers: {
     [fetchLocationsWithInitialLetter.fulfilled]: (state, action) => {
       if (action.payload.toCache) {
@@ -38,4 +54,5 @@ const locationListSlice = createSlice({
   }
 });
 
+export const { defaultLocationIdSet } = locationListSlice.actions;
 export default locationListSlice.reducer;

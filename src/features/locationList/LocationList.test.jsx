@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import { MemoryRouter as Router } from "react-router-dom";
+import { MemoryRouter as Router, Route } from "react-router-dom";
 import LocationList from "./LocationList";
 import * as locationListSlice from "./locationListSlice";
 import * as weatherSlice from "../weather/weatherSlice";
@@ -53,6 +53,39 @@ describe("LocationList", () => {
     expect(
       locationListSlice.fetchLocationsWithInitialLetter
     ).toHaveBeenCalledWith("p");
+  });
+
+  it("dispatches defaultLocationIdSet when you click the home button", () => {
+    const store = mockStore({
+      locationList: {
+        cachedLetters: {},
+        locations: []
+      },
+      weather: {
+        weather: {
+          GPSAvailable: true
+        }
+      }
+    });
+
+    store.dispatch = jest.fn();
+
+    render(
+      <Provider store={store}>
+        <Router initialEntries={["/1"]}>
+          <Route path="/:id">
+            <LocationList />
+          </Route>
+        </Router>
+      </Provider>
+    );
+
+    const homeButton = screen.getByRole("button", { name: "home" });
+    fireEvent.click(homeButton);
+
+    expect(store.dispatch).toHaveBeenCalledTimes(1);
+    expect(locationListSlice.defaultLocationIdSet).toHaveBeenCalledTimes(1);
+    expect(locationListSlice.defaultLocationIdSet).toHaveBeenCalledWith("1");
   });
 
   it("clears the textbox when it gains focus", () => {

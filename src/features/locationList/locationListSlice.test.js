@@ -2,7 +2,10 @@ import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import reducer, { fetchLocationsWithInitialLetter } from "./locationListSlice";
+import reducer, {
+  fetchLocationsWithInitialLetter,
+  defaultLocationIdSet
+} from "./locationListSlice";
 import locationsWithInitialLetterL from "../../fixtures/locationsWithInitialL";
 
 const middlewares = [thunk];
@@ -77,6 +80,7 @@ describe("store", () => {
       it("returns the initial state", () => {
         expect(reducer(undefined, {})).toEqual({
           cachedLetters: {},
+          defaultLocationId: null,
           locations: []
         });
       });
@@ -97,6 +101,19 @@ describe("store", () => {
         ).toEqual({
           cachedLetters: { l: locationsWithInitialLetterL },
           locations: locationsWithInitialLetterL
+        });
+      });
+
+      it("handles defaultLocationIdSet actions", () => {
+        expect(
+          reducer(
+            { locations: [], cachedLetters: {} },
+            defaultLocationIdSet("1")
+          )
+        ).toEqual({
+          cachedLetters: {},
+          locations: [],
+          defaultLocationId: "1"
         });
       });
     });
