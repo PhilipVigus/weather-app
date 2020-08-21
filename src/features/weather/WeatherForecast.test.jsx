@@ -27,6 +27,8 @@ describe("WeatherForecast", () => {
   });
 
   it("Renders the forecast", () => {
+    const scrollIntoViewMock = jest.fn();
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
     const { getTimezoneOffset } = Date.prototype;
     Date.prototype.getTimezoneOffset = () => {
       return -60;

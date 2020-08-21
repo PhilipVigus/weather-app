@@ -33,6 +33,8 @@ describe("Main", () => {
   });
 
   it("renders the Header component", () => {
+    const scrollIntoViewMock = jest.fn();
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
     render(
       <Provider store={store}>
         <Router>
