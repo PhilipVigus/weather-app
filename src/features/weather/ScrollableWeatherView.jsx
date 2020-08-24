@@ -13,7 +13,23 @@ const Day = styled.div`
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
-    display: none;
+    background-color: transparent;
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      overflow-x: scroll;
+      -ms-overflow-style: auto;
+      scrollbar-width: auto;
+      &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: grey;
+      }
+    }
   }
 `;
 
