@@ -14,6 +14,10 @@ const mockStore = configureStore(middlewares);
 describe("store", () => {
   let axiosMock;
 
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   beforeAll(() => {
     axiosMock = new MockAdapter(Axios);
   });
@@ -85,6 +89,19 @@ describe("store", () => {
         });
       });
 
+      it("gets the defaultLocationId from local storage", () => {
+        expect(reducer(undefined, {})).toEqual({
+          cachedLetters: {},
+          defaultLocationId: null,
+          locations: []
+        });
+
+        expect(localStorage.getItem).toHaveBeenCalledTimes(1);
+        expect(localStorage.getItem).toHaveBeenCalledWith(
+          "weatherApp-defaultLocationId"
+        );
+      });
+
       it("handles fetchLocationsWithInitialLetter actions", () => {
         expect(
           reducer(
@@ -105,16 +122,22 @@ describe("store", () => {
       });
 
       it("handles defaultLocationIdSet actions", () => {
-        expect(
-          reducer(
-            { locations: [], cachedLetters: {} },
-            defaultLocationIdSet("1")
-          )
-        ).toEqual({
+        const store = reducer(
+          { locations: [], cachedLetters: {} },
+          defaultLocationIdSet("1")
+        );
+
+        expect(store).toEqual({
           cachedLetters: {},
           locations: [],
           defaultLocationId: "1"
         });
+
+        expect(localStorage.setItem).toHaveBeenCalledTimes(1);
+        expect(localStorage.setItem).toHaveBeenCalledWith(
+          "weatherApp-defaultLocationId",
+          "1"
+        );
       });
     });
   });

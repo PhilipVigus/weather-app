@@ -140,9 +140,9 @@ const LocationList = () => {
     setTextboxText("");
   };
 
-  const handleLocationClick = (id) => {
+  const handleLocationClick = (newId) => {
     setShowFilteredLocations(false);
-    history.push(`/${id}`);
+    history.push(`/${newId}`);
   };
 
   const handleWhereIAmClick = () => {

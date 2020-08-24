@@ -432,4 +432,38 @@ describe("LocationList", () => {
       expect(weatherSlice.getWeatherByGPS).toHaveBeenCalledTimes(0);
     });
   });
+
+  describe("the home button", () => {
+    it("dispatches a defaultLocationIDSet action when you click it", () => {
+      const store = mockStore({
+        locationList: {
+          cachedLetters: {},
+          locations: []
+        },
+        weather: {
+          weather: {
+            GPSAvailable: true
+          }
+        }
+      });
+
+      store.dispatch = jest.fn();
+
+      render(
+        <Provider store={store}>
+          <Router initialEntries={["/1"]}>
+            <Route path="/:id">
+              <LocationList />
+            </Route>
+          </Router>
+        </Provider>
+      );
+
+      const homeButton = screen.getByRole("button", { name: "home" });
+      fireEvent.click(homeButton);
+
+      expect(locationListSlice.defaultLocationIdSet).toHaveBeenCalledTimes(1);
+      expect(locationListSlice.defaultLocationIdSet).toHaveBeenCalledWith("1");
+    });
+  });
 });
