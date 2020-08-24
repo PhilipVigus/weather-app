@@ -6,7 +6,7 @@ import LocationList from "../features/locationList/LocationList";
 import Forecast from "../features/weather/Forecast";
 
 const Main = () => {
-  const londonId = "2643743";
+  const LONDON_ID = "2643743";
   const defaultLocationId = useSelector(
     (state) => state.locationList.defaultLocationId
   );
@@ -20,7 +20,7 @@ const Main = () => {
           if (defaultLocationId) {
             return <Redirect to={`/${defaultLocationId}`} />;
           } else {
-            return <Redirect to={`/${londonId}`} />;
+            return <Redirect to={`/${LONDON_ID}`} />;
           }
         }}
       />
