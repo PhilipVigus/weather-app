@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.30",
+    "@fortawesome/free-regular-svg-icons": "^5.14.0",
+    "@fortawesome/free-solid-svg-icons": "^5.14.0",
+    "@fortawesome/react-fontawesome": "^0.1.11",
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -14,7 +18,8 @@
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "styled-components": "^5.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -54,10 +59,14 @@
     "eslint-plugin-react-hooks": "^2.5.1",
     "eslint-plugin-react-redux": "^3.1.0",
     "jest-environment-jsdom-sixteen": "^1.0.3",
+    "jest-localstorage-mock": "^2.4.3",
     "prettier": "^2.0.5",
     "redux-mock-store": "^1.5.4",
     "redux-thunk": "^2.3.0",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0"
+  },
+  "resolutions": {
+    "styled-components": "^5"
   }
 }

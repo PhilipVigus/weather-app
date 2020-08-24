@@ -3,106 +3,44 @@ import thunk from "redux-thunk";
 import Axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import reducer, { getWeatherById, getWeatherByGPS } from "./weatherSlice";
+import londonFullName from "../../fixtures/londonFullName";
+import londonWeatherNow from "../../fixtures/londonWeatherNow";
+import londonWeatherForecast from "../../fixtures/londonWeatherForecast";
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
 describe("store", () => {
-  let mock;
+  let axiosMock;
 
   beforeAll(() => {
-    mock = new MockAdapter(Axios);
+    axiosMock = new MockAdapter(Axios);
   });
 
   afterAll(() => {
-    mock.restore();
+    axiosMock.restore();
   });
 
   describe("weatherNowSlice", () => {
     it("creates an action when getWeatherById is called", async () => {
-      mock
-        .onGet()
-        .replyOnce(200, { name: "London" })
-        .onGet()
-        .replyOnce(200, {
-          coord: { lon: -0.13, lat: 51.51 },
-          weather: [
-            {
-              id: 801,
-              main: "Clouds",
-              description: "few clouds",
-              icon: "02d"
-            }
-          ],
-          base: "stations",
-          main: {
-            temp: 304.61,
-            feels_like: 305.31,
-            temp_min: 304.15,
-            temp_max: 305.93,
-            pressure: 1013,
-            humidity: 43
-          },
-          visibility: 10000,
-          wind: { speed: 2.6, deg: 80 },
-          clouds: { all: 13 },
-          dt: 1597063048,
-          sys: {
-            type: 1,
-            id: 1414,
-            country: "GB",
-            sunrise: 1597034324,
-            sunset: 1597087983
-          },
-          timezone: 3600,
-          id: 2643743,
-          name: "London",
-          cod: 200
-        })
-        .onGet()
-        .replyOnce(200, { weather: "some weather" });
+      axiosMock
+        .onGet(/\/locations\/names\//)
+        .replyOnce(200, londonFullName)
+        .onGet(/https:\/\/api\.openweathermap\.org\/data\/2\.5\/weather/)
+        .replyOnce(200, londonWeatherNow)
+        .onGet(/https:\/\/api\.openweathermap\.org\/data\/2\.5\/forecast/)
+        .replyOnce(200, londonWeatherForecast);
 
-      const store = mockStore({ locations: [] });
-      const result = await store.dispatch(getWeatherById(2643743));
+      londonWeatherNow.name = londonFullName.name;
+
+      const store = mockStore({ GPSAvailable: true });
+      const locationId = 2643743;
+      const result = await store.dispatch(getWeatherById(locationId));
 
       expect(result.type).toEqual("weather/getWeatherById/fulfilled");
       expect(result.payload).toEqual({
-        now: {
-          coord: { lon: -0.13, lat: 51.51 },
-          weather: [
-            {
-              id: 801,
-              main: "Clouds",
-              description: "few clouds",
-              icon: "02d"
-            }
-          ],
-          base: "stations",
-          main: {
-            temp: 304.61,
-            feels_like: 305.31,
-            temp_min: 304.15,
-            temp_max: 305.93,
-            pressure: 1013,
-            humidity: 43
-          },
-          visibility: 10000,
-          wind: { speed: 2.6, deg: 80 },
-          clouds: { all: 13 },
-          dt: 1597063048,
-          sys: {
-            type: 1,
-            id: 1414,
-            country: "GB",
-            sunrise: 1597034324,
-            sunset: 1597087983
-          },
-          timezone: 3600,
-          id: 2643743,
-          name: "London",
-          cod: 200
-        },
-        forecast: { weather: "some weather" }
+        now: londonWeatherNow,
+        forecast: londonWeatherForecast
       });
     });
 
@@ -112,8 +50,8 @@ describe("store", () => {
           Promise.resolve(
             success({
               coords: {
-                latitude: 51.1,
-                longitude: 45.3
+                latitude: 50,
+                longitude: 50
               }
             })
           )
@@ -122,60 +60,36 @@ describe("store", () => {
 
       global.navigator.geolocation = mockGeolocation;
 
-      mock
-        .onGet()
-        .replyOnce(200, {
-          coord: { lon: -0.13, lat: 51.51 },
-          weather: [
-            {
-              id: 801,
-              main: "Clouds",
-              description: "few clouds",
-              icon: "02d"
-            }
-          ]
-        })
-        .onGet()
-        .replyOnce(200, { weather: "a weather forecast" })
-        .onGet()
-        .replyOnce(200, { name: "London" });
+      axiosMock
+        .onGet(/https:\/\/api\.openweathermap\.org\/data\/2\.5\/weather/)
+        .replyOnce(200, londonWeatherNow)
+        .onGet(/https:\/\/api\.openweathermap\.org\/data\/2\.5\/forecast/)
+        .replyOnce(200, londonWeatherForecast)
+        .onGet(/\/locations\/names\//)
+        .replyOnce(200, londonFullName);
+
+      londonWeatherNow.name = londonFullName.name;
 
       const store = mockStore({ locations: [] });
       const result = await store.dispatch(getWeatherByGPS());
 
       expect(result.type).toEqual("weather/getWeatherByGPS/fulfilled");
       expect(result.payload).toEqual({
-        forecast: { weather: "a weather forecast" },
-        now: {
-          coord: { lat: 51.51, lon: -0.13 },
-          name: "London",
-          weather: [
-            { description: "few clouds", icon: "02d", id: 801, main: "Clouds" }
-          ]
-        }
+        forecast: londonWeatherForecast,
+        now: londonWeatherNow
       });
     });
 
     it("creates throws an error when getWeatherByGPS is called and is unavailable", async () => {
       global.navigator.geolocation = undefined;
 
-      mock
-        .onGet()
-        .replyOnce(200, {
-          coord: { lon: -0.13, lat: 51.51 },
-          weather: [
-            {
-              id: 801,
-              main: "Clouds",
-              description: "few clouds",
-              icon: "02d"
-            }
-          ]
-        })
-        .onGet()
-        .replyOnce(200, { weather: "a weather forecast" })
-        .onGet()
-        .replyOnce(200, { name: "London" });
+      axiosMock
+        .onGet(/https:\/\/api\.openweathermap\.org\/data\/2\.5\/weather/)
+        .replyOnce(200, londonWeatherNow)
+        .onGet(/https:\/\/api\.openweathermap\.org\/data\/2\.5\/forecast/)
+        .replyOnce(200, londonWeatherForecast)
+        .onGet(/\/locations\/names\//)
+        .replyOnce(200, londonFullName);
 
       const store = mockStore({ locations: [] });
       const result = await store.dispatch(getWeatherByGPS());
@@ -184,10 +98,10 @@ describe("store", () => {
     });
 
     describe("reducer", () => {
+      const sliceInitialState = { GPSAvailable: true };
+
       it("returns the initial state", () => {
-        expect(reducer(undefined, {})).toEqual({
-          GPSAvailable: true
-        });
+        expect(reducer(undefined, {})).toEqual(sliceInitialState);
       });
 
       it("handles getWeatherByGPS actions when GPS is available", () => {
@@ -196,8 +110,8 @@ describe("store", () => {
             Promise.resolve(
               success({
                 coords: {
-                  latitude: 51.1,
-                  longitude: 45.3
+                  latitude: 50,
+                  longitude: 50
                 }
               })
             )
@@ -207,20 +121,17 @@ describe("store", () => {
         global.navigator.geolocation = mockGeolocation;
 
         expect(
-          reducer(
-            { GPSAvailable: true },
-            {
-              type: getWeatherByGPS.fulfilled.type,
-              payload: {
-                now: { weather: "good" },
-                forecast: { weather: "bad" }
-              }
+          reducer(sliceInitialState, {
+            type: getWeatherByGPS.fulfilled.type,
+            payload: {
+              now: londonWeatherNow,
+              forecast: londonWeatherForecast
             }
-          )
+          })
         ).toEqual({
           GPSAvailable: true,
-          now: { weather: "good" },
-          forecast: { weather: "bad" }
+          now: londonWeatherNow,
+          forecast: londonWeatherForecast
         });
       });
 
@@ -228,13 +139,10 @@ describe("store", () => {
         global.navigator.geolocation = undefined;
 
         expect(
-          reducer(
-            { GPSAvailable: true },
-            {
-              type: getWeatherByGPS.rejected.type,
-              payload: {}
-            }
-          )
+          reducer(sliceInitialState, {
+            type: getWeatherByGPS.rejected.type,
+            payload: {}
+          })
         ).toEqual({
           GPSAvailable: false
         });

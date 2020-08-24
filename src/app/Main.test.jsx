@@ -4,60 +4,37 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import { MemoryRouter as Router } from "react-router-dom";
 import Main from "./Main";
+import londonWeatherNow from "../fixtures/londonWeatherNow";
+import londonWeatherForecast from "../fixtures/londonWeatherForecast";
+import locationsWithInitialL from "../fixtures/locationsWithInitialL";
 
 const mockStore = configureStore([]);
 
 describe("Main", () => {
-  afterEach(() => {
+  let store;
+
+  beforeAll(() => {
+    store = mockStore({
+      locationList: {
+        cachedLetters: {},
+        locations: locationsWithInitialL
+      },
+      weather: {
+        now: londonWeatherNow,
+        forecast: londonWeatherForecast
+      }
+    });
+
+    store.dispatch = jest.fn();
+  });
+
+  afterAll(() => {
     jest.clearAllMocks();
   });
 
-  it("renders the WeatherNow component", () => {
-    const store = mockStore({
-      locationList: {
-        locations: []
-      },
-      weather: {
-        now: {
-          coord: { lon: -0.13, lat: 51.51 },
-          weather: [
-            {
-              id: 801,
-              main: "Clouds",
-              description: "few clouds",
-              icon: "02d"
-            }
-          ],
-          base: "stations",
-          main: {
-            temp: 304.61,
-            feels_like: 305.31,
-            temp_min: 304.15,
-            temp_max: 305.93,
-            pressure: 1013,
-            humidity: 43
-          },
-          visibility: 10000,
-          wind: { speed: 2.6, deg: 80 },
-          clouds: { all: 13 },
-          dt: 1597063048,
-          sys: {
-            type: 1,
-            id: 1414,
-            country: "GB",
-            sunrise: 1597034324,
-            sunset: 1597087983
-          },
-          timezone: 3600,
-          id: 2643743,
-          name: "London",
-          cod: 200
-        }
-      }
-    });
-
-    store.dispatch = jest.fn();
-
+  it("renders the Header component", () => {
+    const scrollIntoViewMock = jest.fn();
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
     render(
       <Provider store={store}>
         <Router>
@@ -65,55 +42,24 @@ describe("Main", () => {
         </Router>
       </Provider>
     );
-    expect(screen.getByText(/Weather in London right now/)).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("heading", { name: "Weather" })
+    ).toBeInTheDocument();
+  });
+
+  it("renders the WeatherNow component", () => {
+    render(
+      <Provider store={store}>
+        <Router>
+          <Main />
+        </Router>
+      </Provider>
+    );
+    expect(screen.getByText(/87% humidity/)).toBeInTheDocument();
   });
 
   it("renders the LocationList component", () => {
-    const store = mockStore({
-      locationList: {
-        locations: []
-      },
-      weather: {
-        now: {
-          coord: { lon: -0.13, lat: 51.51 },
-          weather: [
-            {
-              id: 801,
-              main: "Clouds",
-              description: "few clouds",
-              icon: "02d"
-            }
-          ],
-          base: "stations",
-          main: {
-            temp: 304.61,
-            feels_like: 305.31,
-            temp_min: 304.15,
-            temp_max: 305.93,
-            pressure: 1013,
-            humidity: 43
-          },
-          visibility: 10000,
-          wind: { speed: 2.6, deg: 80 },
-          clouds: { all: 13 },
-          dt: 1597063048,
-          sys: {
-            type: 1,
-            id: 1414,
-            country: "GB",
-            sunrise: 1597034324,
-            sunset: 1597087983
-          },
-          timezone: 3600,
-          id: 2643743,
-          name: "London",
-          cod: 200
-        }
-      }
-    });
-
-    store.dispatch = jest.fn();
-
     render(
       <Provider store={store}>
         <Router>
@@ -122,6 +68,8 @@ describe("Main", () => {
       </Provider>
     );
 
-    expect(screen.getByText(/Location List/)).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/Enter location name/)
+    ).toBeInTheDocument();
   });
 });
