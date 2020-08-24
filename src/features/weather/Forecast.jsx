@@ -72,6 +72,7 @@ const Forecast = () => {
             return forecastDay.day;
           })}
           clickCallback={handleDayLinkClick}
+          dayIndexDisplayed={dayIndexDisplayed}
         />
         <ScrollableWeatherView
           forecast={forecastAsDays}

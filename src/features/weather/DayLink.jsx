@@ -11,14 +11,24 @@ const StyledLink = styled.input`
   font-size: 1.6rem;
   padding: 15px;
   margin: 0 5px;
+  outline: none;
 
-  &:focus {
-    background: rgb(240, 240, 240);
-    font-size: 1.8rem;
-    font-weight: bold;
-    padding: 20px;
-    outline: none;
+  &:last-of-type {
+    border-right: 1px solid grey;
   }
+`;
+
+const StyledLinkWithFocus = styled.input`
+  background: rgb(240, 240, 240);
+  border: 1px solid grey;
+  border-bottom: none;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  font-size: 1.8rem;
+  font-weight: bold;
+  outline: none;
+  padding: 18px;
+  margin: 0 5px;
 
   &:last-of-type {
     border-right: 1px solid grey;
@@ -34,14 +44,25 @@ const DayLink = ({ day, index, clickCallback, hasFocus }) => {
     }
   }, [hasFocus]);
 
-  return (
-    <StyledLink
-      ref={buttonRef}
-      type="button"
-      value={day}
-      onClick={() => clickCallback(index)}
-    />
-  );
+  if (hasFocus) {
+    return (
+      <StyledLinkWithFocus
+        ref={buttonRef}
+        type="button"
+        value={day}
+        onClick={() => clickCallback(index)}
+      />
+    );
+  } else {
+    return (
+      <StyledLink
+        ref={buttonRef}
+        type="button"
+        value={day}
+        onClick={() => clickCallback(index)}
+      />
+    );
+  }
 };
 
 DayLink.propTypes = {

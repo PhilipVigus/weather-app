@@ -17,13 +17,13 @@ const StyledNavigator = styled.div`
   }
 `;
 
-const DayNavigator = ({ days, clickCallback }) => {
+const DayNavigator = ({ days, clickCallback, dayIndexDisplayed }) => {
   return (
     <StyledNavigator>
       {days.map((day, index) => {
         return (
           <DayLink
-            hasFocus={index === 0}
+            hasFocus={index === dayIndexDisplayed}
             key={day}
             day={day}
             index={index}
@@ -37,7 +37,8 @@ const DayNavigator = ({ days, clickCallback }) => {
 
 DayNavigator.propTypes = {
   days: PropTypes.arrayOf(PropTypes.string).isRequired,
-  clickCallback: PropTypes.func.isRequired
+  clickCallback: PropTypes.func.isRequired,
+  dayIndexDisplayed: PropTypes.number.isRequired
 };
 
 export default DayNavigator;
