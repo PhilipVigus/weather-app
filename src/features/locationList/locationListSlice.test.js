@@ -122,16 +122,22 @@ describe("store", () => {
       });
 
       it("handles defaultLocationIdSet actions", () => {
-        expect(
-          reducer(
-            { locations: [], cachedLetters: {} },
-            defaultLocationIdSet("1")
-          )
-        ).toEqual({
+        const store = reducer(
+          { locations: [], cachedLetters: {} },
+          defaultLocationIdSet("1")
+        );
+
+        expect(store).toEqual({
           cachedLetters: {},
           locations: [],
           defaultLocationId: "1"
         });
+
+        expect(localStorage.setItem).toHaveBeenCalledTimes(1);
+        expect(localStorage.setItem).toHaveBeenCalledWith(
+          "weatherApp-defaultLocationId",
+          "1"
+        );
       });
     });
   });
