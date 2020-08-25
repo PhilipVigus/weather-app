@@ -28,10 +28,6 @@ describe("Main", () => {
     store.dispatch = jest.fn();
   });
 
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
-
   it("renders the Header component", () => {
     const scrollIntoViewMock = jest.fn();
     window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
@@ -56,6 +52,7 @@ describe("Main", () => {
         </Router>
       </Provider>
     );
+
     expect(screen.getByText(/87% humidity/)).toBeInTheDocument();
   });
 

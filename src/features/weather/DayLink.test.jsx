@@ -5,6 +5,7 @@ import DayLink from "./DayLink";
 describe("DayNavigator", () => {
   it("renders the day", () => {
     const callback = jest.fn();
+
     render(
       <DayLink day="Monday" index={1} clickCallback={callback} hasFocus />
     );
@@ -14,6 +15,7 @@ describe("DayNavigator", () => {
 
   it("calls the callback when you click the link", () => {
     const callback = jest.fn();
+
     render(
       <DayLink day="Monday" index={1} clickCallback={callback} hasFocus />
     );

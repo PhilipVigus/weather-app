@@ -9,9 +9,9 @@ const StyledLink = styled.input`
   border-radius: 5px 5px 0 0;
   cursor: pointer;
   font-size: ${(props) => (props.focused ? "1.8rem" : "1.6rem")};
-  padding: ${(props) => (props.focused ? "18px" : "15px")};
   margin: 0 5px;
   outline: none;
+  padding: ${(props) => (props.focused ? "18px" : "15px")};
 
   &:last-of-type {
     border-right: 1px solid grey;

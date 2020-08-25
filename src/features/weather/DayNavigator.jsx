@@ -4,13 +4,13 @@ import styled from "styled-components";
 import DayLink from "./DayLink";
 
 const StyledNavigator = styled.div`
-  display: flex;
+  -ms-overflow-style: none;
   align-items: flex-end;
+  display: flex;
   margin-top: 20px;
   overflow-x: auto;
-  white-space: nowrap;
-  -ms-overflow-style: none;
   scrollbar-width: none;
+  white-space: nowrap;
 
   &::-webkit-scrollbar {
     display: none;
