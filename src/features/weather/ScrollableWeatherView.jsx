@@ -117,7 +117,7 @@ const ScrollableWeatherView = ({ scrollTo, weatherForecast, weatherNow }) => {
 
   const getTimeNowComponent = () => {
     return (
-      <TimeContainer key={weatherNow.dt_txt}>
+      <TimeContainer key="Now">
         <div
           ref={(el) => {
             dayTransitionRefs.current[0] = el;
@@ -202,6 +202,51 @@ ScrollableWeatherView.propTypes = {
       sunrise: number,
       sunset: number,
       timezone: number
+    })
+  }).isRequired,
+  weatherNow: PropTypes.shape({
+    base: PropTypes.string,
+    clouds: PropTypes.shape({
+      all: PropTypes.number
+    }),
+    cod: PropTypes.number,
+    coord: PropTypes.shape({
+      lon: PropTypes.number,
+      lat: PropTypes.number
+    }),
+    dt: PropTypes.number,
+    id: PropTypes.number,
+    main: PropTypes.shape({
+      feels_like: number,
+      grnd_level: number,
+      humidity: number,
+      pressure: number,
+      sea_level: number,
+      temp: number,
+      temp_kf: number,
+      temp_max: number,
+      temp_min: number
+    }),
+    sys: PropTypes.shape({
+      country: PropTypes.string,
+      id: PropTypes.number,
+      sunrise: PropTypes.number,
+      sunset: PropTypes.number,
+      type: PropTypes.number
+    }),
+    timezone: PropTypes.number,
+    visibility: PropTypes.number,
+    weather: arrayOf(
+      PropTypes.shape({
+        description: string,
+        icon: string,
+        id: number,
+        main: string
+      })
+    ),
+    wind: PropTypes.shape({
+      speed: number,
+      deg: number
     })
   }).isRequired
 };

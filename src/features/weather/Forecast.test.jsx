@@ -62,7 +62,7 @@ describe("Forecast", () => {
     );
 
     expect(screen.getByText(/82% humidity/)).toBeInTheDocument();
-    expect(screen.getByText(/5 m\/s \(169 °\)/)).toBeInTheDocument();
+    expect(screen.getByText(/5 m\/s \(169°\)/)).toBeInTheDocument();
 
     Date.prototype.getTimezoneOffset = getTimezoneOffset;
   });
