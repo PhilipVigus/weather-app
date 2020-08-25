@@ -33,29 +33,79 @@ const Day = styled.div`
   }
 `;
 
+const TimeContainer = styled.div`
+  display: flex;
+`;
+
+const DayDivider = styled.div`
+  display: flex;
+  flex 0 0 2px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+`;
+
+const GreySpacer = styled.div`
+  background: rgb(200, 200, 200);
+  width: 2px;
+  margin: 10px 0;
+`;
+
 const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
 
-const ScrollableWeatherView = ({ forecast, scrollTo }) => {
-  const [forecastAsTimes, setForecastAsTimes] = useState([]);
+const ScrollableWeatherView = ({ scrollTo, weatherForecast }) => {
   const [bookmarkPositions, setBookmarkPositions] = useState([]);
   const bookmarkRefs = useRef([]);
 
   useEffect(() => {
-    const times = [];
-    const positions = [];
+    const splitForecastIntoDays = (f) => {
+      const days = [];
+      let dayForecasts = [];
 
-    forecast.forEach((day) => {
-      day.forecast.forEach((time, dayIndex) => {
-        if (dayIndex === 0) {
-          positions.push(times.length);
+      for (let i = 0; i < f.list.length; i += 1) {
+        const UTCDate = new Date(f.list[i].dt_txt);
+        const localDate = addMilliseconds(UTCDate, -timeOffset);
+        const day = format(localDate, "EEEE");
+
+        dayForecasts.push(f.list[i]);
+
+        if (i === f.list.length - 1) {
+          days.push({ day, forecast: dayForecasts });
+          dayForecasts = [];
+        } else {
+          const nextUTCDate = new Date(f.list[i + 1].dt_txt);
+          const nextlocalDate = addMilliseconds(nextUTCDate, -timeOffset);
+          const nextDay = format(nextlocalDate, "EEEE");
+
+          if (day !== nextDay) {
+            days.push({ day, forecast: dayForecasts });
+            dayForecasts = [];
+          }
         }
-        times.push(time);
-      });
-    });
+      }
 
-    setForecastAsTimes(times);
-    setBookmarkPositions(positions);
-  }, [forecast]);
+      days[0].day = "Today";
+      return days;
+    };
+
+    const getBookmarkPositions = (forecastDays) => {
+      let cumulativeTimeIndex = 0;
+      const positions = [];
+
+      forecastDays.forEach((day) => {
+        day.forecast.forEach((time, dayIndex) => {
+          if (dayIndex === 0) {
+            positions.push(cumulativeTimeIndex);
+          }
+          cumulativeTimeIndex += 1;
+        });
+      });
+
+      return positions;
+    };
+
+    const forecastAsDays = splitForecastIntoDays(weatherForecast);
+    setBookmarkPositions(getBookmarkPositions(forecastAsDays));
+  }, [weatherForecast]);
 
   useEffect(() => {
     if (bookmarkRefs.current[bookmarkPositions[scrollTo]]) {
@@ -72,59 +122,92 @@ const ScrollableWeatherView = ({ forecast, scrollTo }) => {
     return format(localDate, "HH:mm");
   };
 
+  let currentDay = new Date(weatherForecast.list[0].dt_txt).getDay();
+
   return (
     <Day>
-      {forecastAsTimes.map((time, index) => (
-        // eslint-disable-next-line no-return-assign
-        <div key={time.dt} ref={(el) => (bookmarkRefs.current[index] = el)}>
-          <WeatherAtTime
-            forecast={{ time: getTimeDateString(time.dt_txt), forecast: time }}
-          />
-        </div>
-      ))}
+      {weatherForecast.list.map((time, index) => {
+        const newDay = currentDay !== new Date(time.dt_txt).getDay();
+        currentDay = new Date(time.dt_txt).getDay();
+
+        return (
+          <TimeContainer key={time.dt_txt}>
+            {newDay && (
+              <DayDivider>
+                <GreySpacer />
+              </DayDivider>
+            )}
+            <div ref={(el) => (bookmarkRefs.current[index] = el)}>
+              <WeatherAtTime
+                forecast={{
+                  time: getTimeDateString(time.dt_txt),
+                  forecast: time
+                }}
+              />
+            </div>
+          </TimeContainer>
+        );
+      })}
     </Day>
   );
 };
 
 ScrollableWeatherView.propTypes = {
   scrollTo: PropTypes.number.isRequired,
-  forecast: PropTypes.arrayOf(
-    PropTypes.shape({
-      clouds: PropTypes.shape({
-        all: number
-      }),
-      dt: number,
-      dt_txt: string,
-      main: PropTypes.shape({
-        feels_like: number,
-        grnd_level: number,
-        humidity: number,
-        pressure: number,
-        sea_level: number,
-        temp: number,
-        temp_kf: number,
-        temp_max: number,
-        temp_min: number
-      }),
-      pop: number,
-      sys: PropTypes.shape({
-        pd: string
-      }),
-      visibility: number,
-      weather: arrayOf(
-        PropTypes.shape({
-          description: string,
-          icon: string,
-          id: number,
-          main: string
+  weatherForecast: PropTypes.shape({
+    cod: string,
+    message: number,
+    cnt: number,
+    list: arrayOf(
+      PropTypes.shape({
+        clouds: PropTypes.shape({
+          all: number
+        }),
+        dt: number,
+        dt_txt: string,
+        main: PropTypes.shape({
+          feels_like: number,
+          grnd_level: number,
+          humidity: number,
+          pressure: number,
+          sea_level: number,
+          temp: number,
+          temp_kf: number,
+          temp_max: number,
+          temp_min: number
+        }),
+        pop: number,
+        sys: PropTypes.shape({
+          pd: string
+        }),
+        visibility: number,
+        weather: arrayOf(
+          PropTypes.shape({
+            description: string,
+            icon: string,
+            id: number,
+            main: string
+          })
+        ),
+        wind: PropTypes.shape({
+          speed: number,
+          deg: number
         })
-      ),
-      wind: PropTypes.shape({
-        speed: number,
-        deg: number
       })
+    ),
+    city: PropTypes.shape({
+      coord: PropTypes.shape({
+        lat: number,
+        lon: number
+      }),
+      country: string,
+      id: number,
+      name: string,
+      sunrise: number,
+      sunset: number,
+      timezone: number
     })
-  ).isRequired
+  }).isRequired
 };
 
 export default ScrollableWeatherView;

@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import addMilliseconds from "date-fns/addMilliseconds";
 import { useParams } from "react-router-dom";
 import DayNavigator from "./DayNavigator";
-import ScrollableWeatherView from "./ScrollableWeatherView";
+import ImprovedScrollableWeatherView from "./ScrollableWeatherView";
 import { getWeatherById } from "./weatherSlice";
 
 const Forecast = () => {
@@ -74,9 +74,9 @@ const Forecast = () => {
           clickCallback={handleDayLinkClick}
           dayIndexDisplayed={dayIndexDisplayed}
         />
-        <ScrollableWeatherView
-          forecast={forecastAsDays}
+        <ImprovedScrollableWeatherView
           scrollTo={dayIndexDisplayed}
+          weatherForecast={weatherForecast}
         />
       </>
     );
