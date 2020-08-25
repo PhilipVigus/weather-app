@@ -8,7 +8,7 @@ import { faWind } from "@fortawesome/free-solid-svg-icons";
 const StyledWeatherAtTime = styled.div`
   border-top: 1px solid grey;
   border-bottom: 1px solid grey;
-  padding: 0 20px;
+  padding: 10px 20px;
 `;
 
 const Time = styled.div`
@@ -71,7 +71,7 @@ const WeatherAtTime = ({ forecast }) => {
         <WindSpeedAndDirection>
           {`${Math.round(forecast.forecast.wind.speed)} m/s (${
             forecast.forecast.wind.deg
-          } °)`}
+          }°)`}
         </WindSpeedAndDirection>
       </Wind>
       <CloudCoverage>{`${forecast.forecast.clouds.all}% cloud coverage`}</CloudCoverage>
