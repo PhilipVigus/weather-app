@@ -9,50 +9,48 @@ import { getWeatherById } from "./weatherSlice";
 
 const Forecast = () => {
   const weatherForecast = useSelector((state) => state.weather.forecast);
-  const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
-  const [forecastAsDays, setForecastAsDays] = useState([]);
+  const weatherNow = useSelector((state) => state.weather.now);
+  const timeDifferenceInMilliseconds =
+    new Date().getTimezoneOffset() * 60 * 1000;
+  const [days, setDays] = useState([]);
   const [dayIndexDisplayed, setDayIndexDisplayed] = useState(0);
 
   const dispatch = useDispatch();
   const { id } = useParams();
 
   useEffect(() => {
-    const splitForecastIntoDays = (forecast) => {
+    const getDayFromDateText = (dateAsText) => {
+      const UTCDate = new Date(dateAsText);
+      const localDate = addMilliseconds(UTCDate, -timeDifferenceInMilliseconds);
+      return format(localDate, "EEEE");
+    };
+
+    const setDaysFromForecast = (forecast) => {
       if (!weatherForecast) {
         return;
       }
 
-      const days = [];
-      let dayForecasts = [];
+      const forecastDays = [];
 
-      for (let i = 0; i < forecast.list.length; i += 1) {
-        const UTCDate = new Date(forecast.list[i].dt_txt);
-        const localDate = addMilliseconds(UTCDate, -timeOffset);
-        const day = format(localDate, "EEEE");
+      for (let i = 0; i < forecast.list.length - 1; i += 1) {
+        const day = getDayFromDateText(forecast.list[i].dt_txt);
+        const nextDay = getDayFromDateText(forecast.list[i + 1].dt_txt);
 
-        dayForecasts.push(forecast.list[i]);
-
-        if (i === forecast.list.length - 1) {
-          days.push({ day, forecast: dayForecasts });
-          dayForecasts = [];
-        } else {
-          const nextUTCDate = new Date(forecast.list[i + 1].dt_txt);
-          const nextlocalDate = addMilliseconds(nextUTCDate, -timeOffset);
-          const nextDay = format(nextlocalDate, "EEEE");
-
-          if (day !== nextDay) {
-            days.push({ day, forecast: dayForecasts });
-            dayForecasts = [];
-          }
+        if (day !== nextDay) {
+          forecastDays.push(day);
         }
       }
 
-      days[0].day = "Today";
-      setForecastAsDays(days);
+      forecastDays.push(
+        getDayFromDateText(forecast.list[forecast.list.length - 1].dt_txt)
+      );
+
+      forecastDays[0] = "Today";
+      setDays(forecastDays);
     };
 
-    splitForecastIntoDays(weatherForecast);
-  }, [weatherForecast, timeOffset]);
+    setDaysFromForecast(weatherForecast);
+  }, [weatherForecast, timeDifferenceInMilliseconds]);
 
   useEffect(() => {
     dispatch(getWeatherById(id));
@@ -62,21 +60,20 @@ const Forecast = () => {
     setDayIndexDisplayed(index);
   };
 
-  if (!weatherForecast || forecastAsDays.length === 0) {
+  if (!weatherForecast || days.length === 0) {
     return <div>Loading...</div>;
   } else {
     return (
       <>
         <DayNavigator
-          days={forecastAsDays.map((forecastDay) => {
-            return forecastDay.day;
-          })}
+          days={days}
           clickCallback={handleDayLinkClick}
           dayIndexDisplayed={dayIndexDisplayed}
         />
         <ScrollableWeatherView
-          forecast={forecastAsDays}
           scrollTo={dayIndexDisplayed}
+          weatherForecast={weatherForecast}
+          weatherNow={weatherNow}
         />
       </>
     );

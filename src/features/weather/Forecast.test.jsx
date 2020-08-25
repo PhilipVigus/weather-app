@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import Forecast from "./Forecast";
 import londonWeatherForecast from "../../fixtures/londonWeatherForecast";
+import londonWeatherNow from "../../fixtures/londonWeatherNow";
 
 const mockStore = configureStore([]);
 
@@ -45,6 +46,7 @@ describe("Forecast", () => {
       },
       weather: {
         forecast: londonWeatherForecast,
+        now: londonWeatherNow,
         GPSAvailable: true
       }
     });
@@ -60,7 +62,7 @@ describe("Forecast", () => {
     );
 
     expect(screen.getByText(/82% humidity/)).toBeInTheDocument();
-    expect(screen.getByText(/5 m\/s \(169 °\)/)).toBeInTheDocument();
+    expect(screen.getByText(/5 m\/s \(169°\)/)).toBeInTheDocument();
 
     Date.prototype.getTimezoneOffset = getTimezoneOffset;
   });
@@ -75,6 +77,7 @@ describe("Forecast", () => {
       },
       weather: {
         forecast: londonWeatherForecast,
+        now: londonWeatherNow,
         GPSAvailable: true
       }
     });
