@@ -53,68 +53,35 @@ const GreySpacer = styled.div`
 const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
 
 const ScrollableWeatherView = ({ scrollTo, weatherForecast }) => {
-  const [bookmarkPositions, setBookmarkPositions] = useState([]);
-  const bookmarkRefs = useRef([]);
+  const [dayTransitionIndices, setDayTransitionIndices] = useState([]);
+  const dayTransitionRefs = useRef([]);
 
   useEffect(() => {
-    const splitForecastIntoDays = (f) => {
-      const days = [];
-      let dayForecasts = [];
+    const dayTransitionPositions = [0];
+    let lastDay = new Date(weatherForecast.list[0].dt_txt).getDay();
 
-      for (let i = 0; i < f.list.length; i += 1) {
-        const UTCDate = new Date(f.list[i].dt_txt);
-        const localDate = addMilliseconds(UTCDate, -timeOffset);
-        const day = format(localDate, "EEEE");
+    weatherForecast.list.forEach((forecastAtTime, index) => {
+      const currentDay = new Date(forecastAtTime.dt_txt).getDay();
+      const isDayTransition = lastDay !== currentDay;
 
-        dayForecasts.push(f.list[i]);
-
-        if (i === f.list.length - 1) {
-          days.push({ day, forecast: dayForecasts });
-          dayForecasts = [];
-        } else {
-          const nextUTCDate = new Date(f.list[i + 1].dt_txt);
-          const nextlocalDate = addMilliseconds(nextUTCDate, -timeOffset);
-          const nextDay = format(nextlocalDate, "EEEE");
-
-          if (day !== nextDay) {
-            days.push({ day, forecast: dayForecasts });
-            dayForecasts = [];
-          }
-        }
+      if (isDayTransition) {
+        dayTransitionPositions.push(index);
       }
 
-      days[0].day = "Today";
-      return days;
-    };
+      lastDay = new Date(forecastAtTime.dt_txt).getDay();
+    });
 
-    const getBookmarkPositions = (forecastDays) => {
-      let cumulativeTimeIndex = 0;
-      const positions = [];
-
-      forecastDays.forEach((day) => {
-        day.forecast.forEach((time, dayIndex) => {
-          if (dayIndex === 0) {
-            positions.push(cumulativeTimeIndex);
-          }
-          cumulativeTimeIndex += 1;
-        });
-      });
-
-      return positions;
-    };
-
-    const forecastAsDays = splitForecastIntoDays(weatherForecast);
-    setBookmarkPositions(getBookmarkPositions(forecastAsDays));
-  }, [weatherForecast]);
+    setDayTransitionIndices(dayTransitionPositions);
+  }, [weatherForecast.list]);
 
   useEffect(() => {
-    if (bookmarkRefs.current[bookmarkPositions[scrollTo]]) {
-      bookmarkRefs.current[bookmarkPositions[scrollTo]].scrollIntoView({
+    if (dayTransitionRefs.current[dayTransitionIndices[scrollTo]]) {
+      dayTransitionRefs.current[dayTransitionIndices[scrollTo]].scrollIntoView({
         behavior: "smooth",
         inline: "start"
       });
     }
-  }, [bookmarkPositions, scrollTo]);
+  }, [dayTransitionIndices, scrollTo]);
 
   const getTimeDateString = (date) => {
     const UTCDate = new Date(date);
@@ -122,31 +89,38 @@ const ScrollableWeatherView = ({ scrollTo, weatherForecast }) => {
     return format(localDate, "HH:mm");
   };
 
+  const getTimeContainerComponents = (time, index, newDay) => {
+    return (
+      <TimeContainer key={time.dt_txt}>
+        {newDay && (
+          <DayDivider>
+            <GreySpacer />
+          </DayDivider>
+        )}
+        <div
+          ref={(el) => {
+            dayTransitionRefs.current[index] = el;
+          }}
+        >
+          <WeatherAtTime
+            forecast={{
+              time: getTimeDateString(time.dt_txt),
+              forecast: time
+            }}
+          />
+        </div>
+      </TimeContainer>
+    );
+  };
+
   let currentDay = new Date(weatherForecast.list[0].dt_txt).getDay();
 
   return (
     <Day>
       {weatherForecast.list.map((time, index) => {
-        const newDay = currentDay !== new Date(time.dt_txt).getDay();
+        const isNewDay = currentDay !== new Date(time.dt_txt).getDay();
         currentDay = new Date(time.dt_txt).getDay();
-
-        return (
-          <TimeContainer key={time.dt_txt}>
-            {newDay && (
-              <DayDivider>
-                <GreySpacer />
-              </DayDivider>
-            )}
-            <div ref={(el) => (bookmarkRefs.current[index] = el)}>
-              <WeatherAtTime
-                forecast={{
-                  time: getTimeDateString(time.dt_txt),
-                  forecast: time
-                }}
-              />
-            </div>
-          </TimeContainer>
-        );
+        return getTimeContainerComponents(time, index, isNewDay);
       })}
     </Day>
   );
