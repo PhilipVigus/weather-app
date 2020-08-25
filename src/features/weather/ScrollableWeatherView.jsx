@@ -52,7 +52,7 @@ const GreySpacer = styled.div`
 
 const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
 
-const ScrollableWeatherView = ({ scrollTo, weatherForecast }) => {
+const ScrollableWeatherView = ({ scrollTo, weatherForecast, weatherNow }) => {
   const [dayTransitionIndices, setDayTransitionIndices] = useState([]);
   const dayTransitionRefs = useRef([]);
 
@@ -99,7 +99,9 @@ const ScrollableWeatherView = ({ scrollTo, weatherForecast }) => {
         )}
         <div
           ref={(el) => {
-            dayTransitionRefs.current[index] = el;
+            if (index !== 0) {
+              dayTransitionRefs.current[index] = el;
+            }
           }}
         >
           <WeatherAtTime
@@ -113,10 +115,30 @@ const ScrollableWeatherView = ({ scrollTo, weatherForecast }) => {
     );
   };
 
+  const getTimeNowComponent = () => {
+    return (
+      <TimeContainer key={weatherNow.dt_txt}>
+        <div
+          ref={(el) => {
+            dayTransitionRefs.current[0] = el;
+          }}
+        >
+          <WeatherAtTime
+            forecast={{
+              time: "Now",
+              forecast: weatherNow
+            }}
+          />
+        </div>
+      </TimeContainer>
+    );
+  };
+
   let currentDay = new Date(weatherForecast.list[0].dt_txt).getDay();
 
   return (
     <Day>
+      {getTimeNowComponent()}
       {weatherForecast.list.map((time, index) => {
         const isNewDay = currentDay !== new Date(time.dt_txt).getDay();
         currentDay = new Date(time.dt_txt).getDay();

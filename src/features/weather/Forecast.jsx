@@ -9,6 +9,7 @@ import { getWeatherById } from "./weatherSlice";
 
 const Forecast = () => {
   const weatherForecast = useSelector((state) => state.weather.forecast);
+  const weatherNow = useSelector((state) => state.weather.now);
   const timeDifferenceInMilliseconds =
     new Date().getTimezoneOffset() * 60 * 1000;
   const [days, setDays] = useState([]);
@@ -72,6 +73,7 @@ const Forecast = () => {
         <ScrollableWeatherView
           scrollTo={dayIndexDisplayed}
           weatherForecast={weatherForecast}
+          weatherNow={weatherNow}
         />
       </>
     );
