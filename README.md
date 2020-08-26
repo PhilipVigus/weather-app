@@ -111,6 +111,8 @@ As already commented, I originally intended the project to be front end only. Ho
 
 I investigated a number of possible implementations, ranging from a full-blown database through to simply serving individual files split by the location initial letters. I settled on the latter idea, as it was by far the simplest and met my needs. It worked very well, allowing the front end to respond quickly to user input when searching for locations.
 
+As part of this implementation I had to preprocess the location data provided by the API, which was downloadable in a single CSV file. I removed the fields I didn't need, sorted and then split the locations into files based on the initial letter of the location names. I also amended the location names to include state and country (where available), as well as latitude and longitude information. This helped where multiple location with the same names existed.
+
 ## Further work
 
 - At present the default location is kept in local storage. If this is unavailable or the user does not allow access then the feature simply doesn't work. A possible solution to this would be to use cookies as a backup.
