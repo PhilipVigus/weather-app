@@ -54,7 +54,9 @@ Assuming everything is set up as specified above, you can start the app as follo
 
 ```bash
 # back end root folder
-# this command starts the server using nodemon, which means whenever you make changes to the server code, the server will be restarted to reflect the changes
+# this command starts the server using nodemon, which means
+# whenever you make changes to the server code, the server will
+# be restarted to reflect the changes
 yarn watch:dev
 
 # front end root folder
