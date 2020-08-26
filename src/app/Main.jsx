@@ -5,8 +5,9 @@ import Header from "./Header";
 import LocationList from "../features/locationList/LocationList";
 import Forecast from "../features/weather/Forecast";
 
+const LONDON_ID = "2643743";
+
 const Main = () => {
-  const LONDON_ID = "2643743";
   const defaultLocationId = useSelector(
     (state) => state.locationList.defaultLocationId
   );

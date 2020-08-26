@@ -6,11 +6,11 @@ import PropTypes, { string, number, arrayOf } from "prop-types";
 import WeatherAtTime from "./WeatherAtTime";
 
 const Day = styled.div`
+  -ms-overflow-style: none;
   display: flex;
   overflow-x: auto;
-  white-space: nowrap;
-  -ms-overflow-style: none;
   scrollbar-width: none;
+  white-space: nowrap;
 
   &::-webkit-scrollbar {
     background-color: transparent;
@@ -22,8 +22,8 @@ const Day = styled.div`
 
   @media (hover: hover) {
     &:hover {
-      overflow-x: scroll;
       -ms-overflow-style: auto;
+      overflow-x: scroll;
       scrollbar-width: auto;
       &::-webkit-scrollbar-thumb {
         border-radius: 10px;
@@ -38,16 +38,16 @@ const TimeContainer = styled.div`
 `;
 
 const DayDivider = styled.div`
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
   display: flex;
   flex 0 0 2px;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
 `;
 
 const GreySpacer = styled.div`
   background: rgb(200, 200, 200);
-  width: 2px;
   margin: 10px 0;
+  width: 2px;
 `;
 
 const timeOffset = new Date().getTimezoneOffset() * 60 * 1000;
@@ -58,17 +58,17 @@ const ScrollableWeatherView = ({ scrollTo, weatherForecast, weatherNow }) => {
 
   useEffect(() => {
     const dayTransitionPositions = [0];
-    let lastDay = new Date(weatherForecast.list[0].dt_txt).getDay();
+    let previousDay = new Date(weatherForecast.list[0].dt_txt).getDay();
 
     weatherForecast.list.forEach((forecastAtTime, index) => {
       const currentDay = new Date(forecastAtTime.dt_txt).getDay();
-      const isDayTransition = lastDay !== currentDay;
+      const isDayTransition = previousDay !== currentDay;
 
       if (isDayTransition) {
         dayTransitionPositions.push(index);
       }
 
-      lastDay = new Date(forecastAtTime.dt_txt).getDay();
+      previousDay = new Date(forecastAtTime.dt_txt).getDay();
     });
 
     setDayTransitionIndices(dayTransitionPositions);
@@ -89,7 +89,7 @@ const ScrollableWeatherView = ({ scrollTo, weatherForecast, weatherNow }) => {
     return format(localDate, "HH:mm");
   };
 
-  const getTimeContainerComponents = (time, index, newDay) => {
+  const getTimeContainerComponentsForDay = (time, index, newDay) => {
     return (
       <TimeContainer key={time.dt_txt}>
         {newDay && (
@@ -105,7 +105,7 @@ const ScrollableWeatherView = ({ scrollTo, weatherForecast, weatherNow }) => {
           }}
         >
           <WeatherAtTime
-            forecast={{
+            weather={{
               time: getTimeDateString(time.dt_txt),
               forecast: time
             }}
@@ -124,7 +124,7 @@ const ScrollableWeatherView = ({ scrollTo, weatherForecast, weatherNow }) => {
           }}
         >
           <WeatherAtTime
-            forecast={{
+            weather={{
               time: "Now",
               forecast: weatherNow
             }}
@@ -142,7 +142,7 @@ const ScrollableWeatherView = ({ scrollTo, weatherForecast, weatherNow }) => {
       {weatherForecast.list.map((time, index) => {
         const isNewDay = currentDay !== new Date(time.dt_txt).getDay();
         currentDay = new Date(time.dt_txt).getDay();
-        return getTimeContainerComponents(time, index, isNewDay);
+        return getTimeContainerComponentsForDay(time, index, isNewDay);
       })}
     </Day>
   );

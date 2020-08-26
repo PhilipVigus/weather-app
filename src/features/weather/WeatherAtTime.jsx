@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWind } from "@fortawesome/free-solid-svg-icons";
 
 const StyledWeatherAtTime = styled.div`
-  border-top: 1px solid grey;
   border-bottom: 1px solid grey;
+  border-top: 1px solid grey;
   padding: 10px 20px;
 `;
 
@@ -29,16 +29,16 @@ const Temperature = styled.div`
   text-align: center;
 `;
 
-const Wind = styled.div`
+const WindContainer = styled.div`
   text-align: center;
 `;
 
 const WindIcon = styled.div`
-  margin-top: 20px;
   font-size: 2rem;
+  margin-top: 20px;
 `;
 
-const WindSpeedAndDirection = styled.div`
+const WindText = styled.div`
   font-size: 1.6rem;
 `;
 
@@ -51,37 +51,39 @@ const Humidity = styled.div`
   text-align: center;
 `;
 
-const WeatherAtTime = ({ forecast }) => {
+const WeatherAtTime = ({ weather }) => {
   return (
     <StyledWeatherAtTime>
-      <Time>{forecast.time}</Time>
+      <Time>{weather.time}</Time>
       <ImageContainer>
         <img
-          alt={`${forecast.forecast.weather[0].main} icon`}
-          src={`https://openweathermap.org/img/wn/${forecast.forecast.weather[0].icon}@2x.png`}
+          alt={`${weather.forecast.weather[0].main} icon`}
+          src={`https://openweathermap.org/img/wn/${weather.forecast.weather[0].icon}@2x.png`}
         />
       </ImageContainer>
       <Temperature>
-        {Math.round(forecast.forecast.main.temp - 273.15)}°
+        {Math.round(weather.forecast.main.temp - 273.15)}°
       </Temperature>
-      <Wind>
+      <WindContainer>
         <WindIcon>
           <FontAwesomeIcon icon={faWind} />
         </WindIcon>
-        <WindSpeedAndDirection>
-          {`${Math.round(forecast.forecast.wind.speed)} m/s (${
-            forecast.forecast.wind.deg
+        <WindText>
+          {`${Math.round(weather.forecast.wind.speed)} m/s (${
+            weather.forecast.wind.deg
           }°)`}
-        </WindSpeedAndDirection>
-      </Wind>
-      <CloudCoverage>{`${forecast.forecast.clouds.all}% cloud coverage`}</CloudCoverage>
-      <Humidity>{forecast.forecast.main.humidity}% humidity</Humidity>
+        </WindText>
+      </WindContainer>
+      <CloudCoverage>
+        {weather.forecast.clouds.all}% cloud coverage
+      </CloudCoverage>
+      <Humidity>{weather.forecast.main.humidity}% humidity</Humidity>
     </StyledWeatherAtTime>
   );
 };
 
 WeatherAtTime.propTypes = {
-  forecast: PropTypes.shape({
+  weather: PropTypes.shape({
     time: PropTypes.string.isRequired,
     forecast: PropTypes.shape({
       forecast: PropTypes.shape({

@@ -7,11 +7,12 @@ import DayNavigator from "./DayNavigator";
 import ScrollableWeatherView from "./ScrollableWeatherView";
 import { getWeatherById } from "./weatherSlice";
 
+const timeDifferenceInMilliseconds = new Date().getTimezoneOffset() * 60 * 1000;
+
 const Forecast = () => {
   const weatherForecast = useSelector((state) => state.weather.forecast);
   const weatherNow = useSelector((state) => state.weather.now);
-  const timeDifferenceInMilliseconds =
-    new Date().getTimezoneOffset() * 60 * 1000;
+
   const [days, setDays] = useState([]);
   const [dayIndexDisplayed, setDayIndexDisplayed] = useState(0);
 
@@ -25,16 +26,16 @@ const Forecast = () => {
       return format(localDate, "EEEE");
     };
 
-    const setDaysFromForecast = (forecast) => {
+    const setDaysFromForecast = () => {
       if (!weatherForecast) {
         return;
       }
 
       const forecastDays = [];
 
-      for (let i = 0; i < forecast.list.length - 1; i += 1) {
-        const day = getDayFromDateText(forecast.list[i].dt_txt);
-        const nextDay = getDayFromDateText(forecast.list[i + 1].dt_txt);
+      for (let i = 0; i < weatherForecast.list.length - 1; i += 1) {
+        const day = getDayFromDateText(weatherForecast.list[i].dt_txt);
+        const nextDay = getDayFromDateText(weatherForecast.list[i + 1].dt_txt);
 
         if (day !== nextDay) {
           forecastDays.push(day);
@@ -42,15 +43,17 @@ const Forecast = () => {
       }
 
       forecastDays.push(
-        getDayFromDateText(forecast.list[forecast.list.length - 1].dt_txt)
+        getDayFromDateText(
+          weatherForecast.list[weatherForecast.list.length - 1].dt_txt
+        )
       );
 
       forecastDays[0] = "Today";
       setDays(forecastDays);
     };
 
-    setDaysFromForecast(weatherForecast);
-  }, [weatherForecast, timeDifferenceInMilliseconds]);
+    setDaysFromForecast();
+  }, [weatherForecast]);
 
   useEffect(() => {
     dispatch(getWeatherById(id));
@@ -60,7 +63,7 @@ const Forecast = () => {
     setDayIndexDisplayed(index);
   };
 
-  if (!weatherForecast || days.length === 0) {
+  if (!weatherForecast) {
     return <div>Loading...</div>;
   } else {
     return (

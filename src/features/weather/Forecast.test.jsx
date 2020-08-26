@@ -11,6 +11,10 @@ import londonWeatherNow from "../../fixtures/londonWeatherNow";
 const mockStore = configureStore([]);
 
 describe("Forecast", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("Renders the loading message", () => {
     const store = mockStore({
       locationList: {
@@ -35,10 +39,6 @@ describe("Forecast", () => {
   it("Renders the forecast", () => {
     const scrollIntoViewMock = jest.fn();
     window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
-    const { getTimezoneOffset } = Date.prototype;
-    Date.prototype.getTimezoneOffset = () => {
-      return -60;
-    };
 
     const store = mockStore({
       locationList: {
@@ -63,8 +63,6 @@ describe("Forecast", () => {
 
     expect(screen.getByText(/82% humidity/)).toBeInTheDocument();
     expect(screen.getByText(/5 m\/s \(169°\)/)).toBeInTheDocument();
-
-    Date.prototype.getTimezoneOffset = getTimezoneOffset;
   });
 
   it("Calls scrollIntoView when you click a day button", () => {
@@ -95,6 +93,6 @@ describe("Forecast", () => {
     const button = screen.getByRole("button", { name: "Monday" });
     fireEvent.click(button);
 
-    expect(scrollIntoViewMock).toBeCalled();
+    expect(scrollIntoViewMock).toBeCalledTimes(2);
   });
 });

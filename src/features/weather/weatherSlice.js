@@ -57,7 +57,7 @@ export const getWeatherByGPS = createAsyncThunk(
           }
         );
       } else {
-        reject(new Error("GPS failed"));
+        reject(new Error("GPS unavailable"));
       }
     });
   }

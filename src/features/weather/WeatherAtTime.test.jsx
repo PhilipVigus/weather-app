@@ -7,7 +7,7 @@ describe("WeatherAtTime", () => {
   it("Renders the weather details", () => {
     render(
       <WeatherAtTime
-        forecast={{ time: "Now", forecast: londonWeatherForecast.list[0] }}
+        weather={{ time: "Now", forecast: londonWeatherForecast.list[0] }}
       />
     );
 
@@ -18,7 +18,6 @@ describe("WeatherAtTime", () => {
     expect(screen.getByText(/19°/)).toBeInTheDocument();
     expect(screen.getByText(/82% humidity/)).toBeInTheDocument();
     expect(screen.getByText(/5 m\/s \(169°\)/)).toBeInTheDocument();
-
     expect(screen.getByText(/100% cloud coverage/)).toBeInTheDocument();
   });
 });

@@ -218,6 +218,7 @@ describe("LocationList", () => {
       const textbox = screen.getByPlaceholderText(/Enter location name/);
       fireEvent.focus(textbox);
       fireEvent.change(textbox, { target: { value: "l" } });
+
       const filteredLocation = screen.getByText(
         /L'Ametlla del Vallès, Spain \(2\.27°, 41\.67°\)/
       );
@@ -287,6 +288,7 @@ describe("LocationList", () => {
       const textbox = screen.getByPlaceholderText(/Enter location name/);
       fireEvent.focus(textbox);
       fireEvent.change(textbox, { target: { value: "l" } });
+
       const searchButton = screen.getByRole("button", { name: "search" });
       fireEvent.click(searchButton);
 

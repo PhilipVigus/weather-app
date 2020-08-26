@@ -25,9 +25,9 @@ const StyledNav = styled.nav`
 
 const UserInputs = styled.div`
   align-items: center;
+  background: white;
   color: black;
   display: flex;
-  background: white;
 `;
 
 const StyledInput = styled.input`
@@ -98,11 +98,10 @@ const LocationList = () => {
     // get the location list for locations starting with the same
     // letter as the current location
     if (weatherNow) {
-      dispatch(
-        fetchLocationsWithInitialLetter(
-          weatherNow.name.charAt(0).toLocaleLowerCase()
-        )
-      );
+      const currentLocationInitialLetter = weatherNow.name
+        .charAt(0)
+        .toLocaleLowerCase();
+      dispatch(fetchLocationsWithInitialLetter(currentLocationInitialLetter));
       setTextboxText(weatherNow.name);
     }
   }, [dispatch, weatherNow]);
@@ -145,15 +144,15 @@ const LocationList = () => {
     history.push(`/${newId}`);
   };
 
-  const handleWhereIAmClick = () => {
+  const weatherWhereIAmClick = () => {
     dispatch(getWeatherByGPS());
   };
 
   const handleSearchClick = () => {
     if (textboxText && showFilteredLocations) {
       const newLocation = locationsList.find((location) => {
-        const pattern = new RegExp(`^${textboxText}`, "i");
-        return pattern.test(location.name);
+        const filterPattern = new RegExp(`^${textboxText}`, "i");
+        return filterPattern.test(location.name);
       });
       setShowFilteredLocations(false);
       history.push(`/${newLocation.id}`);
@@ -165,9 +164,10 @@ const LocationList = () => {
   };
 
   const getFilteredLocationComponents = (locations) => {
+    const NUMBER_OF_LOCATIONS_TO_LIST = 20;
     return (
       <>
-        {locations.slice(0, 20).map((location) => (
+        {locations.slice(0, NUMBER_OF_LOCATIONS_TO_LIST).map((location) => (
           <FilteredLocation
             key={location.id}
             id={location.id}
@@ -176,7 +176,8 @@ const LocationList = () => {
           />
         ))}
         <AdditionalMatches>
-          {locations.length > 20 && `+${locations.length - 20} matches`}
+          {locations.length > NUMBER_OF_LOCATIONS_TO_LIST &&
+            `+${locations.length - NUMBER_OF_LOCATIONS_TO_LIST} matches`}
         </AdditionalMatches>
       </>
     );
@@ -233,7 +234,7 @@ const LocationList = () => {
             aria-label="weather at my location"
             ref={myLocationButtonRef}
             type="button"
-            onClick={handleWhereIAmClick}
+            onClick={weatherWhereIAmClick}
             disabled={!GPSAvailable}
           >
             <FontAwesomeIcon icon={faMapMarkerAlt} />
