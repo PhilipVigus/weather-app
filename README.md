@@ -4,7 +4,7 @@
 
 This app uses the [OpenWeatherMap API](https://openweathermap.org/api) to provide a five day weather forecast for any one of thousands of locations around the world.
 
-**[See a live demo here!](https://weather-phil.netlify.app/)**
+**[See a live demo here!](https://weather-phil.netlify.app/)** - please note that because the backend is hosted on the Heroku free tier, if it hasn't been used for a while it can take the page a few seconds to load while it waits for the server to start up. After that though, everything runs as normal.
 
 My motivation for this project was to utilise a third part API, learn to use Redux and Styled COmponents, and for it to be front end focused. As I discuss later, I ended up having to implement a small backend server anyway.
 
