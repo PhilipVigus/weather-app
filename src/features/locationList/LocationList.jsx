@@ -77,7 +77,7 @@ const LocationList = () => {
   const { id } = useParams();
 
   const [textboxText, setTextboxText] = useState("");
-  const [currentInitialLetter, setCurrentInitialLetter] = useState("l");
+  const [currentInitialLetter, setCurrentInitialLetter] = useState("");
   const [showFilteredLocations, setShowFilteredLocations] = useState(false);
 
   const locationsList = useSelector((state) => state.locationList.locations);
@@ -122,7 +122,8 @@ const LocationList = () => {
 
   const handleTextboxContentChange = (e) => {
     const textBoxInitialLetter = e.target.value.charAt(0).toLocaleLowerCase();
-
+    console.log(textBoxInitialLetter);
+    console.log(currentInitialLetter);
     if (e.target.value && textBoxInitialLetter !== currentInitialLetter) {
       dispatch(fetchLocationsWithInitialLetter(textBoxInitialLetter));
       setCurrentInitialLetter(textBoxInitialLetter);
