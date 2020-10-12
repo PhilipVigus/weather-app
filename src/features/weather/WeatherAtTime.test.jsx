@@ -15,7 +15,7 @@ describe("WeatherAtTime", () => {
     expect(
       screen.getByRole("img", { name: "Clouds icon" })
     ).toBeInTheDocument();
-    expect(screen.getByText(/19°/)).toBeInTheDocument();
+    expect(screen.getByText(/19°C/)).toBeInTheDocument();
     expect(screen.getByText(/82% humidity/)).toBeInTheDocument();
     expect(screen.getByText(/5 m\/s \(169°\)/)).toBeInTheDocument();
     expect(screen.getByText(/100% cloud coverage/)).toBeInTheDocument();

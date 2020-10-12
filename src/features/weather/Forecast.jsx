@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
 import addMilliseconds from "date-fns/addMilliseconds";
 import { useParams } from "react-router-dom";
+
 import DayNavigator from "./DayNavigator";
 import ScrollableWeatherView from "./ScrollableWeatherView";
 import { getWeatherById } from "./weatherSlice";

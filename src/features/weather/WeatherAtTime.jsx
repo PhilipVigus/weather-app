@@ -52,6 +52,7 @@ const Humidity = styled.div`
 `;
 
 const WeatherAtTime = ({ weather }) => {
+  const KELVIN_TO_CELSIUS_DIFFERENCE = 273.15;
   return (
     <StyledWeatherAtTime>
       <Time>{weather.time}</Time>
@@ -62,7 +63,8 @@ const WeatherAtTime = ({ weather }) => {
         />
       </ImageContainer>
       <Temperature>
-        {Math.round(weather.forecast.main.temp - 273.15)}°
+        {Math.round(weather.forecast.main.temp - KELVIN_TO_CELSIUS_DIFFERENCE)}
+        °C
       </Temperature>
       <WindContainer>
         <WindIcon>
