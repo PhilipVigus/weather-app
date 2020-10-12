@@ -105,7 +105,7 @@ describe("store", () => {
       it("handles fetchLocationsWithInitialLetter actions", () => {
         expect(
           reducer(
-            { locations: [], cachedLetters: {} },
+            { locations: [], defaultLocationId: null, cachedLetters: {} },
             {
               type: fetchLocationsWithInitialLetter.fulfilled.type,
               payload: {
@@ -117,13 +117,14 @@ describe("store", () => {
           )
         ).toEqual({
           cachedLetters: { l: locationsWithInitialLetterL },
+          defaultLocationId: null,
           locations: locationsWithInitialLetterL
         });
       });
 
       it("handles defaultLocationIdSet actions", () => {
         const store = reducer(
-          { locations: [], cachedLetters: {} },
+          { locations: [], defaultLocationId: null, cachedLetters: {} },
           defaultLocationIdSet("1")
         );
 

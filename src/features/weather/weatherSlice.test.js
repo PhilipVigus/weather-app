@@ -34,7 +34,7 @@ describe("store", () => {
       londonWeatherNow.name = londonFullName.name;
 
       const store = mockStore({ GPSAvailable: true });
-      const locationId = 2643743;
+      const locationId = 1234; // doesn't matter what this value is
       const result = await store.dispatch(getWeatherById(locationId));
 
       expect(result.type).toEqual("weather/getWeatherById/fulfilled");
@@ -80,7 +80,7 @@ describe("store", () => {
       });
     });
 
-    it("creates throws an error when getWeatherByGPS is called and is unavailable", async () => {
+    it("throws an error when getWeatherByGPS is called and is unavailable", async () => {
       global.navigator.geolocation = undefined;
 
       axiosMock

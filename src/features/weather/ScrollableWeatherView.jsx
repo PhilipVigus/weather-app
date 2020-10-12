@@ -97,6 +97,7 @@ const ScrollableWeatherView = ({ scrollTo, weatherForecast, weatherNow }) => {
             <GreySpacer />
           </DayDivider>
         )}
+
         <div
           ref={(el) => {
             if (index !== 0) {

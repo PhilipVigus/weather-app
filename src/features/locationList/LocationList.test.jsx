@@ -8,7 +8,7 @@ import * as locationListSlice from "./locationListSlice";
 import * as weatherSlice from "../weather/weatherSlice";
 import londonWeatherNow from "../../fixtures/londonWeatherNow";
 import londonWeatherForecast from "../../fixtures/londonWeatherForecast";
-import locatioinsWithInitialLetterL from "../../fixtures/locationsWithInitialL";
+import locationsWithInitialLetterL from "../../fixtures/locationsWithInitialL";
 
 jest.mock("./locationListSlice");
 jest.mock("../weather/weatherSlice");
@@ -20,7 +20,7 @@ describe("LocationList", () => {
     jest.clearAllMocks();
   });
 
-  it("dispatchs a fetchLocationsWithInitialLetter action when change the first letter of the textbox", () => {
+  it("dispatches a fetchLocationsWithInitialLetter action when change the first letter of the textbox", () => {
     const store = mockStore({
       locationList: {
         cachedLetters: {},
@@ -80,7 +80,9 @@ describe("LocationList", () => {
       </Provider>
     );
 
-    const homeButton = screen.getByRole("button", { name: "home" });
+    const homeButton = screen.getByRole("button", {
+      name: "bookmark as your default location"
+    });
     fireEvent.click(homeButton);
 
     expect(store.dispatch).toHaveBeenCalledTimes(1);
@@ -92,7 +94,7 @@ describe("LocationList", () => {
     const store = mockStore({
       locationList: {
         cachedLetters: {},
-        locations: locatioinsWithInitialLetterL
+        locations: locationsWithInitialLetterL
       },
       weather: {
         now: londonWeatherNow,
@@ -123,7 +125,7 @@ describe("LocationList", () => {
       const store = mockStore({
         locationList: {
           cachedLetters: {},
-          locations: locatioinsWithInitialLetterL.slice(0, 20)
+          locations: locationsWithInitialLetterL.slice(0, 20)
         },
         weather: {
           now: londonWeatherNow,
@@ -159,7 +161,7 @@ describe("LocationList", () => {
       const store = mockStore({
         locationList: {
           cachedLetters: {},
-          locations: locatioinsWithInitialLetterL
+          locations: locationsWithInitialLetterL
         },
         weather: {
           now: londonWeatherNow,
@@ -196,7 +198,7 @@ describe("LocationList", () => {
       const store = mockStore({
         locationList: {
           cachedLetters: {},
-          locations: locatioinsWithInitialLetterL
+          locations: locationsWithInitialLetterL
         },
         weather: {
           now: londonWeatherNow,
@@ -233,7 +235,7 @@ describe("LocationList", () => {
       const store = mockStore({
         locationList: {
           cachedLetters: {},
-          locations: locatioinsWithInitialLetterL
+          locations: locationsWithInitialLetterL
         },
         weather: {
           now: londonWeatherNow,
@@ -266,7 +268,7 @@ describe("LocationList", () => {
       const store = mockStore({
         locationList: {
           cachedLetters: {},
-          locations: locatioinsWithInitialLetterL
+          locations: locationsWithInitialLetterL
         },
         weather: {
           now: londonWeatherNow,
@@ -301,7 +303,7 @@ describe("LocationList", () => {
       const store = mockStore({
         locationList: {
           cachedLetters: {},
-          locations: locatioinsWithInitialLetterL
+          locations: locationsWithInitialLetterL
         },
         weather: {
           now: londonWeatherNow,
@@ -333,7 +335,7 @@ describe("LocationList", () => {
       const store = mockStore({
         locationList: {
           cachedLetters: {},
-          locations: locatioinsWithInitialLetterL
+          locations: locationsWithInitialLetterL
         },
         weather: {
           now: londonWeatherNow,
@@ -376,7 +378,7 @@ describe("LocationList", () => {
       const store = mockStore({
         locationList: {
           cachedLetters: {},
-          locations: locatioinsWithInitialLetterL
+          locations: locationsWithInitialLetterL
         },
         weather: {
           now: londonWeatherNow,
@@ -407,7 +409,7 @@ describe("LocationList", () => {
       const store = mockStore({
         locationList: {
           cachedLetters: {},
-          locations: locatioinsWithInitialLetterL
+          locations: locationsWithInitialLetterL
         },
         weather: {
           now: londonWeatherNow,
@@ -461,7 +463,9 @@ describe("LocationList", () => {
         </Provider>
       );
 
-      const homeButton = screen.getByRole("button", { name: "home" });
+      const homeButton = screen.getByRole("button", {
+        name: "bookmark as your default location"
+      });
       fireEvent.click(homeButton);
 
       expect(locationListSlice.defaultLocationIdSet).toHaveBeenCalledTimes(1);
