@@ -9,6 +9,7 @@ import {
   faStar
 } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarOUtline } from "@fortawesome/free-regular-svg-icons";
+import ReactTooltip from "react-tooltip";
 
 import {
   fetchLocationsWithInitialLetter,
@@ -206,7 +207,12 @@ const LocationList = () => {
   return (
     <StyledNav>
       <UserInputs>
-        <IconButton aria-label="home" type="button" onClick={handleHomeClick}>
+        <IconButton
+          aria-label="home"
+          type="button"
+          onClick={handleHomeClick}
+          data-tip="Bookmark as your default location"
+        >
           {defaultLocationId && defaultLocationId === id ? (
             <FontAwesomeIcon icon={faStar} />
           ) : (
@@ -222,11 +228,13 @@ const LocationList = () => {
           onChange={handleTextboxContentChange}
           onFocus={handleTextboxGainingFocus}
           style={{ width: "100%" }}
+          data-tip="Click to enter a location"
         />
         <IconButton
           aria-label="search"
           type="button"
           onClick={handleSearchClick}
+          data-tip="Find the closest location matching the text"
         >
           <FontAwesomeIcon icon={faSearch} />
         </IconButton>
@@ -237,10 +245,12 @@ const LocationList = () => {
             type="button"
             onClick={weatherWhereIAmClick}
             disabled={!GPSAvailable}
+            data-tip="Weather at your location"
           >
             <FontAwesomeIcon icon={faMapMarkerAlt} />
           </IconButton>
         </div>
+        <ReactTooltip />
       </UserInputs>
       {showFilteredLocations &&
         locationsList.length > 0 &&
