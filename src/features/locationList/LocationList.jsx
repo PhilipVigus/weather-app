@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMapMarkerAlt,
@@ -9,6 +10,7 @@ import {
   faStar
 } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarOUtline } from "@fortawesome/free-regular-svg-icons";
+
 import ReactTooltip from "react-tooltip";
 
 import {
@@ -31,10 +33,11 @@ const UserInputs = styled.div`
   display: flex;
 `;
 
-const StyledInput = styled.input`
+const StyledTextbox = styled.input`
   border: none;
   font-size: 3rem;
   padding: 10px 15px;
+  width: 100%;
 
   @media (max-width: 48em) {
     & {
@@ -123,8 +126,7 @@ const LocationList = () => {
 
   const handleTextboxContentChange = (e) => {
     const textBoxInitialLetter = e.target.value.charAt(0).toLocaleLowerCase();
-    console.log(textBoxInitialLetter);
-    console.log(currentInitialLetter);
+
     if (e.target.value && textBoxInitialLetter !== currentInitialLetter) {
       dispatch(fetchLocationsWithInitialLetter(textBoxInitialLetter));
       setCurrentInitialLetter(textBoxInitialLetter);
@@ -146,7 +148,7 @@ const LocationList = () => {
     history.push(`/${newId}`);
   };
 
-  const weatherWhereIAmClick = () => {
+  const handleWeatherHereClick = () => {
     dispatch(getWeatherByGPS());
   };
 
@@ -161,7 +163,7 @@ const LocationList = () => {
     }
   };
 
-  const handleHomeClick = () => {
+  const handleSetDefaultLocationClick = () => {
     dispatch(defaultLocationIdSet(id));
   };
 
@@ -208,9 +210,9 @@ const LocationList = () => {
     <StyledNav>
       <UserInputs>
         <IconButton
-          aria-label="home"
+          aria-label="bookmark as your default location"
           type="button"
-          onClick={handleHomeClick}
+          onClick={handleSetDefaultLocationClick}
           data-tip="Bookmark as your default location"
         >
           {defaultLocationId && defaultLocationId === id ? (
@@ -219,17 +221,18 @@ const LocationList = () => {
             <FontAwesomeIcon icon={faStarOUtline} />
           )}
         </IconButton>
-        <StyledInput
+
+        <StyledTextbox
           ref={textBoxRef}
           type="text"
           placeholder="Enter location name"
-          onKeyDown={handleKeyDownInTextbox}
           value={textboxText}
+          onKeyDown={handleKeyDownInTextbox}
           onChange={handleTextboxContentChange}
           onFocus={handleTextboxGainingFocus}
-          style={{ width: "100%" }}
           data-tip="Click to enter a location"
         />
+
         <IconButton
           aria-label="search"
           type="button"
@@ -238,20 +241,21 @@ const LocationList = () => {
         >
           <FontAwesomeIcon icon={faSearch} />
         </IconButton>
-        <div>
-          <IconButton
-            aria-label="weather at my location"
-            ref={myLocationButtonRef}
-            type="button"
-            onClick={weatherWhereIAmClick}
-            disabled={!GPSAvailable}
-            data-tip="Weather at your location"
-          >
-            <FontAwesomeIcon icon={faMapMarkerAlt} />
-          </IconButton>
-        </div>
+
+        <IconButton
+          aria-label="weather at my location"
+          ref={myLocationButtonRef}
+          type="button"
+          onClick={handleWeatherHereClick}
+          disabled={!GPSAvailable}
+          data-tip="Weather at my location"
+        >
+          <FontAwesomeIcon icon={faMapMarkerAlt} />
+        </IconButton>
+
         <ReactTooltip />
       </UserInputs>
+
       {showFilteredLocations &&
         locationsList.length > 0 &&
         textboxText &&
