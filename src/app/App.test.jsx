@@ -8,25 +8,12 @@ import londonWeatherNow from "../fixtures/londonWeatherNow";
 import londonWeatherForecast from "../fixtures/londonWeatherForecast";
 
 describe("App", () => {
-  let mock;
-
-  beforeAll(() => {
-    mock = new MockAdapter(Axios);
-  });
-
-  afterEach(() => {
-    mock.reset();
-  });
-
-  afterAll(() => {
-    mock.restore();
-  });
-
   it("renders the weather now and location list", async () => {
     const scrollIntoViewMock = jest.fn();
     window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
 
-    mock
+    const mockAxios = new MockAdapter(Axios);
+    mockAxios
       .onGet(/\/locations\/names\//)
       .replyOnce(200, londonFullName)
       .onGet(/https:\/\/api\.openweathermap\.org\/data\/2\.5\/weather/)
@@ -35,9 +22,13 @@ describe("App", () => {
       .replyOnce(200, londonWeatherForecast);
 
     render(<App />);
+
     expect(await screen.findByText(/87% humidity/)).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/Enter location name/)
     ).toBeInTheDocument();
+
+    mockAxios.reset();
+    mockAxios.restore();
   });
 });
