@@ -22,7 +22,7 @@ Key features:
 | :-------- | :------------------------------------------------------------------- |
 | Language  | JavaScript                                                           |
 | Front end | React with functional components and hooks, Redux, Styled Components |
-| Back end  | Express                                                              |
+| Back end  | Express, SQLite                                                      |
 | Testing   | Jest, React Testing Library (front end), Jest, Supertest (back end)  |
 | CI/CD     | Circle CI, Netlify (front end), Heroku (back end)                    |
 
@@ -99,7 +99,7 @@ I want to be able to set the forecast based on my device's location
 
 My prime focus for the front end was learning to use Redux and Styled Components. I consider the project a success in this regard. Redux is used for all global state management, including retrieving data from the third party API and back end server, while Styled Components are used for all css styling.
 
-Implementing the location search box was particularly challenging due to the sheer number of locations (200k+) available. Although I initially attempted to keep this all on the front end, working with such a large amount of data made the intiial load time for the site far too slow. My solution was to implement a small back end server to serve the data to the front end as and when required.
+Implementing the location search box was particularly challenging due to the sheer number of locations (200k+) available. Although I initially attempted to keep this all on the front end, working with such a large amount of data made the initial load time for the site far too slow. My solution was to implement a small back end server to serve the data to the front end as and when required.
 
 In general I am extremely happy with the end result of the front end, which looks clean and professional, and makes good use of Redux and Styled components.
 
@@ -109,7 +109,7 @@ I am particularly pleased with the scrollable forecast view and the responsivene
 
 As already commented, I originally intended the project to be front end only. However, implementing the location search functionality required a simple server to serve the locations to appear in the search box as the user types. Without this, the site load times and general responsiveness were very sluggish.
 
-I investigated a number of possible implementations, ranging from a full-blown database through to simply serving individual files split by the location initial letters. I settled on the latter idea, as it was by far the simplest and met my needs. It worked very well, allowing the front end to respond quickly to user input when searching for locations.
+I investigated a number of possible implementations, ranging from a full-blown database through to simply serving individual files split by the location initial letters. I initially settled on the latter idea, as it was by far the simplest and met my needs. It worked very well, allowing the front end to respond quickly to user input when searching for locations. However, there were issues with data duplication. I eventually implemented a SQLite database that was far cleaner.
 
 As part of this implementation I had to preprocess the location data provided by the API, which was downloadable in a single CSV file. I removed the fields I didn't need, sorted and then split the locations into files based on the initial letter of the location names. I also amended the location names to include state and country (where available), as well as latitude and longitude information. This helped where multiple location with the same names existed.
 
@@ -118,5 +118,3 @@ As part of this implementation I had to preprocess the location data provided by
 - At present the default location is kept in local storage. If this is unavailable or the user does not allow access then the feature simply doesn't work. A possible solution to this would be to use cookies as a backup.
 - The location data provided by the third party API contains a number of duplicates, where latitude and longitude are either identical or extremely close together. A possible solution to this would be to preprocess the data further, removing these duplicates.
 - There are a number of graphical improvements that could be made, particularly to the scrollable view. It would nice to include an element that indicated the warmth on a colour scale for example. There is also other forecast data I am not displaying that could be integrated into the display.
-- I would like to implement some kind of tooltips for the buttons on the page.
-- The way the backend handles and serves its data is deliberately quite simple, as it wasn't the focus of this project. However, a natural extension would be to implement a simple database to hold the data, replacing the JSON files currently used. This would solve a number of issues, particularly data duplication. It would also remove the need for some of the data preprocessing and simplify the routes that fetch the data.
