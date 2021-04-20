@@ -95,7 +95,7 @@ I want to be able to set the forecast based on my device's location
 
 ### Design decisions
 
-#### The front end
+#### Front end
 
 My prime focus for the front end was learning to use Redux and Styled Components. I consider the project a success in this regard. Redux is used for all global state management, including retrieving data from the third party API and back end server, while Styled Components are used for all css styling.
 
@@ -105,7 +105,7 @@ In general I am extremely happy with the end result of the front end, which look
 
 I am particularly pleased with the scrollable forecast view and the responsiveness of the location search bar.
 
-#### The back end
+#### Back end
 
 As already commented, I originally intended the project to be front end only. However, implementing the location search functionality required a simple server to serve the locations to appear in the search box as the user types. Without this, the site load times and general responsiveness were very sluggish.
 
